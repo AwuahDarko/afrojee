@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head> 
+
+<head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
@@ -51,18 +52,19 @@
 
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ static_asset('css/style.css') }}">
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
-   
+
 
 </head>
 
 <body id="body">
     <!-- aiz-main-wrapper -->
-    <div >
+    <div>
 
         <!-- Header -->
         @include('frontend.inc.nav')
@@ -70,7 +72,23 @@
         @yield('content')
 
         @include('frontend.inc.footer')
+        <div class="bg-[#A67C24] text-white p-4">Test Footergold</div>
+        <div class="text-red-500 text-xl">Tailwind Test</div>
+        <div class="bg-footergold text-white p-4">Test Footergold</div>
+        <div class="bg-theme p-4">
+            This div has the theme color as background
+        </div>
 
+        <div class="bg-theme-light p-4 rounded-lg">
+            This div has the lighter theme color as background
+        </div>
+        <p class="text-theme font-bold">
+            This text is in the theme color
+        </p>
+
+        <span class="text-theme-light">
+            This text is in the lighter theme color
+        </span>
     </div>
 
     @yield('script')
