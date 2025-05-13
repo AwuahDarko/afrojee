@@ -41,7 +41,8 @@
         <meta property="og:site_name" content="{{ get_setting('site_name') }}" />
         <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
     @endif
-
+    <title>@yield('title', 'YaaSerwaa')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
