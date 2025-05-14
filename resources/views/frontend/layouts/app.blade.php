@@ -72,23 +72,6 @@
         @yield('content')
 
         @include('frontend.inc.footer')
-        <div class="bg-[#A67C24] text-white p-4">Test Footergold</div>
-        <div class="text-red-500 text-xl">Tailwind Test</div>
-        <div class="bg-footergold text-white p-4">Test Footergold</div>
-        <div class="bg-theme p-4">
-            This div has the theme color as background
-        </div>
-
-        <div class="bg-theme-light p-4 rounded-lg">
-            This div has the lighter theme color as background
-        </div>
-        <p class="text-theme font-bold">
-            This text is in the theme color
-        </p>
-
-        <span class="text-theme-light">
-            This text is in the lighter theme color
-        </span>
     </div>
 
     @yield('script')
