@@ -1,6 +1,5 @@
 @import 'tailwindcss' layer(base);
 
-/* @import 'tailwindcss'; */
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -15,11 +14,31 @@
     --color-cream: #F8F6F1;
     --color-rosegold: #E0C3B6;
     --color-footergold: #A67C24;
+    --color-burgundy: #9D3F5B;
+    --color-taupe: #806D48;
+    --color-strip: #766455;
 }
 
 @layer base {
   :root {
     --color-theme: #e2932b;
     --color-theme-light: #9d50bb;
+  }
+
+  .mmax-container{
+    /* background-color: hsl(0, 91%, 50%); */
+  }
+  .product-card2{
+    /* width: fit-content; */
+  }
+  #productCards{
+    /* background-color: aqua; */
+  }
+  .mmax-products{
+    /* background-color: #dfee13; */
+  }
+  .bg-taupe{
+    /* height: 12px; */
+    /* width: 1000px; */
   }
 }

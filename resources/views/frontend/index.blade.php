@@ -1,5 +1,6 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<h1>I am the content</h1>
+@include('frontend.layouts.hero')
+@include('frontend.layouts.products')
 @endsection
