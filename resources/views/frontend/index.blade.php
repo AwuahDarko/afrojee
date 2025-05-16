@@ -1,10 +1,10 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-@include('frontend.layouts.hero')
-@include('frontend.layouts.products')
-@include('frontend.layouts.who')
-@include('frontend.layouts.tobuy')
-@include('frontend.layouts.ourclients')
-@include('frontend.layouts.faq2')
+@include('frontend.partials.hero')
+@include('frontend.partials.products')
+@include('frontend.partials.who')
+@include('frontend.partials.tobuy')
+@include('frontend.partials.ourclients')
+@include('frontend.partials.faq2')
 @endsection
