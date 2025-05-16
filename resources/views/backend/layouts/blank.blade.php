@@ -1,20 +1,16 @@
 <!doctype html>
-
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="app-url" content="{{ getBaseURL() }}">
-    <meta name="file-base-url" content="{{ getFileBaseURL() }}">
+    <meta name="app-url" content="{{ env('APP_URL')}}">
     <meta name="local-file-base-url" content="{{ getLocalFileBaseURL() }}">
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta name="local-file-base-url" content="{{ getLocalFileBaseURL() }}">
     <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
-    <title> Admin - {{ get_setting('site_name') . ' | ' . get_setting('site_motto') }}</title>
+  	<title>Sign In</title>
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
@@ -30,21 +26,17 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css?v=3.2.0') }}" rel="stylesheet" />
 
-    <!-- aiz core css -->
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-
-
+   
 </head>
+<body>
+    <div class="aiz-main-wrapper d-flex">
 
-<body class="g-sidenav-show  bg-gray-100">
-    @include('backend.inc.admin_sidenav')
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-        @include('backend.inc.admin_nav')
-        <div class="container-fluid py-2">
+        <div class="flex-grow-1">
             @yield('content')
         </div>
 
-    </main>
+    </div><!-- .aiz-main-wrapper -->
+
 
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
@@ -70,6 +62,6 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('js/material-dashboard.min.js?v=3.2.0') }}"></script>
+    
 </body>
-
 </html>
