@@ -1,5 +1,10 @@
 @extends('frontend.layouts.app')
 
 @section('content')
-<h1>I am the content</h1>
+@include('frontend.layouts.hero')
+@include('frontend.layouts.products')
+@include('frontend.layouts.who')
+@include('frontend.layouts.tobuy')
+@include('frontend.layouts.ourclients')
+@include('frontend.layouts.faq')
 @endsection

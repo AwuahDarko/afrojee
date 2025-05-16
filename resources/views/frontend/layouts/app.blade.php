@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head> 
+
+<head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
@@ -41,7 +42,8 @@
         <meta property="og:site_name" content="{{ get_setting('site_name') }}" />
         <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
     @endif
-
+    <title>@yield('title', 'YaaSerwaa')</title>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
 
@@ -49,19 +51,20 @@
     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> -->
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ static_asset('css/style.css') }}">
-    
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 
-   
+
 
 </head>
 
 <body id="body">
     <!-- aiz-main-wrapper -->
-    <div >
+    <div>
 
         <!-- Header -->
         @include('frontend.inc.nav')
@@ -69,12 +72,11 @@
         @yield('content')
 
         @include('frontend.inc.footer')
-
     </div>
 
     @yield('script')
 
-    <script src="{{static_asset('js/index.js') }}"></script>
+    <script src="{{asset('js/index.js') }}"></script>
 </body>
 
 </html>

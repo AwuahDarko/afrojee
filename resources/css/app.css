@@ -1,12 +1,46 @@
-@import 'tailwindcss';
+@import 'tailwindcss' layer(base);
+/* @import url('./fonts.css'); */
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-sans: 'Optima';
+  /* , ui-sans-serif, system-ui, sans-serif; */
+    /* 'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; */
+    --color-gold: #C8A655;
+    --color-cream: #F8F6F1;
+    --color-rosegold: #E0C3B6;
+    --color-footergold: #A67C24;
+    --color-burgundy: #9D3F5B;
+    --color-taupe: #806D48;
+    --color-strip: #766455;
 }
 
+@layer base {
+  :root {
+    --color-theme: #e2932b;
+    --color-theme-light: #9d50bb;
+  }
+  /* *{
+    font-family: ;
+  } */
+  .mmax-container{
+    /* background-color: hsl(0, 91%, 50%); */
+  }
+  .colo1{
+    /* background-color: rgb(24, 28, 255); */
+  }
+  .colo{
+    /* background-color: aqua; */
+  }
+  .lmaoo{
+    background-color: #dfee13;
+  }
+  .place-center{
+    /* background-color: rgb(255, 182, 24); */
+  }
+}
