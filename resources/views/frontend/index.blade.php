@@ -6,5 +6,5 @@
 @include('frontend.layouts.who')
 @include('frontend.layouts.tobuy')
 @include('frontend.layouts.ourclients')
-@include('frontend.layouts.faq')
+@include('frontend.layouts.faq2')
 @endsection
