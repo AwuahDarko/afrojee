@@ -11,4 +11,5 @@
 @include('frontend.partials.newsletter')
 @include('frontend.partials.productList')
 @include('frontend.partials.productView')
+@include('frontend.partials.productDetail')
 @endsection
