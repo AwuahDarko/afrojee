@@ -20,26 +20,37 @@
             <!-- Quantity Selector -->
             <div class="flex items-center mb-6">
                 <span class="mr-4 font-medium">Quantity</span>
-                <div class="flex items-center space-x-4 bg-white rounded-full px-4 py-1 border">
-                    <button class="text-lg font-bold text-gray-600">−</button>
-                    <span>1</span>
-                    <button class="text-lg font-bold text-gray-600">+</button>
+                <div class="flex items-center space-x-4 px-4 py-1">
+                    <button id="decrement"
+                        class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">−</button>
+                    <input type="text" id="quantity" value="1"
+                        class="w-12 text-center focus:outline-none bg-transparent text-xl font-bold" readonly>
+                    <button id="increment"
+                        class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">+</button>
                 </div>
 
                 <!-- Buy Now -->
                 <div class="ml-6 flex items-center gap-4">
                     <button
                         class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2">
-                        Buy Now
+                        Buy Now <span id="buyNowCounter">1</span>
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </button>
                     <button class="bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M3 3h2l.4 2M7 13h14l1-5H6.4M7 13L5.6 6H21M7 13l-1.35 5.4A1 1 0 007 20h10a1 1 0 00.97-.76L20 13H7z" />
-                        </svg>
+                        <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#a)" fill="#99395C">
+                                <path
+                                    d="M21.377 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.087L6.64 5h18.488a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313l-1.125 2.038-.038.15a.313.313 0 0 0 .313.312h14.475v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.877 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5m11.25-8.75 3.475-6.25h-15.8l2.95 6.25z" />
+                                <path d="M25.127 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#FCF4F7" stroke-width="2" />
+                            </g>
+                            <defs>
+                                <clipPath id="a">
+                                    <path fill="#fff" d="M.127 0h30v30h-30z" />
+                                </clipPath>
+                            </defs>
+                        </svg><span id="addToCartCounter">1</span>
                     </button>
                 </div>
             </div>
@@ -48,17 +59,19 @@
     <div class="max-w-4xl mx-auto mt-12">
         <!-- Tab Navigation -->
         <div class="flex gap-4 mt-4 mb-6">
-            <button class="border border-pink-700 px-4 py-2 rounded-full text-pink-800 font-medium">Description</button>
-            <button
-                class="border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100">Ingredients</button>
-            <button class="border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100">How To
+            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 font-medium active"
+                data-tab="description">Description</button>
+            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
+                data-tab="ingredients">Ingredients</button>
+            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
+                data-tab="how-to-use">How To
                 Use</button>
-            <button
-                class="border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100">Reviews</button>
+            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
+                data-tab="reviews">Reviews</button>
         </div>
     </div>
     <!-- Description Content -->
-    <div class="max-w-4xl mx-auto mt-12">
+    <div id="description-content" class="tab-content max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">Product Description</h2>
         <p class="text-gray-700 leading-relaxed mb-6">
             Transform your hair care routine with our Nourishing Shea Butter Hair Cream, a luxurious blend of rich shea
@@ -77,6 +90,86 @@
                 <li>Perfect for styling and defining curls</li>
                 <li>Suitable for all hair types</li>
             </ul>
+        </div>
+    </div>
+
+    <div id="ingredients-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
+        <h2 class="text-xl font-bold mb-4">Ingredients</h2>
+        <ul class="list-disc list-inside text-gray-700">
+            <li>Cocoa Oil</li>
+            <li>Cocoa Oil</li>
+            <li>Cocoa Oil</li>
+            <li>Cocoa Oil</li>
+            <li>Cocoa Oil</li>
+            <li>Cocoa Oil</li>
+        </ul>
+
+        <div class="bg-white/80 text-white rounded-xl p-6 mt-10">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="heart-pulse">
+                    <svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M30.595 2.953a10.06 10.06 0 0 1 .395 13.809L16.772 31 2.557 16.762A10.06 10.06 0 0 1 13.858.744l-6.57 6.57L9.66 9.686l7.114-7.114-.022-.023.023.021a10.06 10.06 0 0 1 13.82.383"
+                            fill="#99395C" />
+                    </svg>
+                </div>
+                <h1 class="text-4xl md:text-2xl font-bold text-rose-800">
+                    Ethically-sourced Ingredients
+                </h1>
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-40"></div>
+                <p class="text-lg md:text-l leading-relaxed text-gray-700 font-medium">
+                    We are committed to ethical sourcing and sustainability. Our ingredients are responsibly harvested
+                    and processed to ensure the highest quality while supporting environmental conservation and fair
+                    trade practices.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="how-to-use-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
+        <h2 class="text-xl font-bold mb-4">How To Use</h2>
+        <ol class="list-decimal list-inside text-gray-700 leading-relaxed">
+            <li><b>Prep your skin:</b> For best results, apply after a shower or bath when your skin is clean and
+                slightly damp.</li>
+            <li><b>Scoop a Small Amount:</b> A little goes a long way! Use your fingers to scoop a small amount of body
+                butter</li>
+            <li><b>Warm it Up:</b> Rub the butter between your palms to warm it up and make it easier to spread</li>
+            <li><b>Let it Absorb:</b> Allow a few moments for the butter to sink in and hydrate your skin</li>
+        </ol>
+    </div>
+
+    <div id="reviews-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
+        <div class="mb-6 flex bg-white/80 justify-between p-6 rounded-xl">
+            <p class="text-gray-700 mb-2 font-bold">Got thoughts on this product?</p>
+            <button
+                class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2">
+                Leave A Review
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+        <div class="pt-6">
+            <h2 class="text-xl font-bold mb-30">Reviews</h2>
+
+            <div class="border-b border-gray-300 pb-5">
+
+                <div class="flex items-center mb-2">
+                    <img src="https://placehold.co/30x30/99395C/FFFFFF?text=M" alt="User Avatar"
+                        class="rounded-full mr-2">
+                    <span class="font-semibold">Maya, 23</span>
+                </div>
+                <h2 class="text-xl font-bold mb-4">Thee growth hair & scalp oil</h2>
+                <p class="text-gray-700 italic mb-2">"This body butter is a game-changer! My skin feels so soft and
+                    hydrated, and the scent is absolutely divine. A little goes a long way, so it's great value for
+                    money.
+                    Highly recommend!"</p>
+                <div class="flex text-yellow-400 text-3xl">
+                    <span>★★★★☆</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>

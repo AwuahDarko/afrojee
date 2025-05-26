@@ -216,41 +216,4 @@
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Quantity Counter Logic
-        const decrementButton = document.getElementById('decrement');
-        const incrementButton = document.getElementById('increment');
-        const quantityInput = document.getElementById('quantity');
-
-        decrementButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-
-        incrementButton.addEventListener('click', () => {
-            let currentValue = parseInt(quantityInput.value);
-            quantityInput.value = currentValue + 1;
-        });
-
-        // Tab Switching Logic
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons and hide all content
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                tabContents.forEach(content => content.classList.add('hidden'));
-
-                // Add active class to the clicked button
-                button.classList.add('active');
-
-                // Show the corresponding content
-                const targetTab = button.dataset.tab;
-                document.getElementById(`${targetTab}-content`).classList.remove('hidden');
-            });
-        });
-    });
 </script>

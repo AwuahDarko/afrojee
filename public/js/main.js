@@ -49,38 +49,7 @@ cards.forEach(card => {
 });
 
 document.addEventListener('DOMContentLoaded', function () {
-  const faqButtons = document.querySelectorAll('.faq-button');
 
-  // Open the first FAQ by default
-  if (faqButtons.length > 0) {
-    const firstButton = faqButtons[0];
-    const firstContent = firstButton.nextElementSibling;
-    firstButton.setAttribute('aria-expanded', 'true');
-    firstContent.classList.add('active');
-    firstContent.classList.remove('hidden');
-  }
-
-  faqButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const isExpanded = button.getAttribute('aria-expanded') === 'true';
-      const content = button.nextElementSibling;
-
-      // Close all FAQ items
-      faqButtons.forEach(btn => {
-        btn.setAttribute('aria-expanded', 'false');
-        const otherContent = btn.nextElementSibling;
-        otherContent.classList.add('hidden');
-        otherContent.classList.remove('active');
-      });
-
-      // If the clicked item was collapsed, open it
-      if (!isExpanded) {
-        button.setAttribute('aria-expanded', 'true');
-        content.classList.remove('hidden');
-        content.classList.add('active');
-      }
-    });
-  });
 });
 
 const swiper = new Swiper('.hero-swiper', {
@@ -94,6 +63,11 @@ const swiper = new Swiper('.hero-swiper', {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
   gsap.from(".hero-label", {
     opacity: 0,
     y: -30,
@@ -122,4 +96,98 @@ document.addEventListener("DOMContentLoaded", () => {
     duration: 1,
     delay: 1.5
   });
+
+
+  // Quantity Counter Logic
+  const decrementButton = document.getElementById('decrement');
+  const incrementButton = document.getElementById('increment');
+  const quantityInput = document.getElementById('quantity');
+
+  // decrementButton.addEventListener('click', () => {
+  //   let currentValue = parseInt(quantityInput.value);
+  //   if (currentValue > 1) {
+  //     quantityInput.value = currentValue - 1;
+  //   }
+  // });
+
+  // incrementButton.addEventListener('click', () => {
+  //   let currentValue = parseInt(quantityInput.value);
+  //   quantityInput.value = currentValue + 1;
+  // });
+
+  // Quantity Counter Logic
+  const buyNowCounter = document.getElementById('buyNowCounter');
+  const addToCartCounter = document.getElementById('addToCartCounter');
+
+  // Function to update counters
+  const updateCounters = () => {
+    const currentValue = parseInt(quantityInput.value);
+    buyNowCounter.textContent = currentValue;
+    addToCartCounter.textContent = currentValue;
+  };
+
+  decrementButton.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value);
+    if (currentValue > 1) {
+      quantityInput.value = currentValue - 1;
+      updateCounters();
+    }
+  });
+
+  incrementButton.addEventListener('click', () => {
+    let currentValue = parseInt(quantityInput.value);
+    quantityInput.value = currentValue + 1;
+    updateCounters();
+  });
+
+  // Initialize counters on page load
+  updateCounters();
+
+  // Tab Switching Logic
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Remove active class from all buttons and hide all content
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      tabContents.forEach(content => content.classList.add('hidden'));
+
+      // Add active class to the clicked button
+      button.classList.add('active');
+
+      // Show the corresponding content
+      const targetTab = button.dataset.tab;
+      document.getElementById(`${targetTab}-content`).classList.remove('hidden');
+    });
+  });
+  // // Tab Switching Logic
+  // const tabButtons = document.querySelectorAll('.tab-button');
+  // const tabContents = document.querySelectorAll('.tab-content');
+
+  // tabButtons.forEach(button => {
+  //   button.addEventListener('click', () => {
+  //     // Remove active class from all buttons and hide all content
+  //     tabButtons.forEach(btn => btn.classList.remove('active'));
+  //     tabContents.forEach(content => content.classList.add('hidden'));
+
+  //     // Add active class to the clicked button
+  //     button.classList.add('active');
+
+  //     // Show the corresponding content
+  //     const targetTab = button.dataset.tab;
+  //     document.getElementById(`${targetTab}-content`).classList.remove('hidden');
+  //   });
+  // });
+
+
+
+
+
+
+
+
+
+
+
 });
