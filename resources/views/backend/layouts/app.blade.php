@@ -14,7 +14,7 @@
 
     <!-- Favicon -->
     <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
-    <title> Admin - {{ get_setting('site_name') . ' | ' . get_setting('site_motto') }}</title>
+    <title> Afojee Admin -   @yield('title' )</title>
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
@@ -33,6 +33,7 @@
     <!-- aiz core css -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
+    @yield('link')
 
 </head>
 

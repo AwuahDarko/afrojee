@@ -1,0 +1,20 @@
+.afrojee-row{
+    display: flex;
+    flex-direction: row;
+}
+
+.afrojee-spaceout{
+    justify-content: space-between;
+}
+
+.afrojee-gap-5{
+    gap: 5px;
+}
+
+.ql-editor {
+    height: 100%;
+    overflow-y: auto;
+}
+#ingre-editor, #how-editor, #desc-editor{
+    height: 300px;
+}
