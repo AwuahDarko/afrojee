@@ -1,4 +1,4 @@
-import './bootstrap';
-import './main';
-import './nav';
-import '../css/app.css';
+import './bootstrap.js';
+import './main.js';
+import './nav.js';
+// import '../css/app.css';

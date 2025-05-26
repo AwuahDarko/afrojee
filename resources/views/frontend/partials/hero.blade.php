@@ -14,18 +14,18 @@
     <div class="relative z-20 container mx-auto h-full px-4 md:px-8 flex flex-col justify-center">
         <div class="max-w-2xl">
             <!-- Product Category Label -->
-            <div class="inline-block px-6 py-2 rounded-full bg-gray-500/70 text-white text-sm mb-6">
+            <div class="hero-label inline-block px-6 py-2 rounded-full bg-gray-500/70 text-white text-sm mb-6">
                 Beauty creams, oils, balms & more
             </div>
 
             <!-- Main Heading -->
-            <h1 class="text-5xl md:text-6xl lg:text-7xl font-light text-white leading-tight mb-4">
+            <h1 class="hero-heading text-5xl md:text-6xl lg:text-7xl font-light text-white leading-tight mb-4">
                 Curated <span class="font-bold">beauty<br>essentials</span> for your<br>
                 <span class="font-bold">unique lifestyle</span>
             </h1>
 
             <!-- Call to Action Buttons -->
-            <div class="flex flex-wrap gap-4 mt-8">
+            <div class="hero-cta flex flex-wrap gap-4 mt-8">
                 <a href="#"
                     class="inline-flex items-center justify-center px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors">
                     Buy Now
@@ -51,7 +51,7 @@
 
         <!-- Testimonial Card -->
         <div
-            class="absolute bottom-8 right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 max-w-xl text-white">
+            class="hero-testimonial absolute bottom-8 right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-6 max-w-xl text-white">
             <!-- Top Row: Avatar + Name + Divider + Stars -->
             <div class="flex items-center space-x-4 mb-2">
                 <!-- Avatar -->

@@ -49,6 +49,7 @@
       transform: rotate(0deg);
     }
   </style>
+    <script src="{{ asset('js/admin.js') }}"></script>
 
 <section class="bg-[#f5f3e8]">
   <div class="container mx-auto px-1 py-12 ">
