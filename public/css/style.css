@@ -3,46 +3,38 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 @theme {
-  --font-sans: 'Optima';
-    --color-gold: #C8A655;
-    --color-cream: #F8F6F1;
-    --color-rosegold: #E0C3B6;
-    --color-footergold: #A67C24;
-    --color-burgundy: #9D3F5B;
-    --color-taupe: #806D48;
-    --color-strip: #766455;
+  --font-sans: "Optima";
+  --color-gold: #c8a655;
+  --color-cream: #f8f6f1;
+  --color-rosegold: #e0c3b6;
+  --color-footergold: #a67c24;
+  --color-burgundy: #9d3f5b;
+  --color-taupe: #806d48;
+  --color-strip: #766455;
+  --color-clifford: #da373d;
 }
 :root {
-  --color-primary: #8a3641;
-  --color-secondary: #f0ead6;
-  --color-text-dark: #333;
-  --color-text-light: #fff;
+    --color-primary: #8a3641;
+    --color-secondary: #f0ead6;
+    --color-text-dark: #333;
+    --color-text-light: #fff;
+    --color-text-pink-100: #99395C
 }
 
-
 .btn-primary {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
 }
 
 .btn-primary:hover {
-  background-color: #6a2831;
+    background-color: #6a2831;
 }
 
 .tab-button.active {
-  background-color: var(--color-primary);
-  color: var(--color-text-light);
+    background-color: var(--color-primary);
+    color: var(--color-text-light);
 }
-@theme {
-    --font-sans: "Optima";
-    --color-gold: #c8a655;
-    --color-cream: #f8f6f1;
-    --color-rosegold: #e0c3b6;
-    --color-footergold: #a67c24;
-    --color-burgundy: #9d3f5b;
-    --color-taupe: #806d48;
-    --color-strip: #766455;
-}
+
 
 @font-face {
     font-family: "Optima";
@@ -80,7 +72,42 @@ body {
     margin: 0;
     padding: 0;
     /* font-family: Outfit; */
-    background-color: black;
+    /* background-color: black; */
+    background-color: var(--color-secondary);
 }
 
+.pagination-button.active {
+    background-color: var(--color-pink-100);
+    color: var(--color-text-pink-100);
+    /* border-color: var(--color-primary); */
+    font-weight: bolder;
+}
 
+.bg-pink-800 {
+  background-color: var(--color-primary);
+}
+.hover\:bg-pink-900:hover {
+  background-color: #6a2831;
+}
+.text-pink-800 {
+  color: var(--color-primary);
+}
+.border-pink-800 {
+  border-color: var(--color-primary);
+}
+
+.bg-pink-100-light {
+  background-color: #fcebeb; /* A lighter pink for the address box */
+}
+.text-pink-700 {
+  color: #99395C; /* A slightly darker pink for text */
+}
+.hover\:text-pink-800:hover {
+  color: var(--color-primary);
+}
+.bg-pink-200-light {
+  background-color: #f0ead6; /* For the "Use this card" button background */
+}
+.hover\:bg-pink-300-light:hover {
+  background-color: #e0d8c9; /* Slightly darker hover for the button */
+}

@@ -13,7 +13,8 @@ Welcome Lorem ipsum
 @include('frontend.partials.faq2')
 @include('frontend.partials.reachout')
 @include('frontend.partials.newsletter')
-@include('frontend.partials.productList')
-@include('frontend.partials.productView')
+
 @include('frontend.partials.productDetail')
+@include('frontend.partials.cartItems')
+@include('frontend.partials.checkout')
 @endsection
