@@ -95,3 +95,19 @@ body {
 .border-pink-800 {
   border-color: var(--color-primary);
 }
+
+.bg-pink-100-light {
+  background-color: #fcebeb; /* A lighter pink for the address box */
+}
+.text-pink-700 {
+  color: #99395C; /* A slightly darker pink for text */
+}
+.hover\:text-pink-800:hover {
+  color: var(--color-primary);
+}
+.bg-pink-200-light {
+  background-color: #f0ead6; /* For the "Use this card" button background */
+}
+.hover\:bg-pink-300-light:hover {
+  background-color: #e0d8c9; /* Slightly darker hover for the button */
+}
