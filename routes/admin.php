@@ -27,9 +27,15 @@ Route::prefix('admin')->group(function () {
             Route::post('/category/edit', [CategoryController::class, 'update'])->name('admin.category.edit');
 
 
-              Route::get('/products', [ProductController::class, 'index'])->name('admin.products');
-              Route::get('/products/new', [ProductController::class, 'newProduct'])->name('admin.products.new');
-               Route::post('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+            Route::get('/products', [ProductController::class, 'index'])->name('admin.products');
+            Route::get('/products/new', [ProductController::class, 'newProduct'])->name('admin.products.new');
+            Route::post('/products/create', [ProductController::class, 'create'])->name('admin.products.create');
+            Route::get('/products/view/{id}', [ProductController::class, 'viewProduct'])->name('admin.products.view');
+            Route::get('/products/activate/{id}', [ProductController::class, 'activate'])->name('admin.products.activate');
+            Route::get('/prroducts/deactivate/{id}', [ProductController::class, 'deactivate'])->name('admin.products.deactivate');
+            Route::post('/products/edit', [ProductController::class, 'update'])->name('admin.products.edit');
+            Route::get('/products/remove/{id}', [ProductController::class, 'remove'])->name('admin.products.remove');
+            Route::get('/prroducts/feature/{id}', [ProductController::class, 'feature'])->name('admin.products.feature');
 
         }
     );

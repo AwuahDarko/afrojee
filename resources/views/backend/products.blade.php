@@ -20,7 +20,7 @@
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
-                      {{-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Category</th> --}}
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Weight (Kg)</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Quantity</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
@@ -42,10 +42,10 @@
                           </div>
                         </div>
                       </td>
-                      {{-- <td>
-                        <p class="text-xs font-weight-bold mb-0">{{$product->category->name}}</p>
-                        <p class="text-xs text-secondary mb-0">Organization</p>
-                      </td> --}}
+                      <td>
+                        <p class="text-xs font-weight-bold mb-0">{{$product->weight}}</p>
+                        {{-- <p class="text-xs text-secondary mb-0">Organization</p> --}}
+                      </td>
                       <td class="align-middle text-center text-sm">
                          <span class="text-secondary text-xs font-weight-bold"> {{ number_format($product->price, 2) }} </span>
                       </td>
@@ -65,9 +65,30 @@
                         <span class="text-secondary text-xs font-weight-bold"> {{$product->created_at}} </span>
                       </td>
                       <td class="align-middle">
-                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                       <a href="{{ route('admin.products.view', ['id' => $product->id] ) }}" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit">
                           Edit
                         </a>
+                        <br>
+                        @if ($product->status === 1)
+                             <a href="{{ route('admin.products.deactivate', ['id' => $product->id] ) }}" class="text-secondary font-weight-bold text-xs text-danger" data-toggle="tooltip" data-original-title="DeActivate">
+                          Deactivate
+                        </a>
+                        @else
+                             <a href="{{ route('admin.products.activate', ['id' => $product->id] ) }}" class="text-secondary font-weight-bold text-xs text-success" data-toggle="tooltip" data-original-title="Activate">
+                          Activate
+                        </a>
+                        @endif
+                        <br>
+                         @if ($product->featured === 1)
+                             <a href="{{ route('admin.products.remove', ['id' => $product->id] ) }}" class="text-secondary font-weight-bold text-xs text-danger" data-toggle="tooltip" data-original-title="Remove">
+                          Remove
+                        </a>
+                        @else
+                             <a href="{{ route('admin.products.feature', ['id' => $product->id] ) }}" class="text-secondary font-weight-bold text-xs text-success" data-toggle="tooltip" data-original-title="Feature">
+                          Feature
+                        </a>
+                        @endif
+
                       </td>
                     </tr>
                     @endforeach

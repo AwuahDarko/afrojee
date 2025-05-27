@@ -32,7 +32,7 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
-                        <p>Create New Product Categrory</p>
+                        <p>Edit Product Categrory</p>
                         <form role="form" class="text-start" method="POST" action="{{ route('admin.category.edit') }}">
                             @csrf
                             <input type="hidden" name="id" value="{{$category->id}}">

@@ -1,5 +1,9 @@
 @extends('frontend.layouts.app')
 
+@section('title')
+Welcome Lorem ipsum
+@endsection
+
 @section('content')
 @include('frontend.partials.hero')
 @include('frontend.partials.products')

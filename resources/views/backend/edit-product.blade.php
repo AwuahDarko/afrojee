@@ -5,7 +5,7 @@
 @endsection
 
 @section('title')
-    New Product
+    Edit Product
 @endsection
 
 @section('content')
@@ -36,14 +36,15 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
-                        <p>Create New Product</p>
-                        <form role="form" class="text-start" method="POST" action="{{ route('admin.products.create') }}"
+                        <p>Edit Product</p>
+                        <form role="form" class="text-start" method="POST" action="{{ route('admin.products.edit') }}"
                             id="product-form" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="id" value="{{ $product->id }}">
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="text" class="form-control" name="name" required
-                                    placeholder="Name of product" value="{{ old('name') }}">
+                                    placeholder="Name of product" value="{{ old('name', $product->name) }}">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -51,7 +52,7 @@
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="number" class="form-control" name="price" required
-                                    placeholder="Product price" value="{{ old('price') }}">
+                                    placeholder="Product price" value="{{ old('price', $product->price) }}">
                                 @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -59,7 +60,7 @@
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="number" class="form-control" name="quantity" required
-                                    placeholder="Product quantity" value="{{ old('quantity') }}">
+                                    placeholder="Product quantity" value="{{ old('quantity', $product->quantity) }}">
                                 @error('quantity')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -67,18 +68,18 @@
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="number" class="form-control" name="weight" required
-                                    placeholder="Product weight (Kg)" value="{{ old('weight') }}">
+                                    placeholder="Product weight (Kg)" value="{{ old('weight', $product->weight) }}">
                                 @error('weight')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="input-group input-group-outline my-3">
-                                <select name="category" id="category" class="form-control" value="{{ old('category') }}">
+                                <select name="category" id="category" class="form-control" value={{$product->category_id}}>
                                     <option value="">Select category</option>
                                     @foreach ($categories as $category)
-                                    <option value="{{$category->id}}"> {{$category->name }} </option>
-                                        
+                                        <option 
+                                         value="{{ $category->id }}"> {{ $category->name }} </option>
                                     @endforeach
                                 </select>
                                 @error('category')
@@ -87,15 +88,15 @@
                             </div>
 
                             <div class="input-group input-group-outline my-3">
-                                <input type="file" class="form-control" name="image" id="image" required
-                                    accept="image/png, image/jpg, image/jpeg, image/bmp" value="{{ old('image') }}">
+                                <input type="file" class="form-control" name="image" id="image" 
+                                    accept="image/png, image/jpg, image/jpeg, image/bmp">
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <input type="hidden" name="description" id="description">
-                            <input type="hidden" name="how_to_use" id="how_to_use">
-                            <input type="hidden" name="ingredients" id="ingredients">
+                            <input type="hidden" name="description" id="description" value="{{ $product->description }}">
+                            <input type="hidden" name="how_to_use" id="how_to_use" value="{{ $product->how_to_use }}">
+                            <input type="hidden" name="ingredients" id="ingredients" value="{{ $product->ingredients }}">
                             <p>Description</p>
                             <div id="desc-editor" class="my-3"></div>
                             @error('description')
@@ -131,26 +132,40 @@
 @section('script')
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
-    <script>
-        const desc = new Quill('#desc-editor', {
-            theme: 'snow'
-        });
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
 
-        const how = new Quill('#how-editor', {
-            theme: 'snow'
-        });
+            const desc = new Quill('#desc-editor', {
+                theme: 'snow'
+            });
 
-        const ingre = new Quill('#ingre-editor', {
-            theme: 'snow'
-        });
 
-        //   var html = quill.root.innerHTML;
-        //     console.log("HTML:", html);
+            // desc.root.innerHTML = `{{ $product->description }}`
+            desc.clipboard.dangerouslyPasteHTML(0, `{!! $product->description !!}`);
 
-        document.getElementById('product-form').addEventListener('submit', function() {
-            document.getElementById('description').value = desc.root.innerHTML;;
-            document.getElementById('how_to_use').value = how.root.innerHTML;;
-            document.getElementById('ingredients').value = ingre.root.innerHTML;;
+
+            const how = new Quill('#how-editor', {
+                theme: 'snow'
+            });
+            // how.root.innerHTML = `{{ $product->how_to_use }}`
+            how.clipboard.dangerouslyPasteHTML(0, `{!! $product->how_to_use !!}`);
+
+
+            const ingre = new Quill('#ingre-editor', {
+                theme: 'snow'
+            });
+            // ingre.root.innerHTML = `{{ $product->ingredients }}`
+            ingre.clipboard.dangerouslyPasteHTML(0, `{!! $product->ingredients !!}`);
+
+
+            //   var html = quill.root.innerHTML;
+            //     console.log("HTML:", html);
+
+            document.getElementById('product-form').addEventListener('submit', function() {
+                document.getElementById('description').value = desc.root.innerHTML;;
+                document.getElementById('how_to_use').value = how.root.innerHTML;;
+                document.getElementById('ingredients').value = ingre.root.innerHTML;;
+            });
         });
     </script>
 @endsection

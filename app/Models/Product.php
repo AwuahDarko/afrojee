@@ -16,7 +16,9 @@ class Product extends Model
         'how_to_use',
         'ingredients',
         'quantity',
+        'weight',
         'status',
+        'featured'
     ];
 
      public function category()

@@ -40,9 +40,9 @@
         <!-- Products Grid -->
         <!-- <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-4"> -->
         <div class="flex gap-4 p-0 max-w-8xl mx-auto" id="productCards">
-            <!-- Product 1 -->
-            <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
-                data-title="Body Butter" data-img-default="/images/p3.png" data-img-active="/images/p3-active.png">
+            @foreach ($featured_products as $product)
+                <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
+                data-title="Body Butter" data-img-default="{{$product->image}}" data-img-active="{{$product->image}}">
                 <div class="relative h-full w-full">
                     <img src="/images/p3.png" alt="Body Butter"
                         class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
@@ -72,13 +72,15 @@
                     </button>
                     <div
                         class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm p-4 opacity-100 group-[.inactive]:opacity-0 transition-opacity duration-300">
-                        <h3 class="text-white text-xl font-bold">Body Butter</h3>
+                        <h3 class="text-white text-xl font-bold"> {{$product->name}} </h3>
                     </div>
                 </div>
             </div>
+            @endforeach
+            
 
-            <!-- Product 2 -->
-            <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out inactive"
+           
+            {{-- <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out inactive"
                 data-title="Serum" data-img-default="/images/p2.png"
                 data-img-active="/images/p2-active.png">
                 <div class="relative h-full w-full">
@@ -114,7 +116,7 @@
                 </div>
             </div>
 
-            <!-- Product 3 -->
+            
             <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out inactive"
                 data-title="Lip Balm" data-img-default="/images/p2.png"
                 data-img-active="/images/p2-active.png">
@@ -150,7 +152,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Product 4 -->
+            
+
             <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out inactive"
                 data-title="Lip Balm" data-img-default="/images/p2.png"
                 data-img-active="/images/p2-active.png">
@@ -187,7 +190,7 @@
                         <h3 class="text-white text-xl font-bold">Lip Balm</h3>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         <!-- View All Products Button -->

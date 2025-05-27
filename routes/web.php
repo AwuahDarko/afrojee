@@ -2,8 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\ProfileManagementController;
+use App\Http\Controllers\Web\CheckoutController;
+use App\Http\Controllers\Web\SignInController;
+use App\Http\Controllers\Web\SignUpController;
+use App\Http\Controllers\Web\ReviewController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
+Route::get('/products', [ProductController::class, 'index'])->name('web.products');
+Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkout');
+Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
+Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
+Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');

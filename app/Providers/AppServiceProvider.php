@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 
@@ -22,5 +23,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::componentNamespace('App\\View\\Components', 'app'); // default
         Blade::anonymousComponentNamespace('resources/views/frontend', 'ui');
+        Model::automaticallyEagerLoadRelationships();
     }
 }
