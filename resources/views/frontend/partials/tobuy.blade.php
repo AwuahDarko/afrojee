@@ -4,8 +4,9 @@
         <div class="mb-16">
             <div class="flex flex-col md:flex-row items-center">
                 <h1 class="text-5xl w-2xs font-bold text-stone-700">
-                    <span class="block">How To</span>
-                     <span class="text-stone-600">Buy?</span>
+                    <span class="block">How</span>
+                    <span class="block">To <span class="text-stone-600 font-medium">Buy?</span></span>
+                     
                 </h1>
                 <div class="w-full h-1 bg-stone-300 mt-4 md:mt-0"></div>
             </div>
@@ -48,133 +49,5 @@
 
         </div>
 
-        <!-- Additional Information -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-xl font-semibold text-stone-700 mb-4">Shipping Information</h3>
-                <ul class="space-y-2 text-stone-600">
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Free shipping on orders over $50
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Standard delivery: 3-5 business days
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Express delivery: 1-2 business days (additional fee)
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        International shipping available
-                    </li>
-                </ul>
-            </div>
-
-            <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-xl font-semibold text-stone-700 mb-4">Payment Methods</h3>
-                <ul class="space-y-2 text-stone-600">
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Credit/Debit Cards (Visa, Mastercard, American Express)
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        PayPal
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Mobile Money (for local customers)
-                    </li>
-                    <li class="flex items-start">
-                        <svg class="w-5 h-5 text-amber-500 mr-2 mt-1 flex-shrink-0" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        Bank Transfer
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- FAQ Section -->
-        <div class="mb-16">
-            <h2 class="text-2xl font-semibold text-stone-700 mb-6">Frequently Asked Questions</h2>
-
-            <div class="space-y-4">
-                <div class="bg-white p-5 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-semibold text-stone-700 mb-2">How long will my order take to arrive?</h3>
-                    <p class="text-stone-600">Standard delivery typically takes 3-5 business days within the country.
-                        International shipping may take 7-14 business days depending on your location.</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-semibold text-stone-700 mb-2">What if I'm not satisfied with my purchase?
-                    </h3>
-                    <p class="text-stone-600">We offer a 30-day satisfaction guarantee. If you're not completely happy
-                        with your purchase, you can return it for a full refund or exchange.</p>
-                </div>
-
-                <div class="bg-white p-5 rounded-lg shadow-sm">
-                    <h3 class="text-lg font-semibold text-stone-700 mb-2">Do you offer wholesale options?</h3>
-                    <p class="text-stone-600">Yes, we do offer wholesale pricing for bulk orders. Please contact our
-                        customer service team for more information on wholesale purchases.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA Section -->
-        <div class="bg-stone-100 p-8 rounded-lg text-center">
-            <h2 class="text-2xl font-semibold text-stone-700 mb-4">Ready to experience natural beauty?</h2>
-            <p class="text-stone-600 mb-6 max-w-2xl mx-auto">Browse our collection of premium, natural skincare products
-                and begin your journey to healthier, more radiant skin today.</p>
-            <a href="#"
-                class="inline-flex items-center justify-center px-8 py-3 bg-amber-400 text-white rounded-full hover:bg-amber-500 transition duration-300">
-                Shop Now
-                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3">
-                    </path>
-                </svg>
-            </a>
-        </div>
     </div>
 </section>

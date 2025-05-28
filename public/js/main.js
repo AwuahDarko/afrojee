@@ -373,4 +373,27 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartSummary();
 
 
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const products = document.querySelectorAll('.product-card');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.getAttribute('data-filter');
+
+      // Update active button style
+      filterButtons.forEach(btn => btn.classList.remove('active-filter'));
+      button.classList.add('active-filter');
+
+      // Show/hide products
+      products.forEach(product => {
+        const category = product.getAttribute('data-category');
+        if (filter === 'all' || category === filter) {
+          product.style.display = 'block';
+        } else {
+          product.style.display = 'none';
+        }
+      });
+    });
+  });
+
 });

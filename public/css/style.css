@@ -76,6 +76,10 @@ body {
     background-color: var(--color-secondary);
 }
 
+.tye{
+  background-image: url('../images/p3.png');
+}
+
 .pagination-button.active {
     background-color: var(--color-pink-100);
     color: var(--color-text-pink-100);
@@ -110,4 +114,9 @@ body {
 }
 .hover\:bg-pink-300-light:hover {
   background-color: #e0d8c9; /* Slightly darker hover for the button */
+}
+
+.active-filter {
+  background-color: #831843; /* Tailwind pink-800 */
+  color: white;
 }

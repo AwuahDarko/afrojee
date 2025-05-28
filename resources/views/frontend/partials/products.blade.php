@@ -1,11 +1,9 @@
 <style>
     .product-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        /* width: 70px; */
     }
 
     .product-card:hover {
-        /* transform: scale(1.05); */
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         z-index: 10;
     }
@@ -80,6 +78,24 @@
             
 
            
+
+        </div>
+
+        <!-- View All Products Button -->
+        <div class="flex justify-end mt-12">
+            <a href="{{ route('web.products') }}"
+                class="inline-flex items-center justify-center px-8 py-3 rounded-full border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white transition-colors">
+                View All Products
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                        clip-rule="evenodd" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
             {{-- <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out inactive"
                 data-title="Serum" data-img-default="/images/p2.png"
                 data-img-active="/images/p2-active.png">
@@ -191,19 +207,3 @@
                     </div>
                 </div>
             </div> --}}
-        </div>
-
-        <!-- View All Products Button -->
-        <div class="flex justify-end mt-12">
-            <a href="#"
-                class="inline-flex items-center justify-center px-8 py-3 rounded-full border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white transition-colors">
-                View All Products
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
-                        d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                        clip-rule="evenodd" />
-                </svg>
-            </a>
-        </div>
-    </div>
-</section>

@@ -54,7 +54,7 @@
 <section class="bg-[#f5f3e8]">
   <div class="container mx-auto px-1 py-12 ">
     <div>
-      <h2 class="text-5xl font-semibold text-gray-700">Got</h2>
+      <h2 class="text-5xl font-medium text-gray-700">Got</h2>
       <h2 class="text-5xl font-semibold text-gray-700 mb-6">Questions?</h2>
       <div class="border-t border-gray-300 mb-8"></div>
       <p class="text-gray-700 mb-10">

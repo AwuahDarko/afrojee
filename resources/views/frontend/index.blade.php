@@ -14,7 +14,5 @@ Welcome Lorem ipsum
 @include('frontend.partials.reachout')
 @include('frontend.partials.newsletter')
 
-@include('frontend.partials.productDetail')
-@include('frontend.partials.cartItems')
-@include('frontend.partials.checkout')
+
 @endsection
