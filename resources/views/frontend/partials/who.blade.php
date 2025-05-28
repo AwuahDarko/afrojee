@@ -103,13 +103,12 @@
             <!-- Bio-friendly ingredients -->
             <div class="space-y-4">
                 <div class="flex items-center mb-2">
-                    <svg class="w-8 h-8 text-green-600 mr-3" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M4.553 9.776a.5.5 0 0 1 .676.208l1.24 2.483a.5.5 0 0 1-.896.448l-1.24-2.483a.5.5 0 0 1 .22-.656zM10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm1-13a1 1 0 1 0-2 0v5.086l-4.243 4.242a1 1 0 1 0 1.415 1.415L10 11.914l3.828 3.829a1 1 0 0 0 1.415-1.415L11 11.086V5z"
-                            clip-rule="evenodd"></path>
+                    <svg width="34" height="32" viewBox="0 0 34 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M25.604 8.333c-15 3.334-18.5 13.617-21.967 22.234l3.15 1.1 1.583-3.834c.8.284 1.634.5 2.234.5C28.937 28.333 33.936 0 33.936 0 32.27 3.333 20.604 3.75 12.27 5.417S.604 14.167.604 17.5s2.916 6.25 2.916 6.25C8.937 8.333 25.604 8.333 25.604 8.333"
+                            fill="#82AE2A" />
                     </svg>
-                    <h2 class="text-2xl font-semibold text-stone-700">Bio-friendly ingredients</h2>
+                    <h2 class="text-2xl ml-2 font-semibold text-stone-700">Bio-friendly ingredients</h2>
                 </div>
                 <p class="text-stone-700 text-lg">
                     Our oils and creams are crafted with the highest quality bio-friendly ingredients, ensuring your
@@ -120,13 +119,11 @@
             <!-- Fast and Effective Results -->
             <div class="space-y-4">
                 <div class="flex items-center mb-2">
-                    <svg class="w-8 h-8 text-amber-500 mr-3" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
-                            clip-rule="evenodd"></path>
+                    <svg width="25" height="36" viewBox="0 0 25 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="m6.79 35.458 2.007-13.813H.27L15.277 0h.927l-1.966 15.626H24.27L7.717 35.458z"
+                            fill="#EC9836" />
                     </svg>
-                    <h2 class="text-2xl font-semibold text-stone-700">Fast and Effective Results</h2>
+                    <h2 class="text-2xl ml-2 font-semibold text-stone-700">Fast and Effective Results</h2>
                 </div>
                 <p class="text-stone-700 text-lg">
                     Our innovative formulations deliver quick and visible improvements to your skin, providing both
@@ -137,13 +134,12 @@
             <!-- Ethically-sourced Ingredients -->
             <div class="space-y-4">
                 <div class="flex items-center mb-2">
-                    <svg class="w-8 h-8 text-teal-500 mr-3" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                            clip-rule="evenodd"></path>
+                    <svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M30.864 2.953a10.06 10.06 0 0 1 .396 13.809L17.042 31 2.827 16.762A10.06 10.06 0 0 1 14.127.744l-6.569 6.57L9.93 9.686l7.114-7.114-.021-.023.023.021a10.06 10.06 0 0 1 13.82.383"
+                            fill="#00A6CA" />
                     </svg>
-                    <h2 class="text-2xl font-semibold text-stone-700">Ethically-sourced Ingredients</h2>
+                    <h2 class="text-2xl  ml-2 font-semibold text-stone-700">Ethically-sourced Ingredients</h2>
                 </div>
                 <p class="text-stone-700 text-lg">
                     We are committed to ethical sourcing and sustainability. Our ingredients are responsibly harvested
