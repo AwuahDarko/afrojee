@@ -3,22 +3,22 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 @theme {
-  --font-sans: "Optima";
-  --color-gold: #c8a655;
-  --color-cream: #f8f6f1;
-  --color-rosegold: #e0c3b6;
-  --color-footergold: #a67c24;
-  --color-burgundy: #9d3f5b;
-  --color-taupe: #806d48;
-  --color-strip: #766455;
-  --color-clifford: #da373d;
+    --font-sans: "Optima";
+    --color-gold: #c8a655;
+    --color-cream: #f8f6f1;
+    --color-rosegold: #e0c3b6;
+    --color-footergold: #a67c24;
+    --color-burgundy: #9d3f5b;
+    --color-taupe: #806d48;
+    --color-strip: #766455;
+    --color-clifford: #da373d;
 }
 :root {
     --color-primary: #8a3641;
     --color-secondary: #f0ead6;
     --color-text-dark: #333;
     --color-text-light: #fff;
-    --color-text-pink-100: #99395C
+    --color-text-pink-100: #99395c;
 }
 
 .btn-primary {
@@ -34,7 +34,6 @@
     background-color: var(--color-primary);
     color: var(--color-text-light);
 }
-
 
 @font-face {
     font-family: "Optima";
@@ -76,8 +75,8 @@ body {
     background-color: var(--color-secondary);
 }
 
-.tye{
-  background-image: url('../images/p3.png');
+.tye {
+    background-image: url("../images/p3.png");
 }
 
 .pagination-button.active {
@@ -88,35 +87,42 @@ body {
 }
 
 .bg-pink-800 {
-  background-color: var(--color-primary);
+    background-color: var(--color-primary);
 }
 .hover\:bg-pink-900:hover {
-  background-color: #6a2831;
+    background-color: #6a2831;
 }
 .text-pink-800 {
-  color: var(--color-primary);
+    color: var(--color-primary);
 }
 .border-pink-800 {
-  border-color: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 .bg-pink-100-light {
-  background-color: #fcebeb; /* A lighter pink for the address box */
+    background-color: #fcebeb; /* A lighter pink for the address box */
 }
 .text-pink-700 {
-  color: #99395C; /* A slightly darker pink for text */
+    color: #99395c; /* A slightly darker pink for text */
 }
 .hover\:text-pink-800:hover {
-  color: var(--color-primary);
+    color: var(--color-primary);
 }
 .bg-pink-200-light {
-  background-color: #f0ead6; /* For the "Use this card" button background */
+    background-color: #f0ead6; /* For the "Use this card" button background */
 }
 .hover\:bg-pink-300-light:hover {
-  background-color: #e0d8c9; /* Slightly darker hover for the button */
+    background-color: #e0d8c9; /* Slightly darker hover for the button */
 }
 
 .active-filter {
-  background-color: #831843; /* Tailwind pink-800 */
-  color: white;
+    background-color: #831843; /* Tailwind pink-800 */
+    color: white;
+}
+
+.product-card {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+    transition: all 0.5s ease;
 }
