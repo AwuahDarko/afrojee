@@ -45,7 +45,7 @@
       @foreach($products as $product)
       <div class="product-card text-left"
       data-category="{{ strtolower(str_replace(' ', '-', $product->category->name)) }}">
-      <img src="{{ $product->image }}" alt="{{ $product->name }}" class="rounded-lg w-full mb-4" />
+      <img src="{{ $product->image }}" alt="{{ $product->name }}" class="rounded-lg w-full h-90 mb-4" />
       <h3 class="font-semibold text-gray-800 text-lg mb-2">
       {{ $product->name }}
       </h3>
