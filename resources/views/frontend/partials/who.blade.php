@@ -139,7 +139,7 @@
                             d="M30.864 2.953a10.06 10.06 0 0 1 .396 13.809L17.042 31 2.827 16.762A10.06 10.06 0 0 1 14.127.744l-6.569 6.57L9.93 9.686l7.114-7.114-.021-.023.023.021a10.06 10.06 0 0 1 13.82.383"
                             fill="#00A6CA" />
                     </svg>
-                    <h2 class="text-2xl  ml-2 font-semibold text-stone-700">Ethically-sourced Ingredients</h2>
+                    <h2 class="text-2xl ml-2 font-semibold text-stone-700">Ethically-sourced Ingredients</h2>
                 </div>
                 <p class="text-stone-700 text-lg">
                     We are committed to ethical sourcing and sustainability. Our ingredients are responsibly harvested
