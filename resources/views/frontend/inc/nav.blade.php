@@ -13,9 +13,11 @@
 
         <!-- Left navigation -->
         <div class="hidden lg:flex items-center space-x-8">
-            <a href="#" class="text-gold font-medium hover:text-gold/80 transition">Home</a>
+            <a href="#" class="text-gold font-medium hover:text-gold/80 transition relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
+                Home
+            </a>
             <div class="relative group">
-                <button class="text-gold font-medium hover:text-gold/80 transition flex items-center">
+                <button class="text-gold font-medium hover:text-gold/80 transition flex items-center relative {{ request()->is('products*') ? 'active-nav-link' : '' }}">
                     Products
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
@@ -43,8 +45,12 @@
 
         <!-- Right navigation -->
         <div class="hidden lg:flex items-center space-x-8">
-            <a href="#" class="text-gold font-medium hover:text-gold/80 transition">About Us</a>
-            <a href="#" class="text-gold font-medium hover:text-gold/80 transition">FAQs</a>
+            <a href="/about" class="text-gold font-medium hover:text-gold/80 transition relative {{ request()->is('about') ? 'active-nav-link' : '' }}">
+                About Us
+            </a>
+            <a href="/faq" class="text-gold font-medium hover:text-gold/80 transition relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
+                FAQs
+            </a>
         </div>
 
         <!-- User account button -->
@@ -57,10 +63,12 @@
 
     <!-- Mobile menu, hidden by default -->
     <div id="mobile-menu" class="lg:hidden hidden mt-4 pb-4">
-        <a href="#" class="block py-2 text-gold hover:text-gold/80">Home</a>
+        <a href="#" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
+            Home
+        </a>
         <div class="relative">
             <button id="mobile-products-button"
-                class="w-full text-left py-2 text-gold hover:text-gold/80 flex items-center justify-between">
+                class="w-full text-left py-2 text-gold hover:text-gold/80 flex items-center justify-between relative {{ request()->is('products*') ? 'active-nav-link' : '' }}">
                 Products
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -73,7 +81,31 @@
                 <a href="#" class="block py-2 text-gold/80 hover:text-gold">Category 3</a>
             </div>
         </div>
-        <a href="#" class="block py-2 text-gold hover:text-gold/80">About Us</a>
-        <a href="#" class="block py-2 text-gold hover:text-gold/80">FAQs</a>
+        <a href="/about" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('about') ? 'active-nav-link' : '' }}">
+            About Us
+        </a>
+        <a href="#" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
+            FAQs
+        </a>
     </div>
 </nav>
+
+<style>
+    .active-nav-link::after {
+        /* content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background-color: currentColor; */
+    }
+</style>
+
+<script>
+    // This assumes you're using Laravel - adjust the condition if using another framework
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mobile menu toggle functionality would go here
+        // You'll need to keep your existing JavaScript for mobile menu toggling
+    });
+</script>
