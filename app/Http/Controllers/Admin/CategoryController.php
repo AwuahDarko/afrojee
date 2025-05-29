@@ -39,7 +39,8 @@ class CategoryController extends Controller
 
         $category = new Category(
             [
-                'name' => $request->name
+                'name' => $request->name,
+                'slug' => strtolower(implode('-',explode(' ', $request->name)))
             ]
         );
         $category->save();
@@ -78,6 +79,7 @@ class CategoryController extends Controller
         }
 
         $category->name = $request->name;
+        $category->slug = strtolower(implode('-',explode(' ', $request->name)));
 
         $category->save();
 

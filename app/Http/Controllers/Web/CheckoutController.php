@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class CheckoutController extends Controller
 {
     public function index(){
-        return 'In checkout controller';
+        return view('frontend.partials.checkout');
     }
 }

@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-Welcome Lorem ipsum
+Afrojee - Hair and skin care products
 @endsection
 
 @section('content')
