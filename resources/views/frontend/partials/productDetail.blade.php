@@ -1,14 +1,25 @@
+@extends('frontend.layouts.app')
+
+@section('title')
+    Afrojee - {{$product->name}}
+@endsection
+
+
+
+
+
+@section('content')
 <section class="bg-[#f7f3e9] py-16 px-4 md:px-8 text-gray-800">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
         <!-- Product Image -->
         <div class="flex justify-center">
-            <img src="/images/p3.png" alt="Body Butter" class="rounded-xl w-72" />
+            <img src="{{$product->image}}" alt="Body Butter" class="rounded-xl w-72" />
         </div>
 
         <!-- Product Details -->
         <div>
             <h1 class="text-2xl font-semibold mb-2">
-                Always moisturized Body Butter
+                {{$product->name}}
             </h1>
 
             <!-- Star Rating -->
@@ -17,7 +28,7 @@
             </div>
 
             <!-- Price -->
-            <p class="text-3xl font-bold text-gray-900 mb-6">$ 25.00</p>
+            <p class="text-3xl font-bold text-gray-900 mb-6">$ {{ number_format($product->price, 2) }}</p>
 
             <!-- Quantity Selector -->
             <div class="flex items-center mb-6">
@@ -94,14 +105,7 @@
     <div id="description-content" class="tab-content max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">Product Description</h2>
         <p class="text-gray-700 leading-relaxed mb-6">
-            Transform your hair care routine with our Nourishing Shea Butter
-            Hair Cream, a luxurious blend of rich shea butter, coconut oil, and
-            natural botanicals. This cream deeply moisturizes and strengthens
-            hair, leaving it soft, shiny, and manageable. Perfect for all hair
-            types, especially dry or damaged hair, it provides lasting hydration
-            without weighing your hair down. Use it daily to define curls,
-            smooth frizz, or as a deep conditioning treatment for a healthy,
-            vibrant look.
+           {!! $product->description !!}
         </p>
 
         <!-- Key Benefits -->
@@ -503,3 +507,4 @@
         </div>
     </div>
 </section>
+@endsection

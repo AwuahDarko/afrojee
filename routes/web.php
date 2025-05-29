@@ -12,6 +12,8 @@ use App\Http\Controllers\Web\ReviewController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/products', [ProductController::class, 'index'])->name('web.products');
+Route::get('/products/{slug}', [ProductController::class, 'filterByCategory'])->name('web.products.filterByCategory');
+Route::get('/products/details/{slug}', [ProductController::class, 'productDetails'])->name('web.products.details');
 Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkout');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');

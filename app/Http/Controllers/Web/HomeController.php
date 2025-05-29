@@ -10,7 +10,7 @@ class HomeController extends Controller
 {
     
     public function index(){
-        $featured_products = Product::with('Category')->where(['featured' => 1]) ->get();
+        $featured_products = Product::with('Category')->where(['featured' => 1])->limit(4)->get();
 
         return view('frontend.index', compact('featured_products'));
     }
