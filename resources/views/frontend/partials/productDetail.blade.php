@@ -1,3 +1,5 @@
+<script src="{{ asset('js/product.js') }}"></script>
+
 <section class="bg-[#f7f3e9] py-16 px-4 md:px-8 text-gray-800">
     <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
         <!-- Product Image -->
