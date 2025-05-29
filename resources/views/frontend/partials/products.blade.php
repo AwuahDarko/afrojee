@@ -19,6 +19,7 @@
         opacity: 0.7;
     }
 </style>
+<script src="{{ asset('js/product.js') }}"></script>
 
 <section class="py-16 px-4 md:px-8">
     <div class="container mx-auto mmax-container">

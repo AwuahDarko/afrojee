@@ -185,7 +185,7 @@
     </div>
     
     <div class="flex justify-end mt-10">
-      <a href="#" class="bg-rose-700 text-white px-6 py-3 rounded-full flex items-center hover:bg-rose-800 transition-colors duration-300">
+      <a href="/faq" class="bg-rose-700 text-white px-6 py-3 rounded-full flex items-center hover:bg-rose-800 transition-colors duration-300">
         View More
         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>

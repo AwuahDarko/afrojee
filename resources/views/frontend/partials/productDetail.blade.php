@@ -1,4 +1,4 @@
-<script src="{{ asset('js/product.js') }}"></script>
+<script src="{{ asset('js/productDetail.js') }}"></script>
 
 @extends('frontend.layouts.app')
 
