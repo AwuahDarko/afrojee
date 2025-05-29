@@ -17,7 +17,7 @@
 
     @yield('meta')
 
-    @if (!isset($detailedProduct))
+    {{-- @if (!isset($product))
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="{{ get_setting('meta_title') }}">
         <meta itemprop="description" content="{{ get_setting('meta_description') }}">
