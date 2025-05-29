@@ -174,7 +174,7 @@
                     </button>
                     <div class="faq-content px-6 pb-4 hidden">
                         <p class="text-gray-700">
-                            For optimal quality and longevity, store your YaaSerwaa products in a cool, dry place away from
+                            For optimal quality and longevity, store your Afro Jee products in a cool, dry place away from
                             direct sunlight. Some of our products containing natural ingredients may be better stored in the
                             refrigerator, particularly during hot weather. Each product label provides specific storage
                             instructions.

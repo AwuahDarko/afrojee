@@ -40,7 +40,8 @@
         <meta property="og:site_name" content="{{ get_setting('site_name') }}" />
         <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
     @endif
-    <title>@yield('title', 'YaaSerwaa')</title>
+    <title>@yield('title', 'AfroJee')</title>
+    <!-- <link rel="icon" href="{{ asset('/favicon.ico') }}" type="image/x-icon"> -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script type="module" src="{{asset('js/app.js')}}"></script>
     <!-- Favicon -->

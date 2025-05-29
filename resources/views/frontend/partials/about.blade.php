@@ -8,14 +8,14 @@
                 <div class="bg-taupe h-1 backdrop-blur-sm  w-3/4 min-w-lg mt-4 mb-8"></div>
             </div>
             <p class="text-gray-800 text-lg leading-relaxed mb-4">
-                Welcome to <strong>YaaSerwaa Lifestyle Beauty</strong>, where simplicity meets quality in every product we
+                Welcome to <strong>Afro Jee</strong>, where simplicity meets quality in every product we
                 create.
                 Founded with a passion for natural beauty and self-care, our brand is dedicated to providing you with
                 essentials
                 that enhance your skin and hair, without the fuss.
             </p>
             <p class="text-gray-800 text-lg leading-relaxed">
-                At <strong>YaaSerwaa</strong>, we believe that less is more. That's why we focus on crafting a carefully
+                At <strong>Afro Jee</strong>, we believe that less is more. That's why we focus on crafting a carefully
                 curated
                 selection of products that are as effective as they are gentle. We source the finest natural ingredients,
                 ensuring
@@ -56,7 +56,7 @@
         <p class="text-lg text-gray-700 leading-relaxed mb-6">
             We currently operate exclusively in <span class="font-bold">all the states in the USA</span>, but we're
             excited to expand our reach and bring
-            YaaSerwaa Lifestyle Beauty to more countries soon. Stay tuned!
+            Afro Jee to more countries soon. Stay tuned!
         </p>
 
         <div class="grid md:grid-cols-2 gap-10 items-center">
@@ -371,7 +371,7 @@
                 <div class="bg-taupe h-1 backdrop-blur-sm  w-3/4 min-w-lg mt-4 mb-8"></div>
             </div>
             <p class="text-lg text-gray-700 leading-relaxed mb-8">
-                Join us on our journey to celebrate natural beauty, one product at a time. At YaaSerwaa Lifestyle Beauty,
+                Join us on our journey to celebrate natural beauty, one product at a time. At Afro Jee,
                 it's not just
                 about looking good—it's about feeling good too.
             </p>

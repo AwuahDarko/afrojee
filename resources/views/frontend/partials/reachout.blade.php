@@ -25,7 +25,7 @@
                 </div>
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">Email Us</h3>
                 <p class="text-gray-700 mb-2">Reach out to us via the email address below:</p>
-                <p class="font-semibold text-gray-800">yaaserwaalifestylebeauty@gmail.com</p>
+                <p class="font-semibold text-gray-800">Afro Jeelifestylebeauty@gmail.com</p>
             </div>
 
             <!-- Instagram Card -->
@@ -39,7 +39,7 @@
                 </div>
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">On Instagram</h3>
                 <p class="text-gray-700 mb-2">Reach out to us via the IG handle;</p>
-                <p class="font-semibold text-gray-800">Yaaserwaabeauty</p>
+                <p class="font-semibold text-gray-800">Afro Jeebeauty</p>
             </div>
         </div>
     </div>

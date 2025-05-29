@@ -17,7 +17,7 @@
             <div class="flex items-center">
                 <div class="space-y-6 text-left">
                     <p class="text-stone-700 text-lg">
-                        Welcome to <span class="font-semibold">YaaSerwaa Lifestyle Beauty</span>, your destination for
+                        Welcome to <span class="font-semibold">Afro Jee</span>, your destination for
                         premium natural skincare products. We are a company dedicated to providing high-quality oils and
                         creams that
                         reflect our commitment to natural beauty and sustainability.
@@ -67,7 +67,7 @@
 
             <div class="pl-16 pr-16">
                 <p class="text-stone-700 mb-4">
-                    At <span class="font-semibold">YaaSerwaa Lifestyle Beauty</span>, we prioritize purity and nature.
+                    At <span class="font-semibold">Afro Jee</span>, we prioritize purity and nature.
                     Our
                     oils and creams are made with natural, plant-based ingredients that deeply nourish and rejuvenate
                     your

@@ -38,7 +38,7 @@
         <!-- Logo -->
         <div class="flex items-center">
             <a href="/" class="flex flex-col items-center">
-                <h1 class="text-2xl md:text-3xl font-serif text-gold italic">YaaSerwaa</h1>
+                <h1 class="text-2xl md:text-3xl font-serif text-gold italic">Afro Jee</h1>
                 <span class="text-xs text-gold/80">Lifestyle Beauty</span>
             </a>
         </div>

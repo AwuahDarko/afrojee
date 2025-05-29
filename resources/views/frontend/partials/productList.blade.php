@@ -11,7 +11,7 @@
             <!-- Header -->
             <div class="mb-12">
                 <div class="flex items-center mb-2">
-                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-light text-taupe mb-2">
+                    <h2 class="text-2xl md:text-5xl lg:text-6xl text-left font-light text-taupe mb-2">
                         View <br /><span class="font-bold">Our Products</span>
                     </h2>
                     <div class="bg-taupe h-1 backdrop-blur-sm w-full min-w-lg mt-4 mb-8"></div>

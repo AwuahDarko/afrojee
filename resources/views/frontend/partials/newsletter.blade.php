@@ -20,7 +20,7 @@
         </div> -->
 
         <p class="text-lg font-bold leading-relaxed mb-10">
-            Stay in the loop with the latest from YaaSerwaa Lifestyle Beauty! Sign up for our newsletter to receive
+            Stay in the loop with the latest from Afro Jee! Sign up for our newsletter to receive
             exclusive updates, special offers, and beauty tips straight to your inbox. Join our community and be the
             first to know what's new!
         </p>

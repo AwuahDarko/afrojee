@@ -53,7 +53,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-stone-600 mb-4">"I've been using YaaSerwaa products for three months now, and the
+            <p class="text-stone-600 mb-4">"I've been using Afro Jee products for three months now, and the
                 difference in my skin is remarkable. The shea butter cream has completely transformed my dry
                 skin!"</p>
             <p class="font-semibold text-stone-700">- Ama K.</p>
@@ -89,7 +89,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-stone-600 mb-4">"What sets YaaSerwaa apart is their commitment to quality. You can
+            <p class="text-stone-600 mb-4">"What sets Afro Jee apart is their commitment to quality. You can
                 really feel the difference when using products that are free from harmful chemicals. My skin has
                 never looked better!"</p>
             <p class="font-semibold text-stone-700">- Kofi M.</p>
