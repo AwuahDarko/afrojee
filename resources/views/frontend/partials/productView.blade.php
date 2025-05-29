@@ -83,6 +83,7 @@
         });
     </script> -->
 
+    <script src="{{ asset('js/product.js') }}"></script>
 
 <section class="py-16 px-4 md:px-8">
     <div class="flex flex-col md:flex-row p-6">

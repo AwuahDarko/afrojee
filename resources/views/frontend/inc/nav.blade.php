@@ -13,7 +13,7 @@
 
         <!-- Left navigation -->
         <div class="hidden lg:flex items-center space-x-8">
-            <a href="#" class="text-gold font-medium hover:text-gold/80 transition relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
+            <a href="/" class="text-gold font-medium hover:text-gold/80 transition relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
                 Home
             </a>
             <div class="relative group">
@@ -37,7 +37,7 @@
 
         <!-- Logo -->
         <div class="flex items-center">
-            <a href="#" class="flex flex-col items-center">
+            <a href="/" class="flex flex-col items-center">
                 <h1 class="text-2xl md:text-3xl font-serif text-gold italic">YaaSerwaa</h1>
                 <span class="text-xs text-gold/80">Lifestyle Beauty</span>
             </a>
@@ -63,7 +63,7 @@
 
     <!-- Mobile menu, hidden by default -->
     <div id="mobile-menu" class="lg:hidden hidden mt-4 pb-4">
-        <a href="#" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
+        <a href="/" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
             Home
         </a>
         <div class="relative">
@@ -84,7 +84,7 @@
         <a href="/about" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('about') ? 'active-nav-link' : '' }}">
             About Us
         </a>
-        <a href="#" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
+        <a href="/faq" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
             FAQs
         </a>
     </div>

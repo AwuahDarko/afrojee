@@ -1,6 +1,6 @@
 @extends('frontend.layouts.app') @section('content')
     <section class="bg-[#f5f3e8]">
-        <div class="container mx-auto px-1 py-12 ">
+        <div class="container mx-auto px-1 py-30 ">
             <div>
                 <h2 class="text-5xl font-medium text-gray-700">Got</h2>
                 <h2 class="text-5xl font-semibold text-gray-700 mb-6">Questions?</h2>
@@ -183,7 +183,7 @@
                 </div>
             </div>
 
-            <div class="flex justify-end mt-10">
+            <!-- <div class="flex justify-end mt-10">
                 <a href="#"
                     class="bg-rose-700 text-white px-6 py-3 rounded-full flex items-center hover:bg-rose-800 transition-colors duration-300">
                     View More
@@ -193,11 +193,11 @@
                         </path>
                     </svg>
                 </a>
-            </div>
+            </div> -->
         </div>
 
     </section>
-    <section class="max-w-7xl mx-auto py-12">
+    <section class="max-w-7xl mx-auto py-30">
         <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
             <div class="flex-shrink-0 relative w-48 h-48 md:w-64 md:h-64">
                 <!-- <svg class="w-full h-full question-mark-icon" viewBox="0 0 24 24" fill="currentColor">
