@@ -1,9 +1,42 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-    Afrojee - {{$product->name}}
+     {{$product->name}} | Afrojee
 @endsection
 
+@section('meta_title'){{ $product->name }}@stop
+
+@section('meta_description'){{ $meta_description }}@stop
+
+@section('meta_keywords'){{ $meta_keywords }}@stop
+
+@section('meta')
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="{{ $product->name }}">
+    <meta itemprop="description" content="{{ $meta_description }}">
+    <meta itemprop="image" content="{{ $product->image }}">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="product">
+    <meta name="twitter:site" content="@publisher_handle">
+    <meta name="twitter:title" content="{{ $product->name }}">
+    <meta name="twitter:description" content="{{ $meta_description }}">
+    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:image" content="{{ $product->image }}">
+    <meta name="twitter:data1" content="{{ '€'. $product->price }}">
+    <meta name="twitter:label1" content="Price"> 
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="{{ $product->name }}" />
+    <meta property="og:type" content="og:product" />
+    <meta property="og:url" content="{{ route('web.products.details', ['slug' => $product->slug]) }}" />
+    <meta property="og:image" content="{{ $product->image }}" />
+    <meta property="og:description" content="{{ $meta_description }}" />
+    <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
+    <meta property="og:price:amount" content="{{ '€'.$product->price }}" />
+    <meta property="product:price:currency" content="{{ '€' }}" />
+
+@endsection
 
 
 
@@ -109,7 +142,7 @@
         </p>
 
         <!-- Key Benefits -->
-        <div class="bg-pink-800 text-white rounded-xl p-6">
+        {{-- <div class="bg-pink-800 text-white rounded-xl p-6 mt-5">
             <h3 class="text-lg font-semibold mb-4">Key Benefits</h3>
             <ul class="list-disc list-inside space-y-2">
                 <li>Deeply moisturizes and strengthens hair</li>
@@ -117,7 +150,7 @@
                 <li>Perfect for styling and defining curls</li>
                 <li>Suitable for all hair types</li>
             </ul>
-        </div>
+        </div> --}}
 
         <div class="container mx-auto px-4 py-12">
         <div class="mb-16">
@@ -389,16 +422,19 @@
 
     <div id="ingredients-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">Ingredients</h2>
-        <ul class="list-disc list-inside text-gray-700">
+        {{-- <ul class="list-disc list-inside text-gray-700">
             <li>Cocoa Oil</li>
             <li>Cocoa Oil</li>
             <li>Cocoa Oil</li>
             <li>Cocoa Oil</li>
             <li>Cocoa Oil</li>
             <li>Cocoa Oil</li>
-        </ul>
+        </ul> --}}
+        <div>
+            {!! $product->ingredients !!}
+        </div>
 
-        <div class="bg-white/80 text-white rounded-xl p-6 mt-10">
+        {{-- <div class="bg-white/80 text-white rounded-xl p-6 mt-10">
             <div class="flex items-center gap-4 mb-8">
                 <div class="heart-pulse">
                     <svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -420,12 +456,12 @@
                     conservation and fair trade practices.
                 </p>
             </div>
-        </div>
+        </div> --}}
     </div>
 
     <div id="how-to-use-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">How To Use</h2>
-        <ol class="list-decimal list-inside text-gray-700 leading-relaxed">
+        {{-- <ol class="list-decimal list-inside text-gray-700 leading-relaxed">
             <li>
                 <b>Prep your skin:</b> For best results, apply after a shower or
                 bath when your skin is clean and slightly damp.
@@ -442,7 +478,8 @@
                 <b>Let it Absorb:</b> Allow a few moments for the butter to sink
                 in and hydrate your skin
             </li>
-        </ol>
+        </ol> --}}
+        {!! $product->how_to_use !!}
     </div>
 
     <div id="reviews-content" class="tab-content hidden max-w-4xl mx-auto mt-12">

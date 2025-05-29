@@ -17,7 +17,7 @@
 
     @yield('meta')
 
-    @if (!isset($detailedProduct))
+    {{-- @if (!isset($product))
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="{{ get_setting('meta_title') }}">
         <meta itemprop="description" content="{{ get_setting('meta_description') }}">
@@ -39,7 +39,7 @@
         <meta property="og:description" content="{{ get_setting('meta_description') }}" />
         <meta property="og:site_name" content="{{ get_setting('site_name') }}" />
         <meta property="fb:app_id" content="{{ env('FACEBOOK_PIXEL_ID') }}">
-    @endif
+    @endif --}}
     <title>@yield('title', 'YaaSerwaa')</title>
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script type="module" src="{{asset('js/app.js')}}"></script>

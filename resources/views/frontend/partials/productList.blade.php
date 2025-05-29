@@ -23,16 +23,21 @@
             </div>
 
             <!-- Search Bar -->
+            <form action="{{route('web.product.search')}}" method="GET">
             <div
                 class="max-w-lg mb-8 flex justify-start items-center bg-white border border-gray-300 rounded-lg px-4 py-2 shadow-sm">
-                <input id="productSearch" type="text" placeholder="Enter product to search"
-                    class="flex-grow bg-transparent focus:outline-none text-gray-700" />
-                <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" stroke-width="2"
+                <input name="q" id="productSearch" type="text" placeholder="Enter product to search"
+                    class="flex-grow bg-transparent focus:outline-none text-gray-700" value="{{ $_GET['q'] ?? '' }}"/>
+                <button type="submit">
+                    <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18a7.5 7.5 0 006.15-3.35z" />
                 </svg>
+                </button>
             </div>
+            </form>
+            
 
             <!-- Filter Buttons -->
             <div class="flex flex-wrap justify-start gap-4 mb-10">
