@@ -1,16 +1,4 @@
-<style>
-    .testimonial-slide {
-        display: none;
-    }
 
-    .testimonial-slide.active> :first-child {
-        min-height: 30vh !important;
-    }
-
-    .testimonial-slide.active {
-        display: block;
-    }
-</style>
 <section class="bg-pink-50">
     <div class="container mx-auto px-4 py-25">
         <div class="mb-16">

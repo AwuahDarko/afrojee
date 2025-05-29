@@ -171,4 +171,67 @@ window.addEventListener("DOMContentLoaded", () => {
   renderReviews();
   renderPaginationNumbers();
   updatePaginationButtons();
+
+  // Variables
+  const slides = document.querySelectorAll('.testimonial-slide');
+  const clientNavs = document.querySelectorAll('.client-nav');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  let currentIndex = 0;
+  const totalSlides = slides.length;
+
+  // Initialize
+  updateSlide();
+
+  // Event listeners
+  prevBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    updateSlide();
+  });
+
+  nextBtn.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlide();
+  });
+
+  clientNavs.forEach(nav => {
+    nav.addEventListener('click', () => {
+      currentIndex = parseInt(nav.getAttribute('data-index'));
+      updateSlide();
+    });
+  });
+
+  // Functions
+  function updateSlide() {
+    // Update slides
+    slides.forEach(slide => {
+      slide.classList.remove('active');
+    });
+    slides[currentIndex].classList.add('active');
+
+    // Update client navs
+    clientNavs.forEach(nav => {
+      const navIndex = parseInt(nav.getAttribute('data-index'));
+      if (navIndex === currentIndex) {
+        nav.classList.remove('opacity-50');
+        nav.querySelector('.w-10').classList.remove('border-gray-300');
+        nav.querySelector('.w-10').classList.add('border-rose-500');
+        nav.querySelector('p').classList.remove('text-gray-500');
+        nav.querySelector('p').classList.add('text-gray-700');
+      } else {
+        nav.classList.add('opacity-50');
+        nav.querySelector('.w-10').classList.remove('border-rose-500');
+        nav.querySelector('.w-10').classList.add('border-gray-300');
+        nav.querySelector('p').classList.remove('text-gray-700');
+        nav.querySelector('p').classList.add('text-gray-500');
+      }
+    });
+  }
+
+  // Auto-rotate slides every 5 seconds
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    updateSlide();
+  }, 5000);
+
 });
