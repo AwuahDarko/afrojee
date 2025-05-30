@@ -43,9 +43,9 @@
                 <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
                 data-title="Body Butter" data-img-default="{{$product->image}}" data-img-active="{{$product->image}}">
                 <div class="relative h-full w-full">
-                    <img src="/images/p3.png" alt="Body Butter"
+                    <img src="{{$product->image}}" alt="Body Butter"
                         class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    <button
+                    <a href="{{route('web.products.details', ['slug' => $product->slug])}}"
                         class="absolute top-4 right-4 bg-burgundy text-white rounded-full p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
                         <!-- arrow icon -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -53,7 +53,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M14 5l7 7m0 0l-7 7m7-7H3" />
                         </svg>
-                    </button>
+                    </a>
                     <button
                         class="absolute -top-15 z-100 -left-15 p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
                         <svg width="231" height="94" viewBox="0 0 231 94" fill="none"

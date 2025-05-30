@@ -33,6 +33,10 @@
     <!-- aiz core css -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
+      <link rel='apple-touch-icon-precomposed' sizes='144x144' href="{{ asset('img/icons/apple-touch-icon.png') }}" type='image/x-icon' />
+    <link rel='icon' href='{{ asset('img/icons/favicon.ico') }}' type='image/x-icon' />
+    <link rel='shortcut icon' type='image/png' href='{{ asset('img/icons/favicon.png') }}' />
+
     @yield('link')
 
 </head>

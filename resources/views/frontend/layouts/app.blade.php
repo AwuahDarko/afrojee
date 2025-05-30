@@ -14,9 +14,12 @@
     <meta name="robots" content="index, follow">
     <meta name="description" content="@yield('meta_description', get_setting('meta_description'))" />
     <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords'))">
+    <link rel='apple-touch-icon-precomposed' sizes='144x144' href="{{ asset('img/icons/apple-touch-icon.png') }}" type='image/x-icon' />
+    <link rel='icon' href='{{ asset('img/icons/favicon.ico') }}' type='image/x-icon' />
+    <link rel='shortcut icon' type='image/png' href='{{ asset('img/icons/favicon.png') }}' />
 
     @yield('meta')
-
+    <title>@yield('title', 'AfroJee')</title>
     {{-- @if (!isset($product))
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="{{ get_setting('meta_title') }}">
@@ -43,9 +46,9 @@
     <title>@yield('title', 'AfroJee')</title>
     <!-- <link rel="icon" href="{{ asset('/favicon.ico') }}" type="image/x-icon"> -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-    <script type="module" src="{{asset('js/app.js')}}"></script>
+    <script type="module" src="{{ asset('js/app.js') }}"></script>
     <!-- Favicon -->
-    <link rel="icon" href="{{ uploaded_asset(get_setting('site_icon')) }}">
+
 
     <!-- Google Fonts -->
     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> -->
@@ -62,15 +65,15 @@
 
     <style type="text/tailwindcss">
         @theme {
-        --color-clifford: #da373d;
-        --font-sans: "Optima";
-        --color-gold: #c8a655;
-        --color-cream: #f8f6f1;
-        --color-rosegold: #e0c3b6;
-        --color-footergold: #a67c24;
-        --color-burgundy: #9d3f5b;
-        --color-taupe: #806d48;
-        --color-strip: #766455;
+            --color-clifford: #da373d;
+            --font-sans: "Optima";
+            --color-gold: #c8a655;
+            --color-cream: #f8f6f1;
+            --color-rosegold: #e0c3b6;
+            --color-footergold: #a67c24;
+            --color-burgundy: #9d3f5b;
+            --color-taupe: #806d48;
+            --color-strip: #766455;
         }
     </style>
 
@@ -91,7 +94,7 @@
 
     @yield('script')
 
-    <script src="{{asset('js/index.js') }}"></script>
+    <script src="{{ asset('js/index.js') }}"></script>
 </body>
 
 </html>
