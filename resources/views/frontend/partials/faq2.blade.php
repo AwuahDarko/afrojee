@@ -106,7 +106,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            Yes, our products are available in select retail locations across the country. We partner with beauty boutiques, spa retreats, and select department stores. You can use our store locator on our website to find the nearest retailer carrying YaaSerwa products.
+            Yes, our products are available in select retail locations across the country. We partner with beauty boutiques, spa retreats, and select department stores. You can use our store locator on our website to find the nearest retailer carrying Afro Jee products.
           </p>
         </div>
       </div>
@@ -178,7 +178,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            For optimal quality and longevity, store your YaaSerwa products in a cool, dry place away from direct sunlight. Some of our products containing natural ingredients may be better stored in the refrigerator, particularly during hot weather. Each product label provides specific storage instructions.
+            For optimal quality and longevity, store your Afro Jee products in a cool, dry place away from direct sunlight. Some of our products containing natural ingredients may be better stored in the refrigerator, particularly during hot weather. Each product label provides specific storage instructions.
           </p>
         </div>
       </div>

@@ -47,7 +47,27 @@ document.addEventListener('DOMContentLoaded', () => {
     delay: 1.5
   });
 
+  // document.querySelector('a[href="#who-section"]').addEventListener('click', function(e) {
+  //   e.preventDefault();
+  //   gsap.to(window, {
+  //     duration: 1.2,
+  //     scrollTo: {
+  //       y: "#who-section",
+  //       offsetY: 80 // Adjust for fixed headers
+  //     },
+  //     ease: "power3.inOut"
+  //   });
+  // });
 
+  document.querySelector('a[href="#who-section"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    
+    window.scrollTo({
+      top: target.offsetTop,
+      behavior: 'smooth' // This enables smooth scrolling
+    });
+  });
 
   // Tab Switching Logic
   const tabButtons = document.querySelectorAll('.tab-button');

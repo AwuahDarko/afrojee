@@ -88,7 +88,7 @@
 <section class="py-16 px-4 md:px-8">
     <div class="flex flex-col md:flex-row p-6">
         <div class="md:w-1/2 flex justify-center items-center p-4">
-            <img src="/images/p3.png" alt="Always Moisturize Body Butter"
+            <img src="/images/p3.jpg" alt="Always Moisturize Body Butter"
                 class="rounded-lg shadow-md max-w-full h-auto">
         </div>
 

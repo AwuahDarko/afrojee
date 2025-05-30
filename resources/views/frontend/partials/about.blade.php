@@ -25,14 +25,16 @@
     </section>
 
     <section class="bg-[#FAEFF8] px-6 py-16 md:px-20">
-        <div class="max-w-5xl mx-auto grid md:grid-cols-2 items-center gap-10">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 items-start gap-10">
             <div class="relative">
-                <div class="absolute -top-4 -left-6 w-24 h-4 bg-[#D3A6C3] rounded-full -rotate-12 z-0"></div>
-                <img src="/images/p3.png" alt="Woman applying beauty products"
-                    class="rounded-xl relative z-10 object-cover w-full h-auto max-h-[400px]" />
+                <!-- <div class=""></div> -->
+                <img src="/images/line.png" alt="Woman applying beauty products"
+                    class="absolute -top-7 -left-16 rounded-full z-10" />
+                    <img src="/images/p3.jpg" alt="Woman applying beauty products"
+                    class="rounded-xl relative z-0 object-cover w-full h-auto max-h-[400px]" />
             </div>
-            <div>
-                <h3 class="text-3xl md:text-4xl font-semibold text-[#8C2A4A] mb-4">Mission</h3>
+            <div class="">
+                <h3 class="text-3xl md:text-4xl font-semibold text-[#8C2A4A] mb-20">Mission</h3>
                 <p class="text-gray-800 text-lg leading-relaxed">
                     Our mission is simple: to help you feel confident and radiant in your own skin, using products you can
                     trust.
@@ -40,6 +42,7 @@
                     little
                     easier and a lot more enjoyable.
                 </p>
+                <p></p>
             </div>
         </div>
     </section>
@@ -362,7 +365,7 @@
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto py-12">
+    <!-- <section class="max-w-6xl mx-auto py-12">
         <div class="mb-16">
             <div class="flex items-center mb-2">
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold w-1/4 text-taupe mb-2">
@@ -383,5 +386,5 @@
                 </svg>
             </button>
         </div>
-    </section>
+    </section> -->
 @endsection

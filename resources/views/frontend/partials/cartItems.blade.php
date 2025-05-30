@@ -8,7 +8,7 @@
         >
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
-                    src="/images/p3.png"
+                    src="/images/p3.jpg"
                     alt="Product Image"
                     class="w-25 h-25 rounded-lg mr-4"
                 />
@@ -78,7 +78,7 @@
 
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
-                    src="/images/p3.png"
+                    src="/images/p3.jpg"
                     alt="Product Image"
                     class="w-25 h-25 rounded-lg mr-4"
                 />
@@ -148,7 +148,7 @@
 
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
-                    src="/images/p3.png"
+                    src="/images/p3.jpg"
                     alt="Product Image"
                     class="w-25 h-25 rounded-lg mr-4"
                 />

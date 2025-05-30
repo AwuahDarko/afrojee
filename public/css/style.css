@@ -82,6 +82,20 @@ body {
     background-image: url("../images/p3.png");
 }
 
+@keyframes pulse {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(5px);
+    }
+}
+
+html.is-scrolling a[href="#amber-section"] svg {
+    animation: pulse 0.8s infinite;
+}
+
 .pagination-button.active {
     background-color: var(--color-pink-100);
     color: var(--color-text-pink-100);

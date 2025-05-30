@@ -172,7 +172,7 @@
                 <div class="testimonial-container relative">
                     <div class="testimonial-slide active" data-index="0">
                         <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"The simplicity and effectiveness of YaaSerwa's
+                            <p class="text-lg text-gray-800 mb-4">"The simplicity and effectiveness of Afro Jee's
                                 products are unmatched. Even with just a few items, my skin feels healthier and more
                                 vibrant every day."</p>
 
@@ -218,7 +218,7 @@
 
                     <div class="testimonial-slide" data-index="1">
                         <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"YaaSerwa's natural ingredients have transformed my
+                            <p class="text-lg text-gray-800 mb-4">"Afro Jee's natural ingredients have transformed my
                                 skincare routine. I've never received so many compliments on my skin!"</p>
 
                             <div class="flex items-center mt-6">
@@ -264,7 +264,7 @@
 
                     <div class="testimonial-slide" data-index="2">
                         <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"As someone with sensitive skin, finding YaaSerwa was
+                            <p class="text-lg text-gray-800 mb-4">"As someone with sensitive skin, finding Afro Jee was
                                 a game-changer. Their products are gentle yet effective - exactly what I needed."</p>
 
                             <div class="flex items-center mt-6">
@@ -309,7 +309,7 @@
 
                     <div class="testimonial-slide" data-index="3">
                         <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"The quality and attention to detail in every YaaSerwa
+                            <p class="text-lg text-gray-800 mb-4">"The quality and attention to detail in every Afro Jee
                                 product is exceptional. I'm completely devoted to their skincare line!"</p>
 
                             <div class="flex items-center mt-6">
