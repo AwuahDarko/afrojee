@@ -38,46 +38,86 @@
 
         <!-- Products Grid -->
         <!-- <div class="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 p-4"> -->
-        <div class="flex gap-4 p-0 max-w-8xl mx-auto" id="productCards">
+        <div class="hidden lg:flex gap-4 p-0 max-w-8xl mx-auto sm:hidden md:hidden" id="productCards">
             @foreach ($featured_products as $product)
                 <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
-                data-title="Body Butter" data-img-default="{{$product->image}}" data-img-active="{{$product->image}}">
-                <div class="relative h-full w-full">
-                    <img src="{{$product->image}}" alt="Body Butter"
-                        class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    <a href="{{route('web.products.details', ['slug' => $product->slug])}}"
-                        class="absolute top-4 right-4 bg-burgundy text-white rounded-full p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
-                        <!-- arrow icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
+                    data-title="Body Butter" data-img-default="{{$product->image}}" data-img-active="{{$product->image}}">
+                    <a href="/products/details/{{ $product->slug }}">
+                        <div class="relative h-full w-full">
+                            <img src="/images/p3.jpg" alt="Body Butter"
+                                class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                            <button
+                                class="absolute top-4 right-4 bg-burgundy text-white rounded-full p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
+                                <!-- arrow icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                            <button
+                                class="absolute -top-15 z-100 -left-15 p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
+                                <svg width="231" height="94" viewBox="0 0 231 94" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g opacity="0.5">
+                                        <path d="M9.89791 12.1723C32.8258 10.1112 99.2605 12.0607 181.576 36.3473"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                        <path d="M28.9994 34.4957C48.8452 31.1511 107.093 26.8951 181.32 36.6272"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                        <path d="M29.6353 34.4891C55.2714 36.0577 129.41 48.0769 220.874 83.6052"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                    </g>
+                                </svg>
+
+                            </button>
+                            <div
+                                class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm p-4 opacity-100 group-[.inactive]:opacity-0 transition-opacity duration-300">
+                                <h3 class="text-white text-xl font-bold"> {{$product->name}} </h3>
+                            </div>
+                        </div>
                     </a>
-                    <button
-                        class="absolute -top-15 z-100 -left-15 p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
-                        <svg width="231" height="94" viewBox="0 0 231 94" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g opacity="0.5">
-                                <path d="M9.89791 12.1723C32.8258 10.1112 99.2605 12.0607 181.576 36.3473"
-                                    stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
-                                <path d="M28.9994 34.4957C48.8452 31.1511 107.093 26.8951 181.32 36.6272"
-                                    stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
-                                <path d="M29.6353 34.4891C55.2714 36.0577 129.41 48.0769 220.874 83.6052"
-                                    stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
-                            </g>
-                        </svg>
-
-                    </button>
-                    <div
-                        class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm p-4 opacity-100 group-[.inactive]:opacity-0 transition-opacity duration-300">
-                        <h3 class="text-white text-xl font-bold"> {{$product->name}} </h3>
-                    </div>
+                </div>
             @endforeach
-
-
-
-
+        </div>
+        <div class="flex flex-col gap-4 p-4 max-w-8xl mx-auto items-center lg:hidden" id="productCardsMobile">
+            @foreach ($featured_products as $product)
+                <div class="group relative product-card w-full max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
+                    data-title="{{ $product->name }}" data-img-default="{{$product->image}}"
+                    data-img-active="{{$product->image}}">
+                    <a href="/products/details/{{ $product->slug }}">
+                        <div class="relative h-full w-full">
+                            <img src="/images/p3.jpg" alt="{{ $product->name }}"
+                                class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                            <button
+                                class="absolute top-4 right-4 bg-burgundy text-white rounded-full p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                            <button
+                                class="absolute -top-15 z-100 -left-15 p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">
+                                <svg width="231" height="94" viewBox="0 0 231 94" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <g opacity="0.5">
+                                        <path d="M9.89791 12.1723C32.8258 10.1112 99.2605 12.0607 181.576 36.3473"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                        <path d="M28.9994 34.4957C48.8452 31.1511 107.093 26.8951 181.32 36.6272"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                        <path d="M29.6353 34.4891C55.2714 36.0577 129.41 48.0769 220.874 83.6052"
+                                            stroke="#F3BF45" stroke-width="19.0517" stroke-linecap="round" />
+                                    </g>
+                                </svg>
+                            </button>
+                            <div
+                                class="absolute bottom-0 left-0 right-0 bg-black/30 backdrop-blur-sm p-4 opacity-100 group-[.inactive]:opacity-0 transition-opacity duration-300">
+                                <h3 class="text-white text-xl font-bold"> {{ $product->name }} </h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            @endforeach
         </div>
 
         <!-- View All Products Button -->
