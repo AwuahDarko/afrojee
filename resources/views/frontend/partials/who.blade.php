@@ -1,4 +1,4 @@
-<section class="bg-amber-50">
+<section id="who-section" class="bg-amber-50">
 
     <div class="container mx-auto px-1 py-12 ">
 
@@ -166,7 +166,7 @@
             </div> -->
             <!-- CTA Section -->
             <div class="flex justify-end align-bottom items-end mt-12">
-                <a href="#"
+                <a href="/products"
                     class="inline-flex items-center justify-center px-8 h-12 py-3 border border-rose-300 text-rose-700 bg-white rounded-full hover:bg-rose-50 transition duration-300">
                     Make A Purchase
                     <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"

@@ -43,7 +43,7 @@
                 <div class="group relative product-card flex-1 max-w-[400px] h-[350px] bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-500 ease-in-out active"
                 data-title="Body Butter" data-img-default="{{$product->image}}" data-img-active="{{$product->image}}">
                 <div class="relative h-full w-full">
-                    <img src="/images/p3.png" alt="Body Butter"
+                    <img src="/images/p3.jpg" alt="Body Butter"
                         class="product-image h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
                     <button
                         class="absolute top-4 right-4 bg-burgundy text-white rounded-full p-3 opacity-0 group-[.active]:opacity-100 transform group-[.active]:translate-y-0 translate-y-[-10px] transition-all duration-300">

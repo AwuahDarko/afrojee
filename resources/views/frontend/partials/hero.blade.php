@@ -20,9 +20,9 @@
                     </h1>
 
                     <div class="hero-cta flex flex-wrap gap-4 mt-8">
-                        <a href="#"
+                        <a href="/products"
                             class="inline-flex items-center justify-center px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors">
-                            Buy Now
+                            View Products
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20"
                                 fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -30,7 +30,7 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </a>
-                        <a href="#"
+                        <a href="#who-section"
                             class="inline-flex items-center justify-center px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors">
                             Learn more
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20"

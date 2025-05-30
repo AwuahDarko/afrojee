@@ -27,9 +27,9 @@
                 <div
                     class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
                     <div class="py-2 px-4">
-                        <a href="#" class="block py-2 text-gray-700 hover:text-gold">Category 1</a>
-                        <a href="#" class="block py-2 text-gray-700 hover:text-gold">Category 2</a>
-                        <a href="#" class="block py-2 text-gray-700 hover:text-gold">Category 3</a>
+                        <a href="/products/skin" class="block py-2 text-gray-700 hover:text-gold">Skin Products</a>
+                        <a href="/products/hair" class="block py-2 text-gray-700 hover:text-gold">Hair Products</a>
+                        <a href="/products/others" class="block py-2 text-gray-700 hover:text-gold">Others</a>
                     </div>
                 </div>
             </div>
@@ -39,7 +39,7 @@
         <div class="flex items-center">
             <a href="/" class="flex flex-col items-center">
                 <h1 class="text-2xl md:text-3xl font-serif text-gold italic">Afro Jee</h1>
-                <span class="text-xs text-gold/80">Lifestyle Beauty</span>
+                <!-- <span class="text-xs text-gold/80">Lifestyle Beauty</span> -->
             </a>
         </div>
 
@@ -76,9 +76,9 @@
                 </svg>
             </button>
             <div id="mobile-products-dropdown" class="hidden pl-4 pt-2">
-                <a href="#" class="block py-2 text-gold/80 hover:text-gold">Category 1</a>
-                <a href="#" class="block py-2 text-gold/80 hover:text-gold">Category 2</a>
-                <a href="#" class="block py-2 text-gold/80 hover:text-gold">Category 3</a>
+                <a href="/products/skin" class="block py-2 text-gold/80 hover:text-gold">Skin Products</a>
+                <a href="/products/hair" class="block py-2 text-gold/80 hover:text-gold">Hair Products</a>
+                <a href="/products/others" class="block py-2 text-gold/80 hover:text-gold">Others</a>
             </div>
         </div>
         <a href="/about" class="block py-2 text-gold hover:text-gold/80 relative {{ request()->is('about') ? 'active-nav-link' : '' }}">

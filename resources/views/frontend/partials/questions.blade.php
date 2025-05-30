@@ -74,7 +74,7 @@
                         <p class="text-gray-700">
                             Yes, our products are available in select retail locations across the country. We partner with
                             beauty boutiques, spa retreats, and select department stores. You can use our store locator on
-                            our website to find the nearest retailer carrying YaaSerwa products.
+                            our website to find the nearest retailer carrying Afro Jee products.
                         </p>
                     </div>
                 </div>
