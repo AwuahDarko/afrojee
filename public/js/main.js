@@ -1,4 +1,29 @@
 
+document.addEventListener('DOMContentLoaded', function() {
+  // const modal = document.getElementById('addressModal');
+  // const openBtn = document.getElementById('changeAddressBtn');
+  // const closeBtn = document.getElementById('closeModalBtn');
+  // console.log("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+
+  // openBtn.addEventListener('click', function() {
+  //     alert('ggg')
+  //     modal.classList.remove('hidden');
+  //     document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+  // });
+
+  // closeBtn.addEventListener('click', function() {
+  //     modal.classList.add('hidden');
+  //     document.body.style.overflow = ''; // Restore scrolling
+  // });
+
+  // // Close modal when clicking outside
+  // modal.addEventListener('click', function(e) {
+  //     if (e.target === modal) {
+  //         modal.classList.add('hidden');
+  //         document.body.style.overflow = '';
+  //     }
+  // });
+});
 
 document.addEventListener('DOMContentLoaded', function () {
 

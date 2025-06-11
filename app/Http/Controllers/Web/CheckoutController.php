@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 class CheckoutController extends Controller
 {
     public function index(){
-        return view('frontend.partials.checkout');
+        return view('frontend.partials.checkoutDetails', [
+            'editingAddress' => request()->has('edit_address')
+        ]);
     }
 }

@@ -20,7 +20,7 @@ Route::get('/products/search', [ProductController::class, 'search'])->name('web.
 Route::get('/products/{slug}', [ProductController::class, 'filterByCategory'])->name('web.products.filterByCategory');
 Route::get('/products/details/{slug}', [ProductController::class, 'productDetails'])->name('web.products.details');
 Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
-Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkout');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');

@@ -9,7 +9,7 @@
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
                     src="/images/p3.jpg"
-                    alt="Product Image"
+                    alt="Product"
                     class="w-25 h-25 rounded-lg mr-4"
                 />
                 <div class="flex-grow">
@@ -79,7 +79,7 @@
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
                     src="/images/p3.jpg"
-                    alt="Product Image"
+                    alt="Product"
                     class="w-25 h-25 rounded-lg mr-4"
                 />
                 <div class="flex-grow">
@@ -149,7 +149,7 @@
             <div class="cart-item flex items-center p-8" data-price="20.00">
                 <img
                     src="/images/p3.jpg"
-                    alt="Product Image"
+                    alt="Product"
                     class="w-25 h-25 rounded-lg mr-4"
                 />
                 <div class="flex-grow">

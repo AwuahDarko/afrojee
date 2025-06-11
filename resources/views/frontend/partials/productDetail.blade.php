@@ -143,17 +143,6 @@
            {!! $product->description !!}
         </p>
 
-        <!-- Key Benefits -->
-        {{-- <div class="bg-pink-800 text-white rounded-xl p-6 mt-5">
-            <h3 class="text-lg font-semibold mb-4">Key Benefits</h3>
-            <ul class="list-disc list-inside space-y-2">
-                <li>Deeply moisturizes and strengthens hair</li>
-                <li>Reduces frizz and adds shine</li>
-                <li>Perfect for styling and defining curls</li>
-                <li>Suitable for all hair types</li>
-            </ul>
-        </div> --}}
-
         <div class="container mx-auto px-4 py-12">
         <div class="mb-16">
             <div class="flex flex-col md:flex-row items-center">
@@ -424,63 +413,13 @@
 
     <div id="ingredients-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">Ingredients</h2>
-        {{-- <ul class="list-disc list-inside text-gray-700">
-            <li>Cocoa Oil</li>
-            <li>Cocoa Oil</li>
-            <li>Cocoa Oil</li>
-            <li>Cocoa Oil</li>
-            <li>Cocoa Oil</li>
-            <li>Cocoa Oil</li>
-        </ul> --}}
         <div>
             {!! $product->ingredients !!}
         </div>
-
-        {{-- <div class="bg-white/80 text-white rounded-xl p-6 mt-10">
-            <div class="flex items-center gap-4 mb-8">
-                <div class="heart-pulse">
-                    <svg width="34" height="31" viewBox="0 0 34 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M30.595 2.953a10.06 10.06 0 0 1 .395 13.809L16.772 31 2.557 16.762A10.06 10.06 0 0 1 13.858.744l-6.57 6.57L9.66 9.686l7.114-7.114-.022-.023.023.021a10.06 10.06 0 0 1 13.82.383"
-                            fill="#99395C" />
-                    </svg>
-                </div>
-                <h1 class="text-4xl md:text-2xl font-bold text-rose-800">
-                    Ethically-sourced Ingredients
-                </h1>
-            </div>
-            <div class="flex items-center gap-4 mb-8">
-                <div class="w-40"></div>
-                <p class="text-lg md:text-l leading-relaxed text-gray-700 font-medium">
-                    We are committed to ethical sourcing and sustainability. Our
-                    ingredients are responsibly harvested and processed to
-                    ensure the highest quality while supporting environmental
-                    conservation and fair trade practices.
-                </p>
-            </div>
-        </div> --}}
     </div>
 
     <div id="how-to-use-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
         <h2 class="text-xl font-bold mb-4">How To Use</h2>
-        {{-- <ol class="list-decimal list-inside text-gray-700 leading-relaxed">
-            <li>
-                <b>Prep your skin:</b> For best results, apply after a shower or
-                bath when your skin is clean and slightly damp.
-            </li>
-            <li>
-                <b>Scoop a Small Amount:</b> A little goes a long way! Use your
-                fingers to scoop a small amount of body butter
-            </li>
-            <li>
-                <b>Warm it Up:</b> Rub the butter between your palms to warm it
-                up and make it easier to spread
-            </li>
-            <li>
-                <b>Let it Absorb:</b> Allow a few moments for the butter to sink
-                in and hydrate your skin
-            </li>
-        </ol> --}}
         {!! $product->how_to_use !!}
     </div>
 
@@ -500,28 +439,6 @@
         <div class="pt-6">
             <h2 class="text-xl font-bold mb-30">Reviews</h2>
 
-            <!-- <div class="border-b border-gray-300 pb-5">
-                <div class="flex items-center mb-2">
-                    <img
-                        src="https://placehold.co/30x30/99395C/FFFFFF?text=M"
-                        alt="User Avatar"
-                        class="rounded-full mr-2"
-                    />
-                    <span class="font-semibold">Maya, 23</span>
-                </div>
-                <h2 class="text-xl font-bold mb-4">
-                    Thee growth hair & scalp oil
-                </h2>
-                <p class="text-gray-700 italic mb-2">
-                    "This body butter is a game-changer! My skin feels so soft
-                    and hydrated, and the scent is absolutely divine. A little
-                    goes a long way, so it's great value for money. Highly
-                    recommend!"
-                </p>
-                <div class="flex text-yellow-400 text-3xl">
-                    <span>★★★★☆</span>
-                </div>
-            </div> -->
             <div id="reviews-list">
             </div>
 
