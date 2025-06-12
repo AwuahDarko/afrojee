@@ -214,14 +214,14 @@ window.addEventListener("DOMContentLoaded", () => {
       const navIndex = parseInt(nav.getAttribute('data-index'));
       if (navIndex === currentIndex) {
         nav.classList.remove('opacity-50');
-        nav.querySelector('.w-10').classList.remove('border-gray-300');
-        nav.querySelector('.w-10').classList.add('border-rose-500');
+        nav.querySelector('.client-nav-c').classList.remove('border-gray-300');
+        nav.querySelector('.client-nav-c').classList.add('border-rose-500');
         nav.querySelector('p').classList.remove('text-gray-500');
         nav.querySelector('p').classList.add('text-gray-700');
       } else {
         nav.classList.add('opacity-50');
-        nav.querySelector('.w-10').classList.remove('border-rose-500');
-        nav.querySelector('.w-10').classList.add('border-gray-300');
+        nav.querySelector('.client-nav-c').classList.remove('border-rose-500');
+        nav.querySelector('.client-nav-c').classList.add('border-gray-300');
         nav.querySelector('p').classList.remove('text-gray-700');
         nav.querySelector('p').classList.add('text-gray-500');
       }

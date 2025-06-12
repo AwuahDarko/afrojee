@@ -3,7 +3,7 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-     {{$product->name}} | Afrojee
+    {{$product->name}} | Afrojee
 @endsection
 
 @section('meta_title'){{ $product->name }}@stop
@@ -13,454 +13,505 @@
 @section('meta_keywords'){{ $meta_keywords }}@stop
 
 @section('meta')
-    <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="{{ $product->name }}">
     <meta itemprop="description" content="{{ $meta_description }}">
     <meta itemprop="image" content="{{ $product->image }}">
 
-    <!-- Twitter Card data -->
     <meta name="twitter:card" content="product">
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $product->name }}">
     <meta name="twitter:description" content="{{ $meta_description }}">
     <meta name="twitter:creator" content="@author_handle">
     <meta name="twitter:image" content="{{ $product->image }}">
-    <meta name="twitter:data1" content="{{ '€'. $product->price }}">
-    <meta name="twitter:label1" content="Price"> 
+    <meta name="twitter:data1" content="{{ '€' . $product->price }}">
+    <meta name="twitter:label1" content="Price">
 
-    <!-- Open Graph data -->
     <meta property="og:title" content="{{ $product->name }}" />
     <meta property="og:type" content="og:product" />
     <meta property="og:url" content="{{ route('web.products.details', ['slug' => $product->slug]) }}" />
     <meta property="og:image" content="{{ $product->image }}" />
     <meta property="og:description" content="{{ $meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
-    <meta property="og:price:amount" content="{{ '€'.$product->price }}" />
+    <meta property="og:price:amount" content="{{ '€' . $product->price }}" />
     <meta property="product:price:currency" content="{{ '€' }}" />
 
 @endsection
 
-
-
-
 @section('content')
-<section class="bg-[#f7f3e9] py-16 px-4 md:px-8 text-gray-800">
-    <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
-        <!-- Product Image -->
-        <div class="flex justify-center">
-            <img src="{{$product->image}}" alt="Body Butter" class="rounded-xl w-72" />
-        </div>
-
-        <!-- Product Details -->
-        <div>
-            <h1 class="text-2xl font-semibold mb-2">
-                {{$product->name}}
-            </h1>
-
-            <!-- Star Rating -->
-            <div class="flex items-center text-yellow-400 mb-4">
-                <span>★★★★★</span>
-            </div>
-
-            <!-- Price -->
-            <p class="text-3xl font-bold text-gray-900 mb-6">$ {{ number_format($product->price, 2) }}</p>
-
-            <!-- Quantity Selector -->
-            <div class="flex items-center mb-6">
-                <span class="mr-1 font-bold">Quantity</span>
-                <div class="flex items-center space-x-4 px-4 py-1">
-                    <button id="decrement"
-                        class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
-                        −
-                    </button>
-                    <input type="text" id="quantity" value="1"
-                        class="w-12 text-center focus:outline-none bg-transparent text-xl font-bold" readonly />
-                    <button id="increment"
-                        class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-2 w-10 h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
-                        +
-                    </button>
+    <section class="bg-[#f7f3e9] py-8 px-4 md:py-16 md:px-8 text-gray-800">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start">
+            <div class="flex justify-center w-full">
+                <!-- Mobile version with blurred background -->
+                <div class="relative sm:hidden w-full h-64 overflow-hidden">
+                    <!-- Blurred background -->
+                    <img src="{{$product->image}}" alt=""
+                        class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
+                    <!-- Main image in center -->
+                    <div class="absolute inset-0 flex items-center justify-center p-4">
+                        <img src="{{$product->image}}" alt="{{$product->name}}"
+                            class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
+                    </div>
                 </div>
 
-                <!-- Buy Now -->
-                <div class="ml-6 flex items-center gap-4">
+                <!-- Desktop/tablet version (original) -->
+                <img src="{{$product->image}}" alt="{{$product->name}}"
+                    class="hidden sm:block rounded-xl w-72 md:w-full max-w-sm object-cover" />
+            </div>
+
+            <div>
+                <h1 class="text-xl sm:text-2xl font-semibold mb-2">
+                    {{$product->name}}
+                </h1>
+
+                <div class="flex items-center text-yellow-400 mb-4">
+                    <span>★★★★★</span>
+                </div>
+
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">$
+                    {{ number_format($product->price, 2) }}
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
+                    <div class="flex items-center">
+                        <span class="mr-1 font-bold text-sm sm:text-base">Quantity</span>
+                        <div class="flex items-center space-x-2 px-2 py-1">
+                            <button id="decrement"
+                                class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-1 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                −
+                            </button>
+                            <input type="text" id="quantity" value="1"
+                                class="w-10 sm:w-12 text-center focus:outline-none bg-transparent text-lg sm:text-xl font-bold"
+                                readonly />
+                            <button id="increment"
+                                class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-1 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                +
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
+                        <a href="{{ route('web.checkoutDetails') }}" class="flex-grow">
+                            <button
+                                class="relative bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base">
+                                <span id="buyNowCounter"
+                                    class="absolute -left-2 -top-2 text-xs bg-white text-pink-800 border border-pink-800 rounded-full px-1.5 py-0.5 font-bold shadow">
+                                    1 </span>Buy Now
+                                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </a>
+                        <button
+                            class="relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+                            <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#a)" fill="#99395C">
+                                    <path
+                                        d="M21.377 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.087L6.64 5h18.488a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313l-1.125 2.038-.038.15a.313.313 0 0 0 .313.312h14.475v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.877 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5m11.25-8.75 3.475-6.25h-15.8l2.95 6.25z" />
+                                    <path d="M25.127 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#FCF4F7" stroke-width="2" />
+                                </g>
+                                <defs>
+                                    <clipPath id="a">
+                                        <path fill="#fff" d="M.127 0h30v30h-30z" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <span id="addToCartCounter"
+                                class="absolute -left-1 -top-1 text-xs bg-pink-800 text-white rounded-full px-1.5 py-0.5 font-bold shadow">
+                                1
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-4xl mx-auto mt-8 md:mt-12">
+            <div class="flex flex-wrap gap-2 sm:gap-4 mt-4 mb-6">
+                <button
+                    class="tab-button border border-pink-700 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-pink-800 font-medium active text-sm sm:text-base"
+                    data-tab="description">
+                    Description
+                </button>
+                <button
+                    class="tab-button border border-pink-700 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-pink-800 hover:bg-pink-100 text-sm sm:text-base"
+                    data-tab="ingredients">
+                    Ingredients
+                </button>
+                <button
+                    class="tab-button border border-pink-700 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-pink-800 hover:bg-pink-100 text-sm sm:text-base"
+                    data-tab="how-to-use">
+                    How To Use
+                </button>
+                <button
+                    class="tab-button border border-pink-700 px-3 py-1 sm:px-4 sm:py-2 rounded-full text-pink-800 hover:bg-pink-100 text-sm sm:text-base"
+                    data-tab="reviews">
+                    Reviews
+                </button>
+            </div>
+
+            <div id="description-content" class="tab-content">
+                <h2 class="text-lg sm:text-xl font-bold mb-4">Product Description</h2>
+                <div class="text-gray-700 leading-relaxed mb-6 prose max-w-none">
+                    {!! $product->description !!}
+                </div>
+
+                <div class="container mx-auto px-0 py-8 sm:py-12">
+                    <div class="mb-10 sm:mb-16">
+                        <div class="flex flex-col md:flex-row items-center">
+                            <h1 class="text-3xl sm:text-5xl min-w-[26%] font-medium text-rose-700">
+                                <span class="block">Product</span>
+                                <span class="text-rose-700 font-bold text-3xl sm:text-5xl w-full">Top Reviews</span>
+                            </h1>
+                            <div class="w-full h-1 bg-rose-300 mt-4 md:mt-0"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <div class="lg:w-3/4 relative">
+                            <div class="testimonial-container relative">
+                                <div class="testimonial-slide active" data-index="0">
+                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
+                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"The simplicity and effectiveness
+                                            of Afro Jee's
+                                            products are unmatched. Even with just a few items, my skin feels healthier and
+                                            more
+                                            vibrant every day."</p>
+
+                                        <div class="flex items-center mt-6">
+                                            <div
+                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                                <img src="/images/sami.png" alt="Jean Harper"
+                                                    class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="flex text-yellow-400 mb-1">
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Jean Harper</p>
+                                                <p class="text-xs sm:text-sm text-gray-500">Student</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="testimonial-slide" data-index="1">
+                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
+                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"Afro Jee's natural ingredients
+                                            have transformed my
+                                            skincare routine. I've never received so many compliments on my skin!"</p>
+
+                                        <div class="flex items-center mt-6">
+                                            <div
+                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                                <img src="/images/sami.png" alt="Reinette Akosua"
+                                                    class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="flex text-yellow-400 mb-1">
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Reinette Akosua
+                                                </p>
+                                                <p class="text-xs sm:text-sm text-gray-500">Makeup Artist</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="testimonial-slide" data-index="2">
+                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
+                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"As someone with sensitive skin,
+                                            finding Afro Jee was
+                                            a game-changer. Their products are gentle yet effective - exactly what I
+                                            needed."</p>
+
+                                        <div class="flex items-center mt-6">
+                                            <div
+                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                                <img src="/images/sami.png" alt="Sami Raimi"
+                                                    class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="flex text-yellow-400 mb-1">
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Sami Raimi</p>
+                                                <p class="text-xs sm:text-sm text-gray-500">Photographer</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="testimonial-slide" data-index="3">
+                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
+                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"The quality and attention to
+                                            detail in every Afro Jee
+                                            product is exceptional. I'm completely devoted to their skincare line!"</p>
+
+                                        <div class="flex items-center mt-6">
+                                            <div
+                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                                <img src="/images/sami.png" alt="Karma Yarn"
+                                                    class="w-full h-full object-cover">
+                                            </div>
+                                            <div class="ml-4">
+                                                <div class="flex text-yellow-400 mb-1">
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
+                                                        viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
+                                                        </path>
+                                                    </svg>
+                                                </div>
+                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Karma Yarn</p>
+                                                <p class="text-xs sm:text-sm text-gray-500">Fashion Designer</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex mt-4">
+                                <button id="prev-btn"
+                                    class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 19l-7-7 7-7">
+                                        </path>
+                                    </svg>
+                                </button>
+                                <button id="next-btn"
+                                    class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition ml-4">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 5l7 7-7 7">
+                                        </path>
+                                    </svg>
+                                </button>
+
+                                <div class="ml-auto flex items-center">
+                                    <a href="#"
+                                        class="text-rose-700 font-medium flex items-center hover:underline text-sm sm:text-base">
+                                        View All Reviews
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M9 5l7 7-7 7">
+                                            </path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="lg:w-1/4 mt-8 lg:mt-1">
+                            <div class="space-y-4 sm:space-y-6">
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="0">
+                                    <div
+                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                        <img src="/images/sami.png" alt="Jean Harper" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="ml-4 font-medium text-gray-700 text-sm sm:text-base">Jean Harper</p>
+                                </div>
+
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="1">
+                                    <div
+                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
+                                        <img src="/images/sami.png" alt="Reinette Akosua"
+                                            class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Reinette Akosua</p>
+                                </div>
+
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="2">
+                                    <div
+                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
+                                        <img src="/images/sami.png" alt="Sami Raimi" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Sami Raimi</p>
+                                </div>
+
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="3">
+                                    <div
+                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
+                                        <img src="/images/karma.png" alt="Karma Yarn" class="w-full h-full object-cover">
+                                    </div>
+                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Karma Yarn</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="ingredients-content" class="tab-content hidden">
+                <h2 class="text-lg sm:text-xl font-bold mb-4">Ingredients</h2>
+                <div class="text-gray-700 leading-relaxed prose max-w-none">
+                    {!! $product->ingredients !!}
+                </div>
+            </div>
+
+            <div id="how-to-use-content" class="tab-content hidden">
+                <h2 class="text-lg sm:text-xl font-bold mb-4">How To Use</h2>
+                <div class="text-gray-700 leading-relaxed prose max-w-none">
+                    {!! $product->how_to_use !!}
+                </div>
+            </div>
+
+            <div id="reviews-content" class="tab-content hidden">
+                <div
+                    class="mb-6 flex flex-col sm:flex-row bg-white/80 justify-between p-4 sm:p-6 rounded-xl items-start sm:items-center gap-4 sm:gap-0">
+                    <p class="text-gray-700 mb-2 sm:mb-0 font-bold text-sm sm:text-base">
+                        Got thoughts on this product?
+                    </p>
                     <button
-                        class="relative bg-pink-800 hover:bg-pink-900 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2">
-                        <span id="buyNowCounter"
-                            class="absolute -left-3 -top-3 text-xs bg-white text-pink-800 border border-pink-800 rounded-full px-2 py-0.5 font-bold shadow">
-                            1 </span>Buy Now
+                        class="bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base">
+                        Leave A Review
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </button>
-                    <button
-                        class="relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100">
-                        <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#a)" fill="#99395C">
-                                <path
-                                    d="M21.377 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.087L6.64 5h18.488a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313l-1.125 2.038-.038.15a.313.313 0 0 0 .313.312h14.475v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.877 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5m11.25-8.75 3.475-6.25h-15.8l2.95 6.25z" />
-                                <path d="M25.127 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#FCF4F7" stroke-width="2" />
-                            </g>
-                            <defs>
-                                <clipPath id="a">
-                                    <path fill="#fff" d="M.127 0h30v30h-30z" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                        <span id="addToCartCounter"
-                            class="absolute -left-2 -top-2 text-xs bg-pink-800 text-white rounded-full px-2 py-0.5 font-bold shadow">
-                            1
-                        </span>
-                    </button>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="max-w-4xl mx-auto mt-12">
-        <!-- Tab Navigation -->
-        <div class="flex gap-4 mt-4 mb-6">
-            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 font-medium active"
-                data-tab="description">
-                Description
-            </button>
-            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
-                data-tab="ingredients">
-                Ingredients
-            </button>
-            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
-                data-tab="how-to-use">
-                How To Use
-            </button>
-            <button class="tab-button border border-pink-700 px-4 py-2 rounded-full text-pink-800 hover:bg-pink-100"
-                data-tab="reviews">
-                Reviews
-            </button>
-        </div>
-    </div>
-    <!-- Description Content -->
-    <div id="description-content" class="tab-content max-w-4xl mx-auto mt-12">
-        <h2 class="text-xl font-bold mb-4">Product Description</h2>
-        <p class="text-gray-700 leading-relaxed mb-6">
-           {!! $product->description !!}
-        </p>
+                <div class="pt-6">
+                    <h2 class="text-xl font-bold mb-8">Reviews</h2>
 
-        <div class="container mx-auto px-4 py-12">
-        <div class="mb-16">
-            <div class="flex flex-col md:flex-row items-center">
-                <h1 class="text-5xl min-w-[26%] font-medium text-rose-700">
-                    <span class="block">Product</span>
-                    <span class="text-rose-700 font-bold text-5xl w-full">Top Reviews</span>
-                </h1>
-                <div class="w-full h-1 bg-rose-300 mt-4 md:mt-0"></div>
-            </div>
-        </div>
-        <div class="flex flex-col lg:flex-row gap-6">
-            <!-- Left Content - Testimonials -->
-            <div class="lg:w-3/4 relative">
-
-                <!-- Testimonial Slides -->
-                <div class="testimonial-container relative">
-                    <div class="testimonial-slide active" data-index="0">
-                        <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"The simplicity and effectiveness of Afro Jee's
-                                products are unmatched. Even with just a few items, my skin feels healthier and more
-                                vibrant every day."</p>
-
-                            <div class="flex items-center mt-6">
-                                <div
-                                    class="w-12 h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                    <img src="/images/sami.png" alt="Jean Harper" class="w-full h-full object-cover">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="flex text-yellow-400 mb-1">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <p class="font-medium text-gray-700">Jean Harper</p>
-                                    <p class="text-sm text-gray-500">Student</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div id="reviews-list">
+                        {{-- Reviews will be dynamically loaded here by productDetail.js --}}
                     </div>
 
-                    <div class="testimonial-slide" data-index="1">
-                        <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"Afro Jee's natural ingredients have transformed my
-                                skincare routine. I've never received so many compliments on my skin!"</p>
-
-                            <div class="flex items-center mt-6">
-                                <div
-                                    class="w-12 h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                    <img src="/images/sami.png" alt="Reinette Akosua"
-                                        class="w-full h-full object-cover">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="flex text-yellow-400 mb-1">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <p class="font-medium text-gray-700">Reinette Akosua</p>
-                                    <p class="text-sm text-gray-500">Makeup Artist</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-slide" data-index="2">
-                        <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"As someone with sensitive skin, finding Afro Jee was
-                                a game-changer. Their products are gentle yet effective - exactly what I needed."</p>
-
-                            <div class="flex items-center mt-6">
-                                <div
-                                    class="w-12 h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                    <img src="/images/sami.png" alt="Sami Raimi" class="w-full h-full object-cover">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="flex text-yellow-400 mb-1">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <p class="font-medium text-gray-700">Sami Raimi</p>
-                                    <p class="text-sm text-gray-500">Photographer</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-slide" data-index="3">
-                        <div class="bg-white p-8 rounded-lg shadow-sm mb-8">
-                            <p class="text-lg text-gray-800 mb-4">"The quality and attention to detail in every Afro Jee
-                                product is exceptional. I'm completely devoted to their skincare line!"</p>
-
-                            <div class="flex items-center mt-6">
-                                <div
-                                    class="w-12 h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                    <img src="/images/sami.png" alt="Karma Yarn" class="w-full h-full object-cover">
-                                </div>
-                                <div class="ml-4">
-                                    <div class="flex text-yellow-400 mb-1">
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                            </path>
-                                        </svg>
-                                    </div>
-                                    <p class="font-medium text-gray-700">Karma Yarn</p>
-                                    <p class="text-sm text-gray-500">Fashion Designer</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Navigation Arrows -->
-                <div class="flex mt-4">
-                    <button id="prev-btn"
-                        class="w-12 h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <button id="next-btn"
-                        class="w-12 h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition ml-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
-                        </svg>
-                    </button>
-
-                    <div class="ml-auto">
-                        <a href="#" class="text-rose-700 font-medium flex items-center hover:underline">
-                            View All Reviews
-                            <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                                </path>
+                    <div
+                        class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-2 mt-8">
+                        <button id="prevPage"
+                            class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
+                            <svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="m7.41 11.572-4.58-4.59 4.58-4.59L6 .982l-6 6 6 6z" fill="#000" />
                             </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Content - Client List -->
-            <div class="lg:w-1/4 mt-12 lg:mt-1">
-                <div class="space-y-6">
-                    <!-- Jean Harper -->
-                    <div class="flex items-center cursor-pointer client-nav" data-index="0">
-                        <div class="w-10 h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                            <img src="/images/sami.png" alt="Jean Harper" class="w-full h-full object-cover">
+                            <span class="ml-2 sm:ml-3">Previous</span>
+                        </button>
+                        <div id="pagination-numbers" class="flex space-x-2 text-gray-600">
                         </div>
-                        <p class="ml-4 font-medium text-gray-700">Jean Harper</p>
-                    </div>
-
-                    <!-- Reinette Akosua -->
-                    <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="1">
-                        <div class="w-10 h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                            <img src="/images/sami.png" alt="Reinette Akosua" class="w-full h-full object-cover">
-                        </div>
-                        <p class="ml-4 font-medium text-gray-500">Reinette Akosua</p>
-                    </div>
-
-                    <!-- Sami Raimi -->
-                    <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="2">
-                        <div class="w-10 h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                            <img src="/images/sami.png" alt="Sami Raimi" class="w-full h-full object-cover">
-                        </div>
-                        <p class="ml-4 font-medium text-gray-500">Sami Raimi</p>
-                    </div>
-
-                    <!-- Karma Yarn -->
-                    <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="3">
-                        <div class="w-10 h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                            <img src="/images/karma.png" alt="Karma Yarn" class="w-full h-full object-cover">
-                        </div>
-                        <p class="ml-4 font-medium text-gray-500">Karma Yarn</p>
+                        <button id="nextPage"
+                            class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
+                            <span class="mr-2 sm:mr-3">Next</span>
+                            <svg width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="m.824 2.392 4.58 4.59-4.58 4.59 1.41 1.41 6-6-6-6z" fill="#000" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
-
-    <div id="ingredients-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
-        <h2 class="text-xl font-bold mb-4">Ingredients</h2>
-        <div>
-            {!! $product->ingredients !!}
-        </div>
-    </div>
-
-    <div id="how-to-use-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
-        <h2 class="text-xl font-bold mb-4">How To Use</h2>
-        {!! $product->how_to_use !!}
-    </div>
-
-    <div id="reviews-content" class="tab-content hidden max-w-4xl mx-auto mt-12">
-        <div class="mb-6 flex bg-white/80 justify-between p-6 rounded-xl">
-            <p class="text-gray-700 mb-2 font-bold">
-                Got thoughts on this product?
-            </p>
-            <button
-                class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-2 rounded-full font-medium flex items-center gap-2">
-                Leave A Review
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-            </button>
-        </div>
-        <div class="pt-6">
-            <h2 class="text-xl font-bold mb-30">Reviews</h2>
-
-            <div id="reviews-list">
-            </div>
-
-            <div class="flex justify-start items-center space-x-2 mt-8">
-                <button id="prevPage"
-                    class="pagination-button text-pink-800 font-bold px-1 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1">
-                    <svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m7.41 11.572-4.58-4.59 4.58-4.59L6 .982l-6 6 6 6z" fill="#000" />
-                    </svg>
-                    <span class="ml-3">Previous</span>
-                </button>
-                <div id="pagination-numbers" class="flex space-x-2 text-gray-600">
-                </div>
-                <button id="nextPage"
-                    class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1">
-                    <span class="mr-3">Next</span>
-                    <svg width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m.824 2.392 4.58 4.59-4.58 4.59 1.41 1.41 6-6-6-6z" fill="#000" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 @endsection

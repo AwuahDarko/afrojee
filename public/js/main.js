@@ -84,15 +84,19 @@ document.addEventListener('DOMContentLoaded', () => {
   //   });
   // });
 
-  document.querySelector('a[href="#who-section"]').addEventListener('click', function(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute('href'));
-    
-    window.scrollTo({
-      top: target.offsetTop,
-      behavior: 'smooth' // This enables smooth scrolling
+  const whoLink = document.querySelector('a[href="#who-section"]');
+  if(whoLink){
+    whoLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      
+      window.scrollTo({
+        top: target.offsetTop,
+        behavior: 'smooth' // This enables smooth scrolling
+      });
     });
-  });
+    
+  }
 
   // Tab Switching Logic
   const tabButtons = document.querySelectorAll('.tab-button');
