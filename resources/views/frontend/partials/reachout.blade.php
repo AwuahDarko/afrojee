@@ -25,7 +25,7 @@
                 </div>
                 <h3 class="text-2xl font-semibold text-gray-800 mb-4">Email Us</h3>
                 <p class="text-gray-700 mb-2">Reach out to us via the email address below:</p>
-                <p class="font-semibold text-gray-800">afrojee@gmail.com</p>
+                <p class="font-semibold text-gray-800">info@afrojee.store</p>
             </div>
 
             <!-- Instagram Card -->
