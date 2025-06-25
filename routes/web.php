@@ -10,7 +10,7 @@ use App\Http\Controllers\Web\SignInController;
 use App\Http\Controllers\Web\SignUpController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\QuestionsController;
-
+use App\Http\Controllers\Web\CartController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutUsController::class, 'index'])->name('web.about');
@@ -24,3 +24,14 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkou
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');
+Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
+// Original GET route
+// Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
+
+// New POST route for handling cart data submission to checkout
+Route::post('/checkout', [CheckoutController::class, 'processCartAndShowCheckout'])->name('web.checkoutDetails.post');
+Route::post('/checkout/process-cart', [CheckoutController::class, 'processCartAndShowCheckout'])->name('web.checkout.processCart');
+Route::post('/checkout/save-address', [CheckoutController::class, 'storeAddress'])->name('web.checkout.saveAddress'); // This is the missing one!
+
+// Or, if you want the original route to also handle POST:
+// Route::match(['GET', 'POST'], '/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');

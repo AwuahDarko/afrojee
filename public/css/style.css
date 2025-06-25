@@ -244,3 +244,40 @@ html.is-scrolling a[href="#amber-section"] svg {
 .testimonial-slide.active {
     display: block;
 }
+
+/* Cart Sidebar Styles */
+#cart-sidebar {
+    /* Existing Tailwind classes handle transform and transition */
+    /* Add any additional custom styling if needed */
+    width: 100%; /* Full width on mobile */
+    max-width: 320px; /* Max width on larger screens, adjust as needed */
+}
+
+@media (min-width: 768px) {
+    /* Tailwind's 'md' breakpoint */
+    #cart-sidebar {
+        width: 384px; /* w-96 in Tailwind */
+    }
+}
+
+#cart-sidebar.translate-x-full {
+    transform: translateX(100%);
+}
+
+#cart-sidebar.translate-x-0 {
+    transform: translateX(0);
+}
+
+#cart-sidebar-overlay {
+    /* Background overlay for when sidebar is open */
+}
+
+#cart-count {
+    display: none; /* Hidden by default, shown by JS when items exist */
+}
+
+/* You might already have similar styles for quantity buttons, but ensure they look good */
+.quantity-minus,
+.quantity-plus {
+    @apply px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200;
+}

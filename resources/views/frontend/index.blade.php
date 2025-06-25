@@ -13,5 +13,4 @@ Afrojee - Hair and skin care products
 @include('frontend.partials.faq2')
 @include('frontend.partials.reachout')
 
-
 @endsection

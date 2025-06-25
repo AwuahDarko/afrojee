@@ -55,7 +55,8 @@
                         data-category="{{ strtolower(str_replace(' ', '-', $product->category->name)) }}">
                         <a href="{{route('web.products.details', ['slug' => $product->slug])}}">
                             <div class="w-full h-80 overflow-hidden rounded-lg mb-4">
-                                <img src="{{ $product->image }}" alt="{{ $product->name }}" class="w-full h-full object-cover object-center" />
+                                <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                                    class="w-full h-full object-cover object-center" />
                             </div>
                         </a>
                         <h3 class="font-semibold text-gray-800 text-lg mb-2">
@@ -101,7 +102,12 @@
                                 </button>
                             </a>
                             <button
-                                class="bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 transition-colors duration-200 flex-shrink-0">
+                                class="cart-item-btn bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 transition-colors duration-200 flex-shrink-0"
+                                id="add-to-cart-button"
+                                data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->name }}"
+                                data-product-price="{{ number_format($product->price, 2) }}"
+                                data-product-image="{{ $product->image }}">
                                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clip-path="url(#a)" fill="#99395C">
                                         <path
