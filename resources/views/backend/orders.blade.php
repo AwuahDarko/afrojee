@@ -150,7 +150,7 @@
                                                 data-bs-toggle="dropdown" href="#" role="button">
                                                 Actions
                                             </a>
-                                            <ul class="dropdown-menu">
+                                            <ul class="dropdown-menu text-center">
                                                 <li>
                                                     <a class="dropdown-item"
                                                         href="{{ route('admin.orders.view', $order->id) }}">View</a>
@@ -217,7 +217,7 @@
                         <input class="form-check-input" type="checkbox" name="notify_user"
                             id="notifyUser{{ $order->id }}" value="1">
                         <label class="form-check-label" for="notifyUser{{ $order->id }}">
-                            Notify customer by email or SMS
+                            Notify customer by email
                         </label>
                     </div>
                 </div>

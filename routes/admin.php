@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -37,6 +38,16 @@ Route::prefix('admin')->group(function () {
             Route::get('/products/remove/{id}', [ProductController::class, 'remove'])->name('admin.products.remove');
             Route::get('/prroducts/feature/{id}', [ProductController::class, 'feature'])->name('admin.products.feature');
 
+            //orders
+            Route::get('/orders', [OrdersController::class, 'orders'])->name('admin.orders');
+            Route::get('/orders/view/{id}', [OrdersController::class, 'viewOrder'])->name('admin.orders.view');
+            Route::get('/orders/activate/{id}', [OrdersController::class, 'activateOrder'])->name('admin.orders.activate');
+            Route::get('/orders/deactivate/{id}', [OrdersController::class, 'deactivateOrder'])->name('admin.orders.deactivate');
+            Route::post('/orders/edit', [OrdersController::class, 'updateOrder'])->name('admin.orders.edit');
+            Route::get('/orders/remove/{id}', [OrdersController::class, 'removeOrder'])->name('admin.orders.remove');
+            Route::get('/orders/feature/{id}', [OrdersController::class, 'featureOrder'])->name('admin.orders.feature');
+            Route::post('orders/update', [OrdersController::class, 'updateOrder'])->name('admin.orders.update');
+            Route::delete('orders/{id}', [OrdersController::class, 'removeOrder'])->name('admin.orders.destroy');
         }
     );
 
