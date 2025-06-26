@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
@@ -58,7 +59,28 @@ Route::prefix('admin')->group(function () {
             Route::post('/shipment/update/{id}', [ShipmentController::class, 'update'])->name('admin.shipment.update');
             Route::delete('/shipment/delete/{id}', [ShipmentController::class, 'destroy'])->name('admin.shipment.destroy');
 
+            // reviews
+            // Reviews Routes
+            // Reviews Routes - Explicit definitions
+            Route::get('/reviews', [ReviewsController::class, 'index'])->name('admin.reviews');
+            Route::get('reviews/create', [ReviewsController::class, 'create'])->name('admin.reviews.create');
+            Route::post('reviews', [ReviewsController::class, 'store'])->name('admin.reviews.store');
+            Route::get('reviews/{review}', [ReviewsController::class, 'show'])->name('admin.reviews.show');
+            Route::get('reviews/{review}/edit', [ReviewsController::class, 'edit'])->name('admin.reviews.edit');
+            Route::put('reviews/{review}', [ReviewsController::class, 'update'])->name('admin.reviews.update');
+            Route::delete('reviews/{review}', [ReviewsController::class, 'destroy'])->name('admin.reviews.destroy');
 
+            // Quick Actions for Reviews
+            Route::patch('reviews/{review}/approve', [ReviewsController::class, 'approve'])
+                ->name('admin.reviews.approve');
+            Route::patch('reviews/{review}/reject', [ReviewsController::class, 'reject'])
+                ->name('admin.reviews.reject');
+            Route::patch('reviews/{review}/toggle-featured', [ReviewsController::class, 'toggleFeatured'])
+                ->name('admin.reviews.toggle-featured');
+
+            // Bulk Actions
+            Route::post('reviews/bulk-action', [ReviewsController::class, 'bulkAction'])
+                ->name('admin.reviews.bulk-action');
         }
     );
 
