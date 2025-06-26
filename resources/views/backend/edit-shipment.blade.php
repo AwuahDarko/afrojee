@@ -13,7 +13,7 @@
                     <div class="card-body px-4">
                         <form action="{{ route('admin.shipment.update', $zone->id) }}" method="POST">
                             @csrf
-                            @method('PUT')
+                            @method('POST')
 
                             <!-- Zone Name -->
                             <div class="mb-3">

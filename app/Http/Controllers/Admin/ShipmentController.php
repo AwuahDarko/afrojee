@@ -20,7 +20,7 @@ class ShipmentController extends Controller
     // Show form to create new shipping zone and rates
     public function create()
     {
-        return view('backend.shipment.create');
+        return view('backend.create-shipment');
     }
 
     // Store a new shipping zone with rates
@@ -28,16 +28,16 @@ class ShipmentController extends Controller
     {
         $validated = $request->validate([
             'zone_name' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'region' => 'required|string|max:255', // Changed from 'city'
             'rates' => 'required|array',
-            'rates.*.min_weight' => 'required|numeric',
-            'rates.*.max_weight' => 'required|numeric',
+            'rates.*.weight_from' => 'required|numeric', // Changed from min_weight
+            'rates.*.weight_to' => 'required|numeric',   // Changed from max_weight
             'rates.*.rate' => 'required|numeric',
         ]);
 
         $zone = ShippingZone::create([
             'zone_name' => $request->zone_name,
-            'city' => $request->city,
+            'region' => $request->region,
         ]);
 
         foreach ($request->rates as $rate) {
@@ -51,7 +51,7 @@ class ShipmentController extends Controller
     public function edit($id)
     {
         $zone = ShippingZone::with('rates')->findOrFail($id);
-        return view('backend.shipment.edit', compact('zone'));
+        return view('backend.edit-shipment', compact('zone'));
     }
 
     // Update shipping zone and its rates
@@ -61,16 +61,16 @@ class ShipmentController extends Controller
 
         $validated = $request->validate([
             'zone_name' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
+            'region' => 'required|string|max:255',
             'rates' => 'required|array',
-            'rates.*.min_weight' => 'required|numeric',
-            'rates.*.max_weight' => 'required|numeric',
+            'rates.*.weight_from' => 'required|numeric',
+            'rates.*.weight_to' => 'required|numeric',
             'rates.*.rate' => 'required|numeric',
         ]);
 
         $zone->update([
             'zone_name' => $request->zone_name,
-            'city' => $request->city,
+            'region' => $request->region,
         ]);
 
         $zone->rates()->delete(); // Remove old rates
@@ -91,47 +91,3 @@ class ShipmentController extends Controller
         return redirect()->route('admin.shipment')->with('success', 'Shipping zone deleted.');
     }
 }
-
-// Dummy data for ShippingZone and its rates
-$dummyZones = [
-    (object) [
-        'id' => 1,
-        'zone_name' => 'Northern Region',
-        'city' => 'Tamale',
-        'rates' => [
-            (object) [
-                'id' => 1,
-                'min_weight' => 0,
-                'max_weight' => 10,
-                'rate' => 5.00,
-            ],
-            (object) [
-                'id' => 2,
-                'min_weight' => 10,
-                'max_weight' => 20,
-                'rate' => 10.00,
-            ],
-        ],
-    ],
-    (object) [
-        'id' => 2,
-        'zone_name' => 'Greater Accra',
-        'city' => 'Accra',
-        'rates' => [
-            (object) [
-                'id' => 3,
-                'min_weight' => 0,
-                'max_weight' => 5,
-                'rate' => 3.00,
-            ],
-            (object) [
-                'id' => 4,
-                'min_weight' => 5,
-                'max_weight' => 15,
-                'rate' => 7.00,
-            ],
-        ],
-    ],
-];
-
-
