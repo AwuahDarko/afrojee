@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,16 @@ Route::prefix('admin')->group(function () {
             Route::get('/orders/feature/{id}', [OrdersController::class, 'featureOrder'])->name('admin.orders.feature');
             Route::post('orders/update', [OrdersController::class, 'updateOrder'])->name('admin.orders.update');
             Route::delete('orders/{id}', [OrdersController::class, 'removeOrder'])->name('admin.orders.destroy');
+
+            // shipment
+            Route::get('/shipment', [ShipmentController::class, 'index'])->name('admin.shipment');
+            Route::get('/shipment/create', [ShipmentController::class, 'create'])->name('admin.shipment.create');
+            Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('admin.shipment.store');
+            Route::get('/shipment/edit/{id}', [ShipmentController::class, 'edit'])->name('admin.shipment.edit');
+            Route::post('/shipment/update/{id}', [ShipmentController::class, 'update'])->name('admin.shipment.update');
+            Route::delete('/shipment/delete/{id}', [ShipmentController::class, 'destroy'])->name('admin.shipment.destroy');
+
+
         }
     );
 
