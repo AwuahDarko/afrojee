@@ -61,6 +61,6 @@ class ReviewController extends Controller
             'featured_count' => Review::featured()->count()
         ];
 
-        return view('frontend.all-reviews', compact('reviews', 'stats'));
+        return view('frontend.partials.all-reviews', compact('reviews', 'stats'));
     }
 }
