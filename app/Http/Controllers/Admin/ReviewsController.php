@@ -7,7 +7,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
-
+//reviews controller for admin
 class ReviewsController extends Controller
 {
     public function index(Request $request)
@@ -108,7 +108,7 @@ class ReviewsController extends Controller
 
     public function edit(Review $review)
     {
-        return view('backend.reviews.edit', compact('review'));
+        return view('backend.edit-reviews', compact('review'));
     }
 
     public function update(Request $request, Review $review)
@@ -147,7 +147,7 @@ class ReviewsController extends Controller
 
         $review->update($validated);
 
-        return redirect()->route('backend.reviews')
+        return redirect()->route('admin.reviews')
             ->with('success', 'Review updated successfully.');
     }
 
@@ -160,7 +160,7 @@ class ReviewsController extends Controller
 
         $review->delete();
 
-        return redirect()->route('backend.reviews')
+        return redirect()->route('admin.reviews')
             ->with('success', 'Review deleted successfully.');
     }
 
@@ -250,6 +250,6 @@ class ReviewsController extends Controller
                 break;
         }
 
-        return redirect()->route('backend.reviews')->with('success', $message);
+        return redirect()->route('admin.reviews')->with('success', $message);
     }
 }
