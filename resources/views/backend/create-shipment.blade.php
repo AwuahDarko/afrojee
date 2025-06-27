@@ -1,5 +1,9 @@
 @extends('backend.layouts.app')
 
+@section('title')
+   Shipping Zones
+@endsection
+
 @section('content')
 <div class="container-fluid py-4">
     <!-- Header -->
@@ -11,19 +15,30 @@
                 </div>
 
                 <div class="card-body px-4">
-                    <form action="{{ route('admin.shipment.store') }}" method="POST">
+                    <form role="form" class="text-start" action="{{ route('admin.shipment.store') }}" method="POST">
                         @csrf
 
+                         <div class="mb-3 input-group input-group-outline">
+                            {{-- <label class="form-label">Shipping Country</label> --}}
+                            {{-- <input type="text" name="zone_name" class="form-control" required placeholder=""> --}}
+                            <select name="country" class="form-control">
+                                 <option value="0"> Select shipping country </option>
+                                @foreach ($countries as $country)
+                                <option value="{{$country->id}}"> {{ $country->name }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <!-- Zone Name -->
-                        <div class="mb-3">
+                        <div class="mb-3 input-group input-group-outline">
                             <label class="form-label">Zone Name</label>
-                            <input type="text" name="zone_name" class="form-control" required placeholder="e.g. Greater Accra">
+                            <input type="text" name="zone_name" class="form-control" required placeholder="">
                         </div>
 
                         <!-- City/Region -->
-                        <div class="mb-3">
+                        <div class="mb-3 input-group input-group-outline"> 
                             <label class="form-label">City / Region</label>
-                            <input type="text" name="region" class="form-control" required placeholder="e.g. Accra">
+                            <input type="text" name="region" class="form-control" required placeholder="">
                         </div>
 
                         <!-- Shipping Rates Table -->
@@ -35,23 +50,39 @@
                                     <tr>
                                         <th style="width: 40%">Weight From (kg)</th>
                                         <th style="width: 40%">Weight To (kg)</th>
-                                        <th style="width: 15%">Rate (GHS)</th>
-                                        <th style="width: 5%"></th>
+                                        <th style="width: 15%">Rate </th>
+                                        {{-- <th style="width: 5%"></th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td><input type="number" step="0.01" name="rates[0][weight_from]" class="form-control" required></td>
-                                        <td><input type="number" step="0.01" name="rates[0][weight_to]" class="form-control" required></td>
-                                        <td><input type="number" step="0.01" name="rates[0][rate]" class="form-control" required></td>
-                                        <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button></td>
+                                        <td>
+                                            <div class="input-group input-group-outline">
+
+                                                <input type="number" step="0.01" name="rates[0][weight_from]" class="form-control" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-outline">
+                                                <input type="number" step="0.01" name="rates[0][weight_to]" class="form-control" required>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="input-group input-group-outline">
+                                                <input type="number" step="0.01" name="rates[0][rate]" class="form-control" required>
+
+                                            </div>
+                                        </td>
+                                        {{-- <td class="text-center">
+                                            <button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button>
+                                        </td> --}}
                                     </tr>
                                 </tbody>
                             </table>
 
-                            <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
+                            {{-- <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
                                 <i class="fas fa-plus"></i> Add Rate
-                            </button>
+                            </button> --}}
                         </div>
 
                         <!-- Submit -->

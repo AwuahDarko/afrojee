@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CountryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -81,6 +82,17 @@ Route::prefix('admin')->group(function () {
             // Bulk Actions
             Route::post('reviews/bulk-action', [ReviewsController::class, 'bulkAction'])
                 ->name('admin.reviews.bulk-action');
+
+
+            //country
+             Route::get('/countries', [CountryController::class, 'index'])
+                ->name('admin.countries');
+                Route::get('/countries/new', [CountryController::class, 'newCountry'])->name('admin.countries.new');
+            Route::post('/countries/create', [CountryController::class, 'create'])->name('admin.countries.create');
+            Route::get('/countries/view/{id}', [CountryController::class, 'viewCountry'])->name('admin.countries.view');
+            Route::get('/countries/activate/{id}', [CountryController::class, 'activate'])->name('admin.countries.activate');
+            Route::get('/countries/deactivate/{id}', [CountryController::class, 'deactivate'])->name('admin.countries.deactivate');
+            Route::post('/countries/edit', [CountryController::class, 'update'])->name('admin.countries.edit');
         }
     );
 

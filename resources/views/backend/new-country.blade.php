@@ -32,13 +32,13 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
-                        <p>Create New Product Category</p>
-                        <form role="form" class="text-start" method="POST" action="{{ route('admin.category.create') }}">
+                        <p>Add New Country</p>
+                        <form role="form" class="text-start" method="POST" action="{{ route('admin.countries.create') }}">
                             @csrf
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="text" class="form-control" name="name" required
-                                    placeholder="Name of product category">
+                                    placeholder="Name of country">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

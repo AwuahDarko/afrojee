@@ -1,7 +1,7 @@
 @extends('backend.layouts.app')
 
 @section('title')
-   New Category
+   Edit Country
 @endsection
 
 @section('content')
@@ -32,13 +32,14 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
-                        <p>Create New Product Category</p>
-                        <form role="form" class="text-start" method="POST" action="{{ route('admin.category.create') }}">
+                        <p>Edit Country</p>
+                        <form role="form" class="text-start" method="POST" action="{{ route('admin.countries.edit') }}">
                             @csrf
+                            <input type="hidden" name="id" value="{{$country->id}}">
 
                             <div class="input-group input-group-outline my-3">
                                 <input type="text" class="form-control" name="name" required
-                                    placeholder="Name of product category">
+                                    placeholder="Name of country" value="{{ $country->name }}">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

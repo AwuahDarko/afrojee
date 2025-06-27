@@ -19,6 +19,7 @@
             <table class="table table-bordered align-items-center mb-0">
               <thead class="bg-light">
                 <tr>
+                  <th>Country</th>
                   <th>Zone Name</th>
                   <th>Region</th>
                   <th>Weight From (kg)</th>
@@ -31,6 +32,7 @@
                 @forelse ($zones as $zone)
                   @forelse ($zone->rates as $rate)
                     <tr>
+                      <td>{{ $zone->country->name }}</td>
                       <td>{{ $zone->zone_name }}</td>
                       <td>{{ $zone->region }}</td>
                       <td>{{ $rate->weight_from }}</td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use App\Models\ShippingZone;
 use App\Models\ShippingRate;
 use Illuminate\Http\Request;
@@ -20,7 +21,8 @@ class ShipmentController extends Controller
     // Show form to create new shipping zone and rates
     public function create()
     {
-        return view('backend.create-shipment');
+        $countries = Country::where('status', '=', 1)->get();
+        return view('backend.create-shipment', compact('countries'));
     }
 
     // Store a new shipping zone with rates
@@ -33,11 +35,13 @@ class ShipmentController extends Controller
             'rates.*.weight_from' => 'required|numeric', // Changed from min_weight
             'rates.*.weight_to' => 'required|numeric',   // Changed from max_weight
             'rates.*.rate' => 'required|numeric',
+            'country' => 'required|numeric|min:1'
         ]);
 
         $zone = ShippingZone::create([
             'zone_name' => $request->zone_name,
             'region' => $request->region,
+            'country_id' => $request->country
         ]);
 
         foreach ($request->rates as $rate) {
@@ -51,7 +55,8 @@ class ShipmentController extends Controller
     public function edit($id)
     {
         $zone = ShippingZone::with('rates')->findOrFail($id);
-        return view('backend.edit-shipment', compact('zone'));
+          $countries = Country::where('status', '=', 1)->get();
+        return view('backend.edit-shipment', compact('zone', 'countries'));
     }
 
     // Update shipping zone and its rates
@@ -66,11 +71,13 @@ class ShipmentController extends Controller
             'rates.*.weight_from' => 'required|numeric',
             'rates.*.weight_to' => 'required|numeric',
             'rates.*.rate' => 'required|numeric',
+            'country' => 'required|numeric|min:1'
         ]);
 
         $zone->update([
             'zone_name' => $request->zone_name,
             'region' => $request->region,
+            'country_id' => $request->country
         ]);
 
         $zone->rates()->delete(); // Remove old rates

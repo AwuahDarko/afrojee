@@ -12,10 +12,15 @@ class ShippingZone extends Model
     protected $fillable = [
         'zone_name',
         'region',
+        'country_id'
     ];
 
     public function rates()
     {
         return $this->hasMany(ShippingRate::class);
+    }
+
+    public  function country(){
+        return $this->belongsTo(Country::class);
     }
 }

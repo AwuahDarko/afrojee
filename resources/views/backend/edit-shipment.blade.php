@@ -15,15 +15,27 @@
                             @csrf
                             @method('POST')
 
+                              <div class="mb-3 ">
+                            <label class="form-label">Shipping Country</label>
+                            <select name="country" class="form-control">
+                                 {{-- <option value="0"> Select shipping country </option> --}}
+                                @foreach ($countries as $country)
+                                <option @if ($zone->country_id == $country->id)
+                                    selected="true"
+                                @endif value="{{$country->id}}"> {{ $country->name }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+
                             <!-- Zone Name -->
-                            <div class="mb-3">
+                            <div class="mb-3 ">
                                 <label class="form-label">Zone Name</label>
                                 <input type="text" name="zone_name" value="{{ $zone->zone_name }}" class="form-control"
                                     required>
                             </div>
 
                             <!-- City/Region -->
-                            <div class="mb-3">
+                            <div class="mb-3 ">
                                 <label class="form-label">City / Region</label>
                                 <input type="text" name="region" value="{{ $zone->region }}" class="form-control" required>
                             </div>
@@ -37,8 +49,8 @@
                                         <tr>
                                             <th>Weight From (kg)</th>
                                             <th>Weight To (kg)</th>
-                                            <th>Rate (GHS)</th>
-                                            <th></th>
+                                            <th>Rate </th>
+                                            {{-- <th></th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -50,20 +62,20 @@
                                                         value="{{ $rate->weight_to }}" class="form-control" required></td>
                                                 <td><input type="number" step="0.01" name="rates[{{ $i }}][rate]"
                                                         value="{{ $rate->rate }}" class="form-control" required></td>
-                                                <td class="text-center">
+                                                {{-- <td class="text-center">
                                                     <input type="hidden" name="rates[{{ $i }}][id]" value="{{ $rate->id }}">
                                                     <button type="button" class="btn btn-sm btn-danger remove-rate">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                </td>
+                                                </td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
 
-                                <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
+                                {{-- <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
                                     <i class="fas fa-plus"></i> Add Rate
-                                </button>
+                                </button> --}}
                             </div>
 
                             <!-- Submit -->
