@@ -62,20 +62,20 @@
                                                         value="{{ $rate->weight_to }}" class="form-control" required></td>
                                                 <td><input type="number" step="0.01" name="rates[{{ $i }}][rate]"
                                                         value="{{ $rate->rate }}" class="form-control" required></td>
-                                                {{-- <td class="text-center">
+                                                <td class="text-center">
                                                     <input type="hidden" name="rates[{{ $i }}][id]" value="{{ $rate->id }}">
                                                     <button type="button" class="btn btn-sm btn-danger remove-rate">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
-                                                </td> --}}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
 
-                                {{-- <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
+                                <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
                                     <i class="fas fa-plus"></i> Add Rate
-                                </button> --}}
+                                </button>
                             </div>
 
                             <!-- Submit -->

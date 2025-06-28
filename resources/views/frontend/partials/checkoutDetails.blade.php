@@ -1,5 +1,10 @@
 @extends('frontend.layouts.app')
 
+
+@section('title')
+    Afrojee - Checkout
+@endsection
+
 @section('content')
 <section class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Checkout</h1>

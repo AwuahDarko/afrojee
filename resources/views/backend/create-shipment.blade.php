@@ -73,16 +73,16 @@
 
                                             </div>
                                         </td>
-                                        {{-- <td class="text-center">
+                                        <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button>
-                                        </td> --}}
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
 
-                            {{-- <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
+                            <button type="button" class="btn btn-outline-dark btn-sm" id="addRateRow">
                                 <i class="fas fa-plus"></i> Add Rate
-                            </button> --}}
+                            </button>
                         </div>
 
                         <!-- Submit -->

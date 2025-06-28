@@ -114,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const fullEmptyCartMessage = document.getElementById('full-empty-cart-message');
     const cartItemCountElement = document.getElementById('cart-item-count'); // Element to display total items
 
-    console.log('Cart page script loaded');
 
     // Re-use the cart management functions from cart.js (or copy them here if cart.js isn't loaded on this page)
     const getCart = () => {

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
+use App\Models\Product;
+use App\Models\ShippingZone;
 use Illuminate\Http\Request;
 use App\Models\Address; // Import the Address model
 use App\Models\Order;   // Import the Order model (for future use, if not already used)
@@ -32,6 +35,46 @@ class CheckoutController extends Controller
             'userAddress' => $userAddress, // This will be an Address model instance or null
             'cartItems' => $cartItems,
         ]);
+    }
+
+
+    public function single(Request $request)
+    {
+        if(!$request->product_id){
+            abort(404);
+        }
+
+        $scountries = Country::where('status' , '=', 1)->get();
+        $product = Product::find($request->product_id);
+
+        $userAddress = null;
+
+        // Try to retrieve the address ID from the session for guests
+        $guestAddressId = Session::get('guest_billing_address_id');
+
+        if ($guestAddressId) {
+            $userAddress = Address::find($guestAddressId);
+        }
+
+        // Get cart items from the session (as implemented previously)
+        $cartItems = Session::get('current_cart_for_checkout', []);
+
+        return view('frontend.partials.checkoutDetailsSingle', [
+            'editingAddress' => $request->has('edit_address'),
+            'userAddress' => $userAddress, // This will be an Address model instance or null
+            'cartItems' => $cartItems,
+            'countries' => $scountries,
+            'product' =>$product
+        ]);
+    }
+
+    public function getRegionByCountry(Request $request){
+       
+
+        $zones = ShippingZone::where('country_id',  $request->country_id)->get();
+
+
+        return view('frontend.partials.zone-option', compact('zones'));
     }
 
     /**

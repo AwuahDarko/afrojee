@@ -21,6 +21,8 @@ Route::get('/products/{slug}', [ProductController::class, 'filterByCategory'])->
 Route::get('/products/details/{slug}', [ProductController::class, 'productDetails'])->name('web.products.details');
 Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
+Route::get('/checkout/single/{product_id}', [CheckoutController::class, 'single'])->name('web.checkoutDetails.single');
+Route::get('/checkout/info/regions', [CheckoutController::class, 'getRegionByCountry'])->name('web.checkoutDetails.info.region');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
 Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');
