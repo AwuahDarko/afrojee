@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\ShippingRate;
 use App\Models\ShippingZone;
 use Illuminate\Http\Request;
 use App\Models\Address; // Import the Address model
@@ -40,12 +41,13 @@ class CheckoutController extends Controller
 
     public function single(Request $request)
     {
-        if(!$request->product_id){
+        if (!$request->product_id) {
             abort(404);
         }
 
-        $scountries = Country::where('status' , '=', 1)->get();
+        $scountries = Country::where('status', '=', 1)->get();
         $product = Product::find($request->product_id);
+
 
         $userAddress = null;
 
@@ -64,17 +66,45 @@ class CheckoutController extends Controller
             'userAddress' => $userAddress, // This will be an Address model instance or null
             'cartItems' => $cartItems,
             'countries' => $scountries,
-            'product' =>$product
+            'product' => $product
         ]);
     }
 
-    public function getRegionByCountry(Request $request){
-       
+    public function getRegionByCountry(Request $request)
+    {
 
-        $zones = ShippingZone::where('country_id',  $request->country_id)->get();
+
+        $zones = ShippingZone::where('country_id', $request->country_id)->get();
 
 
         return view('frontend.partials.zone-option', compact('zones'));
+    }
+
+    public function calculatePrice(Request $request)
+    {
+        $quantity = $request->qty;
+        $product_id = $request->id;
+        $zone_id = $request->zone_id;
+
+        // get product details
+        $product = Product::findOrFail($product_id);
+        $weight = $product->weight;
+
+        // $rate = ShippingRate::where(['shipping_zone_id', '=', $zone_id)->get();
+        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->where('weight_from', '<=', $weight)
+            ->where('weight_to', '>=', $weight)
+            ->first();
+
+            // dd($rates);
+
+        $total_price = $product->price * $quantity;
+        $total_shipping = $rates->rate * $quantity;
+        $grand_total = $total_shipping + $total_price;
+
+
+
+        return view('frontend.partials.checkoutSummary', compact('total_price', 'total_shipping', 'grand_total'));
     }
 
     /**
@@ -114,12 +144,13 @@ class CheckoutController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'mobile_number' => 'required|string|max:20',
-            'country' => 'required|string|max:255',
+            'country' => 'required|string|min:1',
             'address_line_1' => 'required|string|max:255',
             'address_line_2' => 'nullable|string|max:255',
-            'city' => 'required|string|max:255',
-            'county' => 'required|string|max:255',
+            'region' => 'required|string|min:1',
             'postcode' => 'required|string|max:20',
+            'from_where' => 'required',
+            'product_id' => 'nullable'
         ]);
 
         // Check if an address ID already exists in the session (meaning they're editing)
@@ -128,22 +159,58 @@ class CheckoutController extends Controller
             $address = Address::find($guestAddressId);
             if ($address) {
                 // Update existing address
-                $address->update($validatedData);
+                $address->update([
+                    'first_name' => $request->first_name, 
+                    'last_name' =>  $request->last_name, 
+                    'mobile_number' =>  $request->mobile_number, 
+                    'country_id' =>  $request->country, 
+                    'address_line_1' =>  $request->address_line_1, 
+                    'address_line_2' =>  $request->address_line_2, 
+                    'city' => NULL, 
+                    'shipping_zone_id' =>  $request->region, 
+                    'county' => NULL, 
+                    'postcode' =>  $request->postcode, 
+                ]);
                 Session::flash('success', 'Address updated successfully!');
             } else {
                 // Address not found, create a new one
-                $address = Address::create($validatedData);
+                $address = Address::create([
+                    'first_name' => $request->first_name, 
+                    'last_name' =>  $request->last_name, 
+                    'mobile_number' =>  $request->mobile_number, 
+                    'country_id' =>  $request->country, 
+                    'address_line_1' =>  $request->address_line_1, 
+                    'address_line_2' =>  $request->address_line_2, 
+                    'city' => NULL, 
+                    'shipping_zone_id' =>  $request->region, 
+                    'county' => NULL, 
+                    'postcode' =>  $request->postcode, 
+                ]);
                 Session::put('guest_billing_address_id', $address->id);
                 Session::flash('success', 'New address saved successfully!');
             }
         } else {
             // No existing address ID, create a new address
-            $address = Address::create($validatedData);
+            $address = Address::create([
+                    'first_name' => $request->first_name, 
+                    'last_name' =>  $request->last_name, 
+                    'mobile_number' =>  $request->mobile_number, 
+                    'country_id' =>  $request->country, 
+                    'address_line_1' =>  $request->address_line_1, 
+                    'address_line_2' =>  $request->address_line_2, 
+                    'city' => NULL, 
+                    'shipping_zone_id' =>  $request->region, 
+                    'county' => NULL, 
+                    'postcode' =>  $request->postcode, 
+                ]);
             Session::put('guest_billing_address_id', $address->id);
             Session::flash('success', 'Address saved successfully!');
         }
 
         // Redirect back to the checkout page, removing the edit_address parameter
+        if($request->from_where == 'single'){
+              return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id]);
+        }
         return redirect()->route('web.checkoutDetails');
     }
 

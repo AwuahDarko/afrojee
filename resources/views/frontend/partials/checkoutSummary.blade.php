@@ -1,0 +1,12 @@
+<div class="flex justify-between items-center mb-3">
+    <p class="text-gray-700">Product sub-total</p>
+    <p class="font-bold text-gray-900"> {{ number_format($total_price, 2) }}</p>
+</div>
+<div class="flex justify-between items-center mb-6">
+    <p class="text-gray-700">Delivery</p>
+    <p class="font-bold text-gray-900"> {{ number_format($total_shipping, 2) }}</p>
+</div>
+<div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
+    <p class="text-xl font-bold text-gray-900">Total</p>
+    <p class="text-3xl font-bold text-gray-900"> {{ number_format($grand_total, 2) }}</p>
+</div>

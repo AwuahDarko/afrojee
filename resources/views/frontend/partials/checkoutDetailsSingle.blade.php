@@ -47,18 +47,20 @@
                         <form id="addressForm" action="{{ route('web.checkout.saveAddress') }}" method="POST"
                             class="space-y-4">
                             @csrf {{-- CSRF protection --}}
+                            <input type="hidden" name="from_where" value="single">
+                            <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="first_name" class="block text-gray-700 text-sm font-medium mb-1">First
                                         Name</label>
-                                    <input type="text" id="first_name" name="first_name"
+                                    <input type="text" id="first_name" name="first_name" required
                                         value="{{ old('first_name', $userAddress->first_name ?? '') }}"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                                 </div>
                                 <div>
                                     <label for="last_name" class="block text-gray-700 text-sm font-medium mb-1">Last
                                         Name</label>
-                                    <input type="text" id="last_name" name="last_name"
+                                    <input type="text" id="last_name" name="last_name" required
                                         value="{{ old('last_name', $userAddress->last_name ?? '') }}"
                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                                 </div>
@@ -67,19 +69,19 @@
                             <div>
                                 <label for="mobile_number" class="block text-gray-700 text-sm font-medium mb-1">Mobile
                                     Number</label>
-                                <input type="tel" id="mobile_number" name="mobile_number"
+                                <input type="tel" id="mobile_number" name="mobile_number" required
                                     value="{{ old('mobile_number', $userAddress->mobile_number ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
                             <div>
                                 <label for="country" class="block text-gray-700 text-sm font-medium mb-1">Country</label>
-                                <select id="country" name="country"
+                                <select id="country" name="country" autocomplete="off"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                                     <option value="0">Select destination country</option>
                                     @foreach ($countries as $country)
                                         <option value="{{ $country->id }}"
-                                            {{ old('country', $userAddress->country ?? '0') == $country->id ? 'selected' : '' }}>
+                                            {{ old('country', $userAddress->country_id ?? '0') == $country->id ? 'selected' : '' }}>
                                             {{ $country->name }} </option>
                                     @endforeach
                                     {{-- Add other countries as needed --}}
@@ -90,10 +92,7 @@
                                 <div>
                                     <label for="city"
                                         class="block text-gray-700 text-sm font-medium mb-1">City/Region</label>
-                                    {{-- <input type="text" id="city" name="city" placeholder="Enter the city you're from"
-                                    value="{{ old('city', $userAddress->city ?? '') }}"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800"> --}}
-                                    <select name="region" id="region"
+                                    <select name="region" id="region" autocomplete="off" required
                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
 
                                     </select>
@@ -105,7 +104,7 @@
                                 <label for="address_line_1" class="block text-gray-700 text-sm font-medium mb-1">Address
                                     Line
                                     1</label>
-                                <input type="text" id="address_line_1" name="address_line_1"
+                                <input type="text" id="address_line_1" name="address_line_1" required
                                     placeholder="Enter your address"
                                     value="{{ old('address_line_1', $userAddress->address_line_1 ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
@@ -113,20 +112,17 @@
 
                             <div>
                                 <label for="address_line_2" class="block text-gray-700 text-sm font-medium mb-1">Address
-                                    Line 2
-                                    (Optional)</label>
+                                    Line 2 (Optional)</label>
                                 <input type="text" id="address_line_2" name="address_line_2"
                                     placeholder="Enter Street name (Optional)"
                                     value="{{ old('address_line_2', $userAddress->address_line_2 ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
-
-
                             <div>
                                 <label for="postcode" class="block text-gray-700 text-sm font-medium mb-1">Postcode</label>
                                 <input type="text" id="postcode" name="postcode" placeholder="Enter your postcode"
-                                    value="{{ old('postcode', $userAddress->postcode ?? '') }}"
+                                    required value="{{ old('postcode', $userAddress->postcode ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
@@ -150,9 +146,9 @@
                                 @if ($userAddress->address_line_2)
                                     <p>{{ $userAddress->address_line_2 }}</p>
                                 @endif
-                                <p>{{ $userAddress->city }}, {{ $userAddress->county }}</p>
+                                <p>{{ $userAddress->country->name }}</p>
+                                <p>{{ $userAddress->zone->zone_name }} </p>
                                 <p>{{ $userAddress->postcode }}</p>
-                                <p>{{ $userAddress->country }}</p>
                                 <p>{{ $userAddress->mobile_number }}</p>
                             @else
                                 <p>No billing address entered yet. Click "Change address" to add your details.</p>
@@ -210,16 +206,16 @@
 
                 <div class="cart-item flex sm:flex-col  items-center border-b border-gray-300 last:border-b-0 pb-3"
                     data-product-id="{{ $product->id }}" data-price="{{ $product->price }}"
-                    data-quantity="{{ 7 }}">
+                    data-quantity="{{ 1 }}">
                     <div class="flex sm:flex-row justify-start w-70 mb-2 items-center">
                         <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                        class="w-24 h-24 sm:w-10 sm:h-10 rounded-lg mb-4 sm:mb-0 sm:mr-4 object-cover" />
-                    <div class="flex flex-col sm:flex-col sm:items-center text-gray-600 mt-2 sm:mt-0">
-                        <p class="font-semibold text-l sm:text-l mb-2 sm:mb-0 p-0">
-                            {{ $product->name }}
-                        </p>
-                        
-                    </div>
+                            class="w-24 h-24 sm:w-10 sm:h-10 rounded-lg mb-4 sm:mb-0 sm:mr-4 object-cover" />
+                        <div class="flex flex-col sm:flex-col sm:items-center text-gray-600 mt-2 sm:mt-0">
+                            <p class="font-semibold text-l sm:text-l mb-2 sm:mb-0 p-0">
+                                {{ $product->name }}
+                            </p>
+
+                        </div>
                     </div>
                     <div class="flex-grow w-full">
                         <div class="flex flex-col sm:flex-col sm:items-center text-gray-600 mt-2 sm:mt-0">
@@ -228,15 +224,15 @@
                             <div class="flex items-center">
                                 <button
                                     class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
-                                    data-product-id="{{ $product->id }}">
+                                    data-product-id="{{ $product->id }}" id="decrease-btn">
                                     -
                                 </button>
-                                <input type="text" value="{{ 7 }}"
+                                <input type="text" value="1"
                                     class="quantity-input w-10 text-center mx-2 border-none focus:outline-none bg-transparent font-bold"
-                                    readonly data-product-id="{{ $product->id }}" />
+                                    readonly data-product-id="{{ $product->id }}" id="p-qty" />
                                 <button
                                     class="quantity-plus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 mr-auto"
-                                    data-product-id="{{ $product->id }}">
+                                    data-product-id="{{ $product->id }}" id="increase-btn">
                                     +
                                 </button>
                             </div>
@@ -247,29 +243,19 @@
 
                 <h2 class="text-xl font-semibold text-gray-800 mb-6 my-2">Your Bill</h2>
 
-                @php
-                    $productSubtotal = 0;
-                    if (isset($cartItems) && is_array($cartItems)) {
-                        foreach ($cartItems as $item) {
-                            $productSubtotal += $item['price'] * $item['quantity'];
-                        }
-                    }
-
-                    $deliveryFee = 15.99; // Static delivery fee for now
-                    $totalBill = $productSubtotal + $deliveryFee;
-                @endphp
-
-                <div class="flex justify-between items-center mb-3">
-                    <p class="text-gray-700">Product sub-total</p>
-                    <p class="font-bold text-gray-900">$ {{ number_format($productSubtotal, 2) }}</p>
-                </div>
-                <div class="flex justify-between items-center mb-6">
-                    <p class="text-gray-700">Delivery</p>
-                    <p class="font-bold text-gray-900">$ {{ number_format($deliveryFee, 2) }}</p>
-                </div>
-                <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
-                    <p class="text-xl font-bold text-gray-900">Total</p>
-                    <p class="text-3xl font-bold text-gray-900">$ {{ number_format($totalBill, 2) }}</p>
+                <div id="checkout-summary">
+                    <div class="flex justify-between items-center mb-3">
+                        <p class="text-gray-700">Product sub-total</p>
+                        <p class="font-bold text-gray-900"> {{ number_format($product->price, 2) }}</p>
+                    </div>
+                    <div class="flex justify-between items-center mb-6">
+                        <p class="text-gray-700">Delivery</p>
+                        <p class="font-bold text-gray-900"> {{ number_format(0, 2) }}</p>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
+                        <p class="text-xl font-bold text-gray-900">Total</p>
+                        <p class="text-3xl font-bold text-gray-900"> {{ number_format($product->price, 2) }}</p>
+                    </div>
                 </div>
                 <button
                     class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
@@ -374,29 +360,71 @@
 
             const region = document.getElementById('region')
             const country = document.getElementById('country')
+            const quantity = document.getElementById('p-qty')
+            const summary = document.getElementById('checkout-summary')
+            const maxQty = {{ $product->quantity }}
+            const id = {{ $product->id }}
+            const global_zone_id = {{ $userAddress->zone->id }};
 
-            console.log('country', country)
 
-            region.addEventListener('change', (evt) => {
+            region?.addEventListener('change', (evt) => {
                 const val = region.value
-                console.log('rgion', val)
+
+                if (!val) return
+
+                let qty = parseInt(quantity.value)
+
+                getNewPrice(qty, id, region.value)
             })
 
-            country.addEventListener('change', (evt) => {
+            country?.addEventListener('change', (evt) => {
                 const val = country.value
-                console.log('country', val)
                 if (val != '0') {
 
                     const url = "{{ route('web.checkoutDetails.info.region') }}"
 
-                    fetch(
-                            `${url}?country_id=${val}`, )
+                    fetch(`${url}?country_id=${val}`, )
                         .then(res => res.text())
                         .then(data => {
                             region.innerHTML = data
                         }).catch(error => console.log(error))
                 }
             })
+
+            document.getElementById('decrease-btn').addEventListener('click', (evt) => {
+                let qty = parseInt(quantity.value)
+                if (qty === 1) return
+
+                quantity.value = --qty
+
+                getNewPrice(qty, id, region?.value ?? 0)
+            })
+
+            document.getElementById('increase-btn').addEventListener('click', (evt) => {
+                let qty = parseInt(quantity.value)
+                if (qty === maxQty) return
+
+                quantity.value = ++qty
+
+                getNewPrice(qty, id, region?.value ?? 0)
+            })
+
+            function getNewPrice(qty, id, zone_id) {
+                if (!zone_id && !global_zone_id) return
+
+                const z = zone_id || global_zone_id
+
+                const url = "{{ route('web.checkoutDetails.info.price') }}"
+
+                fetch(`${url}?qty=${qty}&id=${id}&zone_id=${z}`, )
+                    .then(res => res.text())
+                    .then(data => {
+                        summary.innerHTML = data
+                    }).catch(error => console.log(error))
+            }
+
+
+
         });
     </script>
 @endsection
