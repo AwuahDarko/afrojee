@@ -122,10 +122,7 @@
             <button id="proceed-to-checkout-btn" class="block w-full bg-pink-800 text-white text-center py-3 rounded-md hover:bg-pink-900 transition duration-200">
                 Proceed to Checkout
             </button>
-            <!-- <a href="{{ route('web.checkoutDetails') }}"
-                class="block w-full bg-pink-800 text-white text-center py-3 rounded-md hover:bg-pink-900 transition duration-200">
-                Proceed to Checkout
-            </a> -->
+            
         </div>
     </div>
     <div id="cart-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[90] hidden"></div>

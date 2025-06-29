@@ -66,7 +66,7 @@
                             ${{ number_format($product->price, 2) }}
                         </p>
                         <div class="flex items-center gap-4">
-                            <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id]) }}" class="flex-grow">
+                            <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}" class="flex-grow">
                                 <button
                                     class="bg-pink-800 hover:bg-pink-900 text-white w-full justify-center px-6 py-2 rounded-full font-medium flex items-center gap-2 transition-colors duration-200">
                                     Buy Now

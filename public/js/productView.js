@@ -25,10 +25,12 @@ const updateCounters = () => {
   const currentValue = parseInt(quantityInput.value);
   buyNowCounter.textContent = currentValue;
   addToCartCounter.textContent = currentValue;
+
 };
 
 decrementButton.addEventListener('click', () => {
   let currentValue = parseInt(quantityInput.value);
+
   if (currentValue > 1) {
     quantityInput.value = currentValue - 1;
     updateCounters();
@@ -37,6 +39,7 @@ decrementButton.addEventListener('click', () => {
 
 incrementButton.addEventListener('click', () => {
   let currentValue = parseInt(quantityInput.value);
+
   quantityInput.value = currentValue + 1;
   updateCounters();
 });

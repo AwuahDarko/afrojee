@@ -79,7 +79,7 @@
                                 class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-1 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
                                 −
                             </button>
-                            <input type="text" id="quantity" value="1"
+                            <input type="text" id="quantity" value="1" autocomplete="off"
                                 class="w-10 sm:w-12 text-center focus:outline-none bg-transparent text-lg sm:text-xl font-bold"
                                 readonly />
                             <button id="increment"
@@ -90,7 +90,7 @@
                     </div>
 
                     <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
-                        <a href="{{ route('web.checkoutDetails') }}" class="flex-grow">
+                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}" class="flex-grow" id="nav-link">
                             <button
                                 class="relative bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base">
                                 <span id="buyNowCounter"
@@ -102,8 +102,12 @@
                                 </svg>
                             </button>
                         </a>
-                        <button
-                            class="relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+                        <button 
+                         data-product-id="{{ $product->id }}"
+                                data-product-name="{{ $product->name }}"
+                                data-product-price="{{ number_format($product->price, 2) }}"
+                                data-product-image="{{ $product->image }}"
+                            class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
                             <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#a)" fill="#99395C">
                                     <path

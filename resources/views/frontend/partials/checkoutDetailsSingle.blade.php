@@ -206,7 +206,7 @@
 
                 <div class="cart-item flex sm:flex-col  items-center border-b border-gray-300 last:border-b-0 pb-3"
                     data-product-id="{{ $product->id }}" data-price="{{ $product->price }}"
-                    data-quantity="{{ 1 }}">
+                    data-quantity="{{ $quantity }}">
                     <div class="flex sm:flex-row justify-start w-70 mb-2 items-center">
                         <img src="{{ $product->image }}" alt="{{ $product->name }}"
                             class="w-24 h-24 sm:w-10 sm:h-10 rounded-lg mb-4 sm:mb-0 sm:mr-4 object-cover" />
@@ -227,7 +227,7 @@
                                     data-product-id="{{ $product->id }}" id="decrease-btn">
                                     -
                                 </button>
-                                <input type="text" value="1"
+                                <input type="text" value="{{ $quantity }}"
                                     class="quantity-input w-10 text-center mx-2 border-none focus:outline-none bg-transparent font-bold"
                                     readonly data-product-id="{{ $product->id }}" id="p-qty" />
                                 <button
@@ -246,15 +246,20 @@
                 <div id="checkout-summary">
                     <div class="flex justify-between items-center mb-3">
                         <p class="text-gray-700">Product sub-total</p>
-                        <p class="font-bold text-gray-900"> {{ number_format($product->price, 2) }}</p>
+                        <p class="font-bold text-gray-900"> {{ number_format($product->price * $quantity, 2) }}</p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700">Delivery</p>
-                        <p class="font-bold text-gray-900"> {{ number_format(0, 2) }}</p>
+                        @if ($userAddress)
+                            <p class="font-bold text-gray-900"> {{ number_format(0, 2) }}</p>
+                        @else
+                            <p class="font-bold text-gray-900"> Select region to determine cost </p>
+                        @endif
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
                         <p class="text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-3xl font-bold text-gray-900"> {{ number_format($product->price, 2) }}</p>
+                        <p class="text-3xl font-bold text-gray-900"> {{ number_format($product->price * $quantity, 2) }}
+                        </p>
                     </div>
                 </div>
                 <button
@@ -266,6 +271,7 @@
                 </button>
             </div>
         </div>
+
     </section>
 
     {{-- The modal for adding/editing addresses (kept for reference, but main form is inline) --}}
@@ -364,8 +370,9 @@
             const summary = document.getElementById('checkout-summary')
             const maxQty = {{ $product->quantity }}
             const id = {{ $product->id }}
-            const global_zone_id = {{ $userAddress->zone->id }};
-
+            const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
+        
+            getNewPrice(1, id, global_zone_id)
 
             region?.addEventListener('change', (evt) => {
                 const val = region.value

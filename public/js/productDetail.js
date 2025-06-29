@@ -25,6 +25,13 @@ window.addEventListener("DOMContentLoaded", () => {
     const currentValue = parseInt(quantityInput.value);
     buyNowCounter.textContent = currentValue;
     addToCartCounter.textContent = currentValue;
+    const nav = document.getElementById('nav-link')
+    const link = nav.getAttribute('href')
+    const arr = link.split('/')
+    arr[arr.length - 1] = currentValue
+    const newlink = arr.join('/')
+    
+    nav.setAttribute('href', newlink)
   };
 
   decrementButton.addEventListener('click', () => {

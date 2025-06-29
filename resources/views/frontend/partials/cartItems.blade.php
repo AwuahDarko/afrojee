@@ -1,5 +1,9 @@
 @extends('frontend.layouts.app')
 
+@section('title')
+    Afrojee - Cart
+@endsection
+
 @section('content')
     <section class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8"> {{-- Added padding for mobile --}}
         <h1 class="text-4xl font-semibold text-gray-800 mb-8 text-center md:text-left">Your Cart</h1>
@@ -96,7 +100,7 @@
                 </button>
                 <div class="flex justify-center space-x-3">
                     <img src="/images/card.png?text=VISA" alt="Visa" class="h-full object-contain" />
-                    {{-- Uncomment if you have other card images --}}
+                    
                 </div>
             </div>
         </div>
