@@ -124,11 +124,10 @@ class CheckoutController extends Controller
         $total_amount = 0;
         foreach ($cartItems as $product) {
             array_push($ids, $product->productId);
-             $total_amount += $product->price * $product->quantity;
         }
-
+        
         $products = Product::whereIn('id', $ids)->get();
-
+        
         $total_weight = 0;
         foreach ($products as $product) {
             
@@ -136,6 +135,7 @@ class CheckoutController extends Controller
                 $prod = $cartItems[$i];
                 if ($prod->productId == $product->id) {
                     $total_weight += $prod->quantity * $product->weight;
+                    $total_amount += $product->price * $prod->quantity;
                    
                 }
             }
@@ -204,7 +204,8 @@ class CheckoutController extends Controller
             'region' => 'required|string|min:1',
             'postcode' => 'required|string|max:20',
             'from_where' => 'required',
-            'product_id' => 'nullable'
+            'product_id' => 'nullable',
+            'email' => 'required|email'
         ]);
 
         // Check if an address ID already exists in the session (meaning they're editing)
@@ -224,6 +225,7 @@ class CheckoutController extends Controller
                     'shipping_zone_id' => $request->region,
                     'county' => NULL,
                     'postcode' => $request->postcode,
+                    'email' => $request->email
                 ]);
                 Session::flash('success', 'Address updated successfully!');
             } else {
@@ -239,6 +241,7 @@ class CheckoutController extends Controller
                     'shipping_zone_id' => $request->region,
                     'county' => NULL,
                     'postcode' => $request->postcode,
+                     'email' => $request->email
                 ]);
                 Session::put('guest_billing_address_id', $address->id);
                 Session::flash('success', 'New address saved successfully!');
@@ -256,6 +259,7 @@ class CheckoutController extends Controller
                 'shipping_zone_id' => $request->region,
                 'county' => NULL,
                 'postcode' => $request->postcode,
+                 'email' => $request->email
             ]);
             Session::put('guest_billing_address_id', $address->id);
             Session::flash('success', 'Address saved successfully!');
@@ -263,7 +267,7 @@ class CheckoutController extends Controller
 
         // Redirect back to the checkout page, removing the edit_address parameter
         if ($request->from_where == 'single') {
-            return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id]);
+            return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id, 'quantity' => $request->quantity]);
         }
         return redirect()->route('web.checkoutDetails');
     }

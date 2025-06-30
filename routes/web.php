@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\OrderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AboutUsController;
@@ -42,6 +43,11 @@ Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
 Route::post('/checkout', [CheckoutController::class, 'processCartAndShowCheckout'])->name('web.checkoutDetails.post');
 Route::post('/checkout/process-cart', [CheckoutController::class, 'processCartAndShowCheckout'])->name('web.checkout.processCart');
 Route::post('/checkout/save-address', [CheckoutController::class, 'storeAddress'])->name('web.checkout.saveAddress'); // This is the missing one!
+
+
+// orders 
+Route::post('/order/single/save', [OrderController::class, 'store'])->name('web.order.save');
+Route::post('/order/multiple/save', [OrderController::class, 'storeMultiple'])->name('web.order.multiple.save');
 
 // Or, if you want the original route to also handle POST:
 // Route::match(['GET', 'POST'], '/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');

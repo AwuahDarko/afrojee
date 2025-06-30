@@ -28,14 +28,14 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('admin.reviews*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
-          href="{{ route('admin.reviews') }}">
-          <i class="material-symbols-rounded opacity-5">table_view</i>
-          <span class="nav-link-text ms-1">Reviews</span>
+        <a class="nav-link {{ request()->routeIs('admin.products*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+          href="{{ route('admin.products') }}">
+          <i class="material-symbols-rounded opacity-5">receipt_long</i>
+          <span class="nav-link-text ms-1">Products</span>
         </a>
       </li>
 
-      <li class="nav-item">
+       <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('admin.orders*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.orders') }}">
           <i class="material-symbols-rounded opacity-5">table_view</i>
@@ -44,10 +44,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('admin.products*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
-          href="{{ route('admin.products') }}">
-          <i class="material-symbols-rounded opacity-5">receipt_long</i>
-          <span class="nav-link-text ms-1">Products</span>
+        <a class="nav-link {{ request()->routeIs('admin.reviews*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+          href="{{ route('admin.reviews') }}">
+          <i class="material-symbols-rounded opacity-5">table_view</i>
+          <span class="nav-link-text ms-1">Reviews</span>
         </a>
       </li>
 

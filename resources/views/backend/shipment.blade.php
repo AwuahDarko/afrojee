@@ -1,5 +1,7 @@
 @extends('backend.layouts.app')
 
+@section('title', 'Add Shipment')
+
 @section('content')
 <div class="container-fluid py-4">
   <div class="row">

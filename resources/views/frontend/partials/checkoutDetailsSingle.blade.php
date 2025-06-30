@@ -48,6 +48,7 @@
                             class="space-y-4">
                             @csrf {{-- CSRF protection --}}
                             <input type="hidden" name="from_where" value="single">
+                            <input type="hidden" name="quantity" value="1" id="qty-lbl">
                             <input type="hidden" name="product_id" value="{{ $product->id }}">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
@@ -71,6 +72,14 @@
                                     Number</label>
                                 <input type="tel" id="mobile_number" name="mobile_number" required
                                     value="{{ old('mobile_number', $userAddress->mobile_number ?? '') }}"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
+                            </div>
+
+                             <div>
+                                <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email
+                                    </label>
+                                <input type="tel" id="email" name="email" required
+                                    value="{{ old('email', $userAddress->email ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
@@ -262,13 +271,19 @@
                         </p>
                     </div>
                 </div>
-                <button
+                <form action="{{route('web.order.save')}}" method="POST">
+                     @csrf
+                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                    <input type="hidden" name="quantity" value="1" id="order-qty">
+                    <input type="hidden" name="zone_id" value="{{$userAddress->zone->id}}" id="order-zone">
+                    <button @if (!$userAddress) disabled @endif type="submit" 
                     class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
                     Proceed to checkout
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                 </button>
+                </form>
             </div>
         </div>
 
@@ -367,6 +382,9 @@
             const region = document.getElementById('region')
             const country = document.getElementById('country')
             const quantity = document.getElementById('p-qty')
+            const qtylbl = document.getElementById('qty-lbl')
+            const orderQty = document.getElementById('order-qty')
+            const orderZone = document.getElementById('order-zone')
             const summary = document.getElementById('checkout-summary')
             const maxQty = {{ $product->quantity }}
             const id = {{ $product->id }}
@@ -380,6 +398,8 @@
                 if (!val) return
 
                 let qty = parseInt(quantity.value)
+                orderZone.value = region.value
+
 
                 getNewPrice(qty, id, region.value)
             })
@@ -403,7 +423,12 @@
                 if (qty === 1) return
 
                 quantity.value = --qty
+                orderQty.value = quantity.value
+                if(qtylbl){
+                    qtylbl.value = quantity.value
 
+                }
+                
                 getNewPrice(qty, id, region?.value ?? 0)
             })
 
@@ -412,7 +437,11 @@
                 if (qty === maxQty) return
 
                 quantity.value = ++qty
-
+                orderQty.value = quantity.value
+                 if(qtylbl){
+                     qtylbl.value = quantity.value
+                 }
+                
                 getNewPrice(qty, id, region?.value ?? 0)
             })
 

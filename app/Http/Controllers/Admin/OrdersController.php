@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Validator;
 
 class OrdersController extends Controller
 {
+
+     private int $items_per_page = 30;
+
     public function orders(Request $request)
     {
         $search = $request->input('q');
@@ -15,7 +18,8 @@ class OrdersController extends Controller
         $paymentStatus = $request->input('payment_status');
         $date = $request->input('date');
 
-        $query = Order::query()->with('customer')->latest();
+
+        $query = Order::with('orderProducts')->orderBy('id', 'desc');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -38,7 +42,7 @@ class OrdersController extends Controller
             $query->whereDate('created_at', $date);
         }
 
-        $orders = $query->paginate();
+        $orders = $query->paginate($this->items_per_page);
 
         $stats = [
             'total' => Order::count(),
@@ -52,82 +56,12 @@ class OrdersController extends Controller
 
     public function viewOrder($id)
     {
-        // $order = Order::with('customer', 'items.product')->findOrFail($id);
-        $dummyOrders = [
-            1 => (object) [
-                'id' => 1,
-                'order_number' => 'ORD-20250001',
-                'status' => 'completed',
-                'payment_status' => 'paid',
-                'total_amount' => 150.75,
-                'created_at' => now(),
-                'customer' => (object) [
-                    'name' => 'John Doe',
-                    'email' => 'john.doe@example.com',
-                    'phone' => '1234567890',
-                ],
-                'items' => [
-                    (object) [
-                        'product' => (object) ['name' => 'Product 1'],
-                        'price' => 50.25,
-                        'quantity' => 2,
-                    ],
-                    (object) [
-                        'product' => (object) ['name' => 'Product 2'],
-                        'price' => 25.10,
-                        'quantity' => 1,
-                    ],
-                ],
-            ],
-            2 => (object) [
-                'id' => 2,
-                'order_number' => 'ORD-20250002',
-                'status' => 'pending',
-                'payment_status' => 'unpaid',
-                'total_amount' => 85.50,
-                'created_at' => now()->subDays(1),
-                'customer' => (object) [
-                    'name' => 'Jane Smith',
-                    'email' => 'jane.smith@example.com',
-                    'phone' => '0987654321',
-                ],
-                'items' => [
-                    (object) [
-                        'product' => (object) ['name' => 'Product 3'],
-                        'price' => 30.00,
-                        'quantity' => 1,
-                    ],
-                    (object) [
-                        'product' => (object) ['name' => 'Product 4'],
-                        'price' => 55.50,
-                        'quantity' => 1,
-                    ],
-                ],
-            ],
-            3 => (object) [
-                'id' => 3,
-                'order_number' => 'ORD-20250003',
-                'status' => 'cancelled',
-                'payment_status' => 'paid',
-                'total_amount' => 200.00,
-                'created_at' => now()->subDays(2),
-                'customer' => (object) [
-                    'name' => 'Alice Johnson',
-                    'email' => 'alice.johnson@example.com',
-                    'phone' => '1122334455',
-                ],
-                'items' => [
-                    (object) [
-                        'product' => (object) ['name' => 'Product 5'],
-                        'price' => 100.00,
-                        'quantity' => 2,
-                    ],
-                ],
-            ],
-        ];
+        $order = Order::with(['shippingAddress', 'orderProducts'], 'items.product')->findOrFail($id);
+         
+      
 
         // Select the dummy order based on the provided ID
-        $order = $dummyOrders[$id] ?? $dummyOrders[1];
+        // $order = $dummyOrders[$id] ?? $dummyOrders[1];
         return view('backend.view-order', compact('order'));
     }
 

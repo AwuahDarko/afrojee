@@ -1,5 +1,7 @@
 @extends('backend.layouts.app')
 
+@section('title', 'Order Details')
+
 @section('content')
     <div class="container-fluid py-4">
         <div class="row mb-4">
@@ -15,9 +17,10 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <h6 class="mb-3">Customer Information</h6>
-                                <p><strong>Name:</strong> {{ $order->customer->name ?? 'N/A' }}</p>
-                                <p><strong>Email:</strong> {{ $order->customer->email ?? 'N/A' }}</p>
-                                <p><strong>Phone:</strong> {{ $order->customer->phone ?? 'N/A' }}</p>
+                                <p><strong>Name:</strong>
+                                    {{ $order->shippingAddress->first_name . ' ' . $order->shippingAddress->last_name }}</p>
+                                <p><strong>Email:</strong> {{ $order->shippingAddress->email ?? 'N/A' }}</p>
+                                <p><strong>Phone:</strong> {{ $order->shippingAddress->mobile_number ?? 'N/A' }}</p>
                             </div>
 
                             <div class="col-md-6">
@@ -40,34 +43,55 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Product</th>
+                                            Product
+                                        </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Price</th>
+                                            Quantity
+                                        </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Quantity</th>
+                                            Unit Price
+                                        </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Total</th>
+                                            Total Price
+                                        </th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Unit Weight
+                                        </th>
+                                         <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Total Weight
+                                        </th>
+                                       
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($order->items as $item)
+                                    @foreach ($order->orderProducts as $item)
                                         <tr>
                                             <td>
                                                 <p class="text-sm mb-0">{{ $item->product->name ?? 'Product deleted' }}</p>
                                             </td>
-                                            <td>
-                                                <span class="text-sm">GHS {{ number_format($item->price, 2) }}</span>
-                                            </td>
-                                            <td>
+                                             <td>
                                                 <span class="text-sm">{{ $item->quantity }}</span>
                                             </td>
                                             <td>
-                                                <span class="text-sm">GHS
-                                                    {{ number_format($item->price * $item->quantity, 2) }}</span>
+                                                <span class="text-sm"> {{ number_format($item->unit_price, 2) }}</span>
                                             </td>
+                                            <td>
+                                                <span class="text-sm"> {{ number_format($item->total_price, 2) }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-sm"> {{ $item->unit_weight  }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="text-sm"> {{ $item->total_weight }}</span>
+                                            </td>
+                                           
+                                           
                                         </tr>
                                     @endforeach
                                 </tbody>

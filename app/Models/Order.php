@@ -20,7 +20,10 @@ class Order extends Model
         'subtotal',
         'delivery_fee',
         'total_amount',
+        'total_weight',
         'status',
+        'order_number',
+        'payment_status'
         // Add other order specific fields here
     ];
 
@@ -48,5 +51,9 @@ class Order extends Model
     public function customer()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function orderProducts(){
+        return $this->hasMany(OrderProduct::class, 'order_id', 'id');
     }
 }

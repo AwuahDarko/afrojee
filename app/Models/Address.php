@@ -25,6 +25,7 @@ class Address extends Model
         'shipping_zone_id',
         'county',
         'postcode',
+        'email'
     ];
 
     /**

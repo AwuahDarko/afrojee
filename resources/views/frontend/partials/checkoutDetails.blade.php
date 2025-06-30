@@ -74,6 +74,14 @@
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
+                              <div>
+                                <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email
+                                    </label>
+                                <input type="tel" id="email" name="email" required
+                                    value="{{ old('email', $userAddress->email ?? '') }}"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
+                            </div>
+
                             <div>
                                 <label for="country" class="block text-gray-700 text-sm font-medium mb-1">Country</label>
                                 <select id="country" name="country" autocomplete="off"
@@ -227,13 +235,18 @@
                         </p>
                     </div>
                 </div>
-                <button
+               <form action="{{route('web.order.multiple.save')}}" method="POST">
+                 @csrf
+                <input type="hidden" name="zone_id" value="{{$userAddress->zone->id}}" id="order-zone">
+                <input type="hidden" name="cart" value="" id="order-cart">
+                 <button @if (!$userAddress) disabled @endif type="submit" 
                     class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
                     Proceed to checkout
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
                 </button>
+               </form>
             </div>
         </div>
 
@@ -333,6 +346,8 @@
             const quantity = document.getElementById('p-qty')
             const summary = document.getElementById('del-lbl')
             const grand = document.getElementById('grand-lbl')
+             const orderZone = document.getElementById('order-zone')
+             const orderCart = document.getElementById('order-cart')
             const maxQty = 0
             const id = 0
             const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
@@ -341,12 +356,12 @@
 
             const cartItems = JSON.parse(cart)
 
-            console.log('cartssss', cartItems)
-
             let total = 0
             for(const item of cartItems){
                 total += item.price * item.quantity
             }
+
+            orderCart.value = cart
 
             document.getElementById('total-lbl').innerHTML = total.toFixed(2)
 
@@ -356,6 +371,8 @@
                 const val = region.value
 
                 if (!val) return
+
+                orderZone.value = region.value
 
                 getNewPrice(region.value)
             })

@@ -85,9 +85,9 @@ Route::prefix('admin')->group(function () {
 
 
             //country
-             Route::get('/countries', [CountryController::class, 'index'])
+            Route::get('/countries', [CountryController::class, 'index'])
                 ->name('admin.countries');
-                Route::get('/countries/new', [CountryController::class, 'newCountry'])->name('admin.countries.new');
+            Route::get('/countries/new', [CountryController::class, 'newCountry'])->name('admin.countries.new');
             Route::post('/countries/create', [CountryController::class, 'create'])->name('admin.countries.create');
             Route::get('/countries/view/{id}', [CountryController::class, 'viewCountry'])->name('admin.countries.view');
             Route::get('/countries/activate/{id}', [CountryController::class, 'activate'])->name('admin.countries.activate');
