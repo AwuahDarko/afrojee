@@ -159,7 +159,7 @@
                                 <p>{{ $userAddress->postcode }}</p>
                                 <p>{{ $userAddress->mobile_number }}</p>
                             @else
-                                <p>No billing address entered yet. Click "Change address" to add your details.</p>
+                                <p>No billing address entered yet. Click "Change address" to add your details.ddddd</p>
                             @endif
                         </div>
                     @endif
