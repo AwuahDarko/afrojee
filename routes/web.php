@@ -57,6 +57,15 @@ Route::post('/checkout/save-address', [CheckoutController::class, 'storeAddress'
 Route::post('/order/single/save', [OrderController::class, 'store'])->name('web.order.save');
 Route::post('/order/multiple/save', [OrderController::class, 'storeMultiple'])->name('web.order.multiple.save');
 
+
+// stripe checkout
+// Route::get('/checkout/stripe', [CheckoutController::class, 'create'])->name('checkout.create.stripe');
+Route::get('/checkout/stripe/success', [CheckoutController::class, 'stripeSuccess'])->name('checkout.success.stripe');
+Route::get('/checkout/stripe/cancel',  [CheckoutController::class, 'stripeCancel'])->name('checkout.cancel.stripe');
+Route::post('/stripe/webhook', [CheckoutController::class, 'webhook'])
+      ->name('stripe.webhook');
+
+
 // Or, if you want the original route to also handle POST:
 // Route::match(['GET', 'POST'], '/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
 

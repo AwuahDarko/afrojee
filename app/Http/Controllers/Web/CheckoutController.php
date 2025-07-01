@@ -5,15 +5,24 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Product;
+use App\Models\Payment;
 use App\Models\ShippingRate;
 use App\Models\ShippingZone;
 use Illuminate\Http\Request;
 use App\Models\Address; // Import the Address model
 use App\Models\Order;   // Import the Order model (for future use, if not already used)
 use Illuminate\Support\Facades\Session; // Import Session facade
+use Stripe\Stripe;
+use Stripe\Webhook;
+use Stripe\Checkout\Session as StripeSession;
 
 class CheckoutController extends Controller
 {
+    public function __construct()
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+    }
+
     /**
      * Display the checkout page with guest's address and cart details.
      */
@@ -125,18 +134,18 @@ class CheckoutController extends Controller
         foreach ($cartItems as $product) {
             array_push($ids, $product->productId);
         }
-        
+
         $products = Product::whereIn('id', $ids)->get();
-        
+
         $total_weight = 0;
         foreach ($products as $product) {
-            
+
             for ($i = 0; $i < count($cartItems); ++$i) {
                 $prod = $cartItems[$i];
                 if ($prod->productId == $product->id) {
                     $total_weight += $prod->quantity * $product->weight;
                     $total_amount += $product->price * $prod->quantity;
-                   
+
                 }
             }
         }
@@ -151,13 +160,13 @@ class CheckoutController extends Controller
         // dd($rates);
 
         // $total_price = $product->price * $quantity;
-        $total_shipping = $rates->rate??200;
+        $total_shipping = $rates->rate ?? 200;
         // $grand_total = $total_shipping + $total_price;
 
 
         return json_encode([
             'total_shipping' => number_format($total_shipping, 2),
-            'grand_total' => number_format( $total_shipping + $total_amount, 2)
+            'grand_total' => number_format($total_shipping + $total_amount, 2)
         ]);
     }
 
@@ -241,7 +250,7 @@ class CheckoutController extends Controller
                     'shipping_zone_id' => $request->region,
                     'county' => NULL,
                     'postcode' => $request->postcode,
-                     'email' => $request->email
+                    'email' => $request->email
                 ]);
                 Session::put('guest_billing_address_id', $address->id);
                 Session::flash('success', 'New address saved successfully!');
@@ -259,7 +268,7 @@ class CheckoutController extends Controller
                 'shipping_zone_id' => $request->region,
                 'county' => NULL,
                 'postcode' => $request->postcode,
-                 'email' => $request->email
+                'email' => $request->email
             ]);
             Session::put('guest_billing_address_id', $address->id);
             Session::flash('success', 'Address saved successfully!');
@@ -270,6 +279,206 @@ class CheckoutController extends Controller
             return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id, 'quantity' => $request->quantity]);
         }
         return redirect()->route('web.checkoutDetails');
+    }
+
+
+
+
+    public function stripeSuccess(Request $request)
+    {
+
+        $sessionId = $request->get('session_id');
+
+        if ($sessionId) {
+            try {
+                $session = StripeSession::retrieve($sessionId);
+
+                // You can access session data here
+                $paymentStatus = $session->payment_status;
+                $amountTotal = $session->amount_total;
+                $currency = $session->currency;
+                $metadata = $session->metadata;
+
+
+                // Payment::create([
+                //     'stripe_session_id' => $session['id'],
+                //     'user_id' => null,
+                //     'order_id' => $metadata->order_id,
+                //     'amount' => $session['amount_total'],
+                //     'currency' => $session['currency'],
+                //     'status' => 'completed',
+                //     'payment_method' => 'stripe',
+                // ]);
+
+                Payment::firstOrCreate(
+                    [
+                        'stripe_session_id' => $session['id'], // Search criteria
+                    ],
+                    [
+                        // Data to create if not found
+                        'user_id' => null,
+                        'order_id' => $metadata->order_id,
+                        'amount' => $session['amount_total'],
+                        'currency' => $session['currency'],
+                        'status' => 'completed',
+                        'payment_method' => 'stripe',
+                    ]
+                );
+
+                $order = Order::find($metadata->order_id);
+                $order->payment_status = 'paid';
+                $order->save();
+
+
+                return view('frontend.partials.stripeSuccess', compact('session'));
+
+            } catch (\Exception $e) {
+                // dd($e->getMessage());
+                // Log::error('Error retrieving session: ' . $e->getMessage());
+                return redirect()->route('checkout.cancel.stripe');
+            }
+
+    }
+
+
+
+    }
+
+    public function stripeCancel(Request $request)
+    {
+        $sessionId = $request->get('session_id');
+
+        if ($sessionId) {
+            $session = StripeSession::retrieve($sessionId);
+
+            // You can access session data here
+            $paymentStatus = $session->payment_status;
+            $amountTotal = $session->amount_total;
+            $currency = $session->currency;
+            $metadata = $session->metadata;
+
+            // Payment::create([
+            //     'stripe_session_id' => $session['id'],
+            //     'user_id' => null,
+            //     'order_id' => $metadata->order_id,
+            //     'amount' => $session['amount_total'],
+            //     'currency' => $session['currency'],
+            //     'status' => 'failed',
+            //     'payment_method' => 'stripe',
+            // ]);
+
+            Payment::firstOrCreate(
+                [
+                    'stripe_session_id' => $session['id'], // Search criteria
+                ],
+                [
+                    // Data to create if not found
+                    'user_id' => null,
+                    'order_id' => $metadata->order_id,
+                    'amount' => $session['amount_total'],
+                    'currency' => $session['currency'],
+                    'status' => 'failed',
+                    'payment_method' => 'stripe',
+                ]
+            );
+        }
+
+
+        return view('frontend.partials.stripeCancel');
+    }
+
+
+    public function webhook(Request $request)
+    {
+        $payload = $request->getContent();
+        $sigHeader = $request->header('Stripe-Signature');
+        $endpointSecret = config('services.stripe.webhook.secret');
+
+        try {
+            $event = Webhook::constructEvent($payload, $sigHeader, $endpointSecret);
+        } catch (\UnexpectedValueException $e) {
+            // Log::error('Invalid payload: ' . $e->getMessage());
+            return response()->json(['error' => 'Invalid payload'], 400);
+        } catch (\Stripe\Exception\SignatureVerificationException $e) {
+            // Log::error('Invalid signature: ' . $e->getMessage());
+            return response()->json(['error' => 'Invalid signature'], 400);
+        }
+
+        // Handle the event
+        switch ($event['type']) {
+            case 'checkout.session.completed':
+                $session = $event['data']['object'];
+                $this->handleSuccessfulPayment($session);
+                break;
+
+            case 'payment_intent.succeeded':
+                $paymentIntent = $event['data']['object'];
+                // Log::info('Payment succeeded: ' . $paymentIntent['id']);
+                break;
+
+            case 'payment_intent.payment_failed':
+                $paymentIntent = $event['data']['object'];
+                // Log::warning('Payment failed: ' . $paymentIntent['id']);
+                break;
+
+            default:
+            // Log::info('Received unknown event type: ' . $event['type']);
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+
+    private function handleSuccessfulPayment($session)
+    {
+        // Extract metadata
+        $userId = $session['metadata']['user_id'] ?? null;
+        $orderId = $session['metadata']['order_id'] ?? null;
+
+       
+
+            Payment::firstOrCreate(
+                    [
+                        'stripe_session_id' => $session['id'], // Search criteria
+                    ],
+                    [
+                        // Data to create if not found
+                        'user_id' => null,
+                        'order_id' => $orderId,
+                        'amount' => $session['amount_total'],
+                        'currency' => $session['currency'],
+                        'status' => 'completed',
+                        'payment_method' => 'stripe',
+                    ]
+                );
+
+                $order = Order::find($orderId);
+                $order->payment_status = 'paid';
+                $order->save();
+    }
+
+    private function handleFailedPayment($session)
+    {
+        // Extract metadata
+        $userId = $session['metadata']['user_id'] ?? null;
+        $orderId = $session['metadata']['order_id'] ?? null;
+
+       
+
+            Payment::firstOrCreate(
+                    [
+                        'stripe_session_id' => $session['id'], // Search criteria
+                    ],
+                    [
+                        // Data to create if not found
+                        'user_id' => null,
+                        'order_id' => $orderId,
+                        'amount' => $session['amount_total'],
+                        'currency' => $session['currency'],
+                        'status' => 'failed',
+                        'payment_method' => 'stripe',
+                    ]
+                    );
     }
 
     // You will need a method to finalize the order later,
