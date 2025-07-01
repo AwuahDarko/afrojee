@@ -63,7 +63,7 @@ if (cartItemsContainer) {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  
+  console.log('------------------------------')
     const cartSidebar = document.getElementById('cart-sidebar');
     const cartSidebarOverlay = document.getElementById('cart-sidebar-overlay');
     const openCartSidebarBtn = document.getElementById('open-cart-sidebar');

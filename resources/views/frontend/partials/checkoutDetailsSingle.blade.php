@@ -232,7 +232,7 @@
                             {{-- <span class="mr-2 font-bold mb-2 sm:mb-0">Qty</span> --}}
                             <div class="flex items-center">
                                 <button
-                                    class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
+                                    class="quantity-minus px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
                                     data-product-id="{{ $product->id }}" id="decrease-btn">
                                     -
                                 </button>

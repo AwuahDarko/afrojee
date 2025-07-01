@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
+use App\Models\Category;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::componentNamespace('App\\View\\Components', 'app'); // default
         Blade::anonymousComponentNamespace('resources/views/frontend', 'ui');
         Model::automaticallyEagerLoadRelationships();
+        View::share('categories', Category::where('status', 1)->get());
         Paginator::useBootstrapFour();
         // Paginator::useBootstrapFive();
     }
