@@ -255,19 +255,19 @@
                 <div id="checkout-summary">
                     <div class="flex justify-between items-center mb-3">
                         <p class="text-gray-700">Product sub-total</p>
-                        <p class="font-bold text-gray-900"> {{ number_format($product->price * $quantity, 2) }}</p>
+                        <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format($product->price * $quantity, 2) }}</p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700">Delivery</p>
                         @if ($userAddress)
-                            <p class="font-bold text-gray-900"> {{ number_format(0, 2) }}</p>
+                            <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format(0, 2) }}</p>
                         @else
                             <p class="font-bold text-gray-900"> Select region to determine cost </p>
                         @endif
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
                         <p class="text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-3xl font-bold text-gray-900"> {{ number_format($product->price * $quantity, 2) }}
+                        <p class="text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->price * $quantity, 2) }}
                         </p>
                     </div>
                 </div>

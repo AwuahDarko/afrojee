@@ -320,8 +320,8 @@
 
                             <!-- Price and Actions -->
                             <div class="flex items-center justify-between">
-                                <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg">
-                                    ${{ number_format($product->price, 2) }}
+                                <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg truncate">
+                                    {{app_currency()}} {{ number_format($product->price, 2) }}
                                 </div>
 
                                 <!-- Action Buttons -->

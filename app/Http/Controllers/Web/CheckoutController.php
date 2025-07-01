@@ -170,8 +170,8 @@ class CheckoutController extends Controller
 
 
         return json_encode([
-            'total_shipping' => number_format($total_shipping, 2),
-            'grand_total' => number_format($total_shipping + $total_amount, 2)
+            'total_shipping' => app_currency(). ' '. number_format($total_shipping, 2),
+            'grand_total' => app_currency(). ' '. number_format($total_shipping + $total_amount, 2)
         ]);
     }
 
@@ -326,7 +326,7 @@ class CheckoutController extends Controller
                         // Data to create if not found
                         'user_id' => null,
                         'order_id' => $metadata->order_id,
-                        'amount' => $session['amount_total'],
+                        'amount' => $session['amount_total']/100,
                         'currency' => $session['currency'],
                         'status' => 'completed',
                         'payment_method' => $paymentMethod,
@@ -415,7 +415,7 @@ class CheckoutController extends Controller
                     // Data to create if not found
                     'user_id' => null,
                     'order_id' => $metadata->order_id,
-                    'amount' => $session['amount_total'],
+                    'amount' => $session['amount_total']/100,
                     'currency' => $session['currency'],
                     'status' => 'failed',
                     'payment_method' => 'stripe',
@@ -485,7 +485,7 @@ class CheckoutController extends Controller
                 // Data to create if not found
                 'user_id' => null,
                 'order_id' => $orderId,
-                'amount' => $session['amount_total'],
+                'amount' => $session['amount_total']/100,
                 'currency' => $session['currency'],
                 'status' => 'completed',
                 'payment_method' => 'stripe',
@@ -513,7 +513,7 @@ class CheckoutController extends Controller
                 // Data to create if not found
                 'user_id' => null,
                 'order_id' => $orderId,
-                'amount' => $session['amount_total'],
+                'amount' => $session['amount_total']/100,
                 'currency' => $session['currency'],
                 'status' => 'failed',
                 'payment_method' => 'stripe',

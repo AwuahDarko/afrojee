@@ -30,7 +30,7 @@
                                 <p><strong>Payment:</strong> <span
                                         class="badge bg-gradient-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }}">{{ ucfirst($order->payment_status) }}</span>
                                 </p>
-                                <p><strong>Total:</strong> GHS {{ number_format($order->total_amount, 2) }}</p>
+                                <p><strong>Total:</strong> {{app_currency()}} {{ number_format($order->total_amount, 2) }}</p>
                                 <p><strong>Placed on:</strong> {{ $order->created_at->format('Y-m-d H:i') }}</p>
                             </div>
                         </div>
@@ -51,11 +51,11 @@
                                         </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Unit Price
+                                            Unit Price ( {{app_currency()}})
                                         </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Total Price
+                                            Total Price ( {{app_currency()}})
                                         </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">

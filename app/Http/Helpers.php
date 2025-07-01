@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 if (!function_exists('get_setting')) {
     function get_setting($key, $default = null, $lang = false)
     {
-       return "";
+        return "";
     }
 }
 
@@ -11,9 +11,9 @@ if (!function_exists('get_setting')) {
 if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
-        
+
         // $asset = \DB::table('uploads')->where('id', $id)->first();
-      
+
         // return my_local_asset($asset->file_name); 
 
         return null;
@@ -23,7 +23,7 @@ if (!function_exists('uploaded_asset')) {
 //return file uploaded via uploader
 
 
-if (!function_exists('my_asset')) { 
+if (!function_exists('my_asset')) {
     /**
      * Generate an asset path for the application.
      *
@@ -36,11 +36,11 @@ if (!function_exists('my_asset')) {
 
         // https://awibuy-new-bucket.eu-central-1.linodeobjects.com/uploads/all/NXvdWv9Zq0idHvvBlc7amAIVwi6IXMhvvj1FYchS.png
         // return Storage::disk('s3')->url($path);
-        return 'http://localhost/uploads/'.$path;
+        return 'http://localhost/uploads/' . $path;
     }
 }
 
-if (!function_exists('my_local_asset')) { 
+if (!function_exists('my_local_asset')) {
     /**
      * Generate an asset path for the application.
      *
@@ -86,31 +86,39 @@ if (!function_exists('getBaseURL')) {
 if (!function_exists('getFileBaseURL')) {
     function getFileBaseURL()
     {
-        
-                return getBaseURL() . 'public/';
-        }
+
+        return getBaseURL() . 'public/';
+    }
 }
 
 if (!function_exists('getLocalFileBaseURL')) {
     function getLocalFileBaseURL()
     {
-        
+
         return getBaseURL() . 'public/';
     }
 }
 
 
 if (!function_exists('generateUuidV4')) {
-   function generateUuidV4()
-{
-    $data = random_bytes(16);
+    function generateUuidV4()
+    {
+        $data = random_bytes(16);
 
-    // Set version to 0100
-    $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
-    // Set bits 6-7 to 10
-    $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
+        // Set version to 0100
+        $data[6] = chr(ord($data[6]) & 0x0f | 0x40);
+        // Set bits 6-7 to 10
+        $data[8] = chr(ord($data[8]) & 0x3f | 0x80);
 
-    return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+        return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
 }
-}
 
+
+
+if (!function_exists('app_currency')) {
+    function app_currency()
+    {
+        return "€";
+    }
+}

@@ -17,7 +17,7 @@
 
         <ul>
             <li><strong>Order ID:</strong> {{ $data['order_id'] }}</li>
-            <li><strong>Amount Paid:</strong> {{ $data['amount'] }}</li>
+            <li><strong>Amount Paid:</strong> {{app_currency()}} {{ $data['amount'] }}</li>
             <li><strong>Payment Method:</strong> {{ $data['payment_method'] }}</li>
         </ul>
 

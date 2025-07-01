@@ -26,7 +26,7 @@
                   <th>Region</th>
                   <th>Weight From (kg)</th>
                   <th>Weight To (kg)</th>
-                  <th>Rate (GHS)</th>
+                  <th>Rate ({{app_currency()}})</th>
                   <th class="text-end">Actions</th>
                 </tr>
               </thead>

@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
                     <div class="flex-grow">
                         <h3 class="font-semibold text-gray-800">${item.name}</h3>
-                        <p class="text-pink-800 font-bold">$${parseFloat(item.price).toFixed(2)}</p>
+                        <p class="text-pink-800 font-bold">€${parseFloat(item.price).toFixed(2)}</p>
                         <div class="flex items-center mt-1">
                             <button class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200" data-product-id="${item.productId}">-</button>
                             <span class="quantity-display mx-2 font-medium">${item.quantity}</span>
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartItemsList.appendChild(cartItemElement);
             });
         }
-        cartTotalElement.textContent = `$${total.toFixed(2)}`;
+        cartTotalElement.textContent = `€${total.toFixed(2)}`;
     };
 
     // Update cart count in navigation

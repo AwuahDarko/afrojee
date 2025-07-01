@@ -6,11 +6,13 @@
 
 @section('content')
     <div class="row">
+
       <style>
         .hide{
           visibility: hidden;
         }
       </style>
+
         <div class="ms-3">
             <h3 class="mb-0 h4 font-weight-bolder">Dashboard</h3>
             <p class="mb-4">
@@ -23,7 +25,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="text-sm mb-0 text-capitalize">Sales this Month</p>
-                            <h4 class="mb-0"> {{number_format($total_sales_this_month, 2)}} </h4>
+                            <h4 class="mb-0"> {{app_currency()}} {{number_format($total_sales_this_month, 2)}} </h4>
                         </div>
                         <div
                             class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
@@ -63,7 +65,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="text-sm mb-0 text-capitalize">Total Sales</p>
-                            <h4 class="mb-0"> {{number_format($total_sales, 2)}} </h4>
+                            <h4 class="mb-0"> {{app_currency()}} {{number_format($total_sales, 2)}} </h4>
                         </div>
                         <div
                             class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
@@ -73,7 +75,7 @@
                 </div>
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-2 ps-3">
-                    <p class="mb-0 text-sm"><span class="text-danger font-weight-bolder">-2% </span>than yesterday</p>
+                    <p class="mb-0 text-sm hide"><span class="text-danger font-weight-bolder">-2% </span>than yesterday</p>
                 </div>
             </div>
         </div>
@@ -93,31 +95,31 @@
                 </div>
                 <hr class="dark horizontal my-0">
                 <div class="card-footer p-2 ps-3">
-                    <p class="mb-0 text-sm"><span class="text-success font-weight-bolder">+5% </span>than yesterday</p>
+                    <p class="mb-0 text-sm hide"><span class="text-success font-weight-bolder">+5% </span>than yesterday</p>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+        <div class="col-md-6 mt-4 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h6 class="mb-0 ">Website Views</h6>
-                    <p class="text-sm ">Last Campaign Performance</p>
+                    <p class="text-sm ">Approximate daily site visits</p>
                     <div class="pe-2">
                         <div class="chart">
                             <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                         </div>
                     </div>
                     <hr class="dark horizontal">
-                    <div class="d-flex ">
+                    <div class="d-flex hide">
                         <i class="material-symbols-rounded text-sm my-auto me-1">schedule</i>
                         <p class="mb-0 text-sm"> campaign sent 2 days ago </p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 col-md-6 mt-4 mb-4">
+        <div class="col-md-6 mt-4 mb-4">
             <div class="card ">
                 <div class="card-body">
                     <h6 class="mb-0 "> Daily Sales </h6>
@@ -135,7 +137,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mt-4 mb-3">
+        {{-- <div class="col-lg-4 mt-4 mb-3">
             <div class="card">
                 <div class="card-body">
                     <h6 class="mb-0 ">Completed Tasks</h6>
@@ -152,7 +154,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
     <div class="row mb-4">
         <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
@@ -215,7 +217,7 @@
                                             </span>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            <span class="text-xs font-weight-bold"> {{number_format($order->total_amount, 2)}} </span>
+                                            <span class="text-xs font-weight-bold"> {{app_currency()}} {{number_format($order->total_amount, 2)}} </span>
                                         </td>
                                         <td class="align-middle">
                                             <div class="progress-wrapper w-75 mx-auto">
@@ -262,7 +264,7 @@
                           <i class="material-symbols-rounded text-warning text-gradient">credit_card</i>
                         </span>
                             <div class="timeline-content">
-                              <h6 class="text-dark text-sm font-weight-bold mb-0"> {{number_format($payment->amount, 2)}}, Order ID:{{$payment->order->order_number}} </h6>
+                              <h6 class="text-dark text-sm font-weight-bold mb-0"> {{app_currency()}} {{number_format($payment->amount, 2)}}, Order ID:{{$payment->order->order_number}} </h6>
                               <p class="text-secondary font-weight-bold text-xs mt-1 mb-0"> {{$payment->created_at}} </p>
                             </div>
                           </div>
@@ -289,7 +291,7 @@
                     borderRadius: 4,
                     borderSkipped: false,
                     backgroundColor: "#43A047",
-                    data: [50, 45, 22, 28, 50, 60, 76],
+                    data: JSON.parse("{{json_encode($visit_data['data'])}}"),
                     barThickness: 'flex'
                 }, ],
             },
@@ -366,7 +368,7 @@
                     borderColor: "#43A047",
                     backgroundColor: "transparent",
                     fill: true,
-                    data: [120, 230, 130, 440, 250, 360, 270, 180, 90, 300, 310, 220],
+                    data: JSON.parse("{{json_encode($sales_data['data'])}}"),
                     maxBarThickness: 6
 
                 }],

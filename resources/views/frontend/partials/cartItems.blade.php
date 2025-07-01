@@ -42,7 +42,7 @@
                                                     fill="#99395C" />
                                             </svg>
                                         </span>
-                                        {{ number_format($item['price'], 2) }}
+                                       {{app_currency()}} {{ number_format($item['price'], 2) }}
                                     </p>
                                     <span class="mr-2 font-bold mb-2 sm:mb-0">Quantity</span>
                                     <div class="flex items-center">
@@ -87,7 +87,7 @@
                         Sub-total (<span id="cart-item-count">{{ $totalItemsInCart }}</span> items)
                     </p>
                     <p class="text-xl font-bold text-gray-900">
-                        $ <span id="cart-subtotal">{{ number_format($subtotalBill, 2) }}</span>
+                        {{app_currency()}} <span id="cart-subtotal">{{ number_format($subtotalBill, 2) }}</span>
                     </p>
                 </div>
                 <button id="checkout-page-proceed-btn" {{-- Added ID for potential JS interaction if needed --}}
