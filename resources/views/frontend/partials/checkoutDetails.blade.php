@@ -77,7 +77,7 @@
                               <div>
                                 <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email
                                     </label>
-                                <input type="tel" id="email" name="email" required
+                                <input type="email" id="email" name="email" required
                                     value="{{ old('email', $userAddress->email ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
@@ -237,7 +237,7 @@
                 </div>
                <form action="{{route('web.order.multiple.save')}}" method="POST">
                  @csrf
-                <input type="hidden" name="zone_id" value="{{$userAddress->zone->id}}" id="order-zone">
+                <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
                 <input type="hidden" name="cart" value="" id="order-cart">
                  <button @if (!$userAddress) disabled @endif type="submit" 
                     class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
@@ -350,7 +350,7 @@
              const orderCart = document.getElementById('order-cart')
             const maxQty = 0
             const id = 0
-            const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
+            const global_zone_id = {{ $userAddress?->zone->id ?? 0 }};
 
             const cart = localStorage.getItem('shoppingCart')
 

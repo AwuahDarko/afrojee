@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\ShippingRate;
-
+use Stripe\Stripe;
+use Stripe\Webhook;
+use Stripe\Checkout\Session as StripeSession;
 
 
 class OrderController extends Controller
 {
+
+    public function __construct()
+    {
+        Stripe::setApiKey(config('services.stripe.secret'));
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -40,6 +48,8 @@ class OrderController extends Controller
 
         $delivery_fee = $rates->rate;
 
+        $grand_total = $delivery_fee + $subtotal;
+
 
         $order = Order::create(
             [
@@ -49,7 +59,7 @@ class OrderController extends Controller
                 'subtotal' => $subtotal,
                 'delivery_fee' => $delivery_fee,
                 'total_weight' => $weight,
-                'total_amount' => $delivery_fee + $subtotal,
+                'total_amount' => $grand_total,
                 'payment_status' => 'unpaid',
                 'status' => 'pending',
                 'shipping_address_id' => $zone_id ?? 0,
@@ -67,8 +77,43 @@ class OrderController extends Controller
         ]);
 
 
-        // TODO ==== remove this ===
-        return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id, 'quantity' => $request->quantity]);
+        $session = StripeSession::create(
+            [
+                'payment_method_types' => [
+                    'card',           // Credit/debit cards
+                    'sepa_debit',     // SEPA Direct Debit
+                    'ideal',          // Netherlands
+                    'bancontact',     // Belgium  
+                    'eps',            // Austria
+                    'p24',            // Poland
+                    'klarna'          // Buy now, pay later
+                ],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => $product->name ?? 'Afro Jee Product',
+                                'description' => "Purchase of {$quantity} {$product->name}",
+                            ],
+                            'unit_amount' => $grand_total * 100, // Amount in cents
+                        ],
+                        'quantity' => $quantity ?? 1,
+                    ]
+                ],
+                'mode' => 'payment',
+                'success_url' => route('checkout.success.stripe', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('checkout.cancel.stripe', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+                'metadata' => [
+                    'user_id' => 'guest',
+                    'order_id' => $order->id ?? 0,
+                ],
+            ]
+        );
+
+        return redirect()->away($session->url);
+
+
     }
 
     public function storeMultiple(Request $request)
@@ -112,6 +157,8 @@ class OrderController extends Controller
 
         $guestAddressId = Session::get('guest_billing_address_id');
 
+        $grand_total = $rates->rate + $total_amount;
+
         $order = Order::create(
             [
                 'user_id' => 0,
@@ -120,13 +167,14 @@ class OrderController extends Controller
                 'subtotal' => $total_amount,
                 'delivery_fee' => $rates->rate,
                 'total_weight' => $total_weight,
-                'total_amount' => $rates->rate + $total_amount,
+                'total_amount' => $grand_total,
                 'payment_status' => 'unpaid',
                 'status' => 'pending',
                 'shipping_address_id' => $zone_id ?? 0,
             ]
         );
 
+        $quantity = 0;
         foreach ($products as $product) {
 
             for ($i = 0; $i < count($cartItems); ++$i) {
@@ -141,13 +189,49 @@ class OrderController extends Controller
                         'unit_weight' => $product->weight,
                         'total_weight' => $product->weight * $prod->quantity,
                     ]);
+
+                    $quantity += $prod->quantity;
                 }
             }
         }
 
+        $total_items = count($products);
 
-        return redirect()->route('web.checkoutDetails');
+        $session = StripeSession::create(
+            [
+                'payment_method_types' => [
+                    'card',           // Credit/debit cards
+                    'sepa_debit',     // SEPA Direct Debit
+                    'ideal',          // Netherlands
+                    'bancontact',     // Belgium  
+                    'eps',            // Austria
+                    'p24',            // Poland
+                    'klarna'          // Buy now, pay later
+                ],
+                'line_items' => [
+                    [
+                        'price_data' => [
+                            'currency' => 'eur',
+                            'product_data' => [
+                                'name' => 'Purchases from Afro Jee',
+                                'description' => "Purchase of {$total_items} items",
+                            ],
+                            'unit_amount' => $grand_total * 100, // Amount in cents
+                        ],
+                        'quantity' => $quantity ?? 1,
+                    ]
+                ],
+                'mode' => 'payment',
+                'success_url' => route('checkout.success.stripe', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('checkout.cancel.stripe', [], true) . '?session_id={CHECKOUT_SESSION_ID}',
+                'metadata' => [
+                    'user_id' => 'guest',
+                    'order_id' => $order->id ?? 0,
+                ],
+            ]
+        );
 
 
+        return redirect()->away($session->url);
     }
 }

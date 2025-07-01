@@ -16,6 +16,7 @@ Route::prefix('admin')->group(function () {
     // });
 
     Route::get('/', [SignInController::class, 'index'])->name('admin.signin');
+   
     Route::post('/login', [SignInController::class, 'login'])->name('admin.signin.login');
 
 
