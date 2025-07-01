@@ -15,8 +15,7 @@
         <!-- Introduction Text -->
         <div class="mb-16 max-w-3xl">
             <p class="text-stone-700 text-lg">
-                Wondering how to go from here to owning a product from <span class="font-semibold">YaaSeerwa Lifestyle &
-                    Beauty?</span> Its pretty easy:
+                Wondering how to go from here to owning a product from <span class="font-semibold">Afro Jee?</span> Its pretty easy:
             </p>
         </div>
 

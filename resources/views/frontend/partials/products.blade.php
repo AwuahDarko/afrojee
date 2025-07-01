@@ -262,10 +262,19 @@
                                         data-product-price="{{ number_format($product->price, 2) }}"
                                         data-product-image="{{ $product->image }}" title="Add to Cart">
                                         <div class="loading-spinner hidden"></div>
-                                        <svg class="w-5 h-5 cart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.8-9M7 13l-1.8-9m0 0L3 3m4 10v6a2 2 0 002 2h6a2 2 0 002-2v-6M9 19h6">
-                                            </path>
+                                        <svg width="30" class="w-5 h-5 cart-icon" stroke="currentColor" height="30" viewBox="0 0 30 30" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <g clip-path="url(#a)" fill="#fff">
+                                                <path
+                                                    d="M21.25 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.088L6.513 5H25a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313L9 18.288l-.037.15a.313.313 0 0 0 .312.312H23.75v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.75 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5M20 13.75l3.475-6.25h-15.8l2.95 6.25z" />
+                                                <path d="M25 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#F4F3E7"
+                                                    stroke-width="1" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="a">
+                                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                                </clipPath>
+                                            </defs>
                                         </svg>
                                     </button>
                                 @else

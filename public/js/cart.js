@@ -142,9 +142,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (cart.length === 0) {
             emptyCartMessage.classList.remove('hidden');
+            console.log('--------------------------------', emptyCartMessage)
         } else {
             emptyCartMessage.classList.add('hidden');
-            console.log('Rendering cart items:', cart);
+            console.log('Rendering cart items:', cart, emptyCartMessage);
             cart.forEach(item => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;

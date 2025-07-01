@@ -107,8 +107,8 @@
         </div>
         <div id="cart-items-list" class="p-4 space-y-4">
             {{-- Cart items will be rendered here by JavaScript --}}
-            <p class="text-gray-500 text-center" id="empty-cart-message">Your cart is empty.</p>
         </div>
+        <p class="text-gray-500 text-center" id="empty-cart-message">Your cart is empty.</p>
         <div id="cart-summary" class="p-4 border-t sticky bottom-0 bg-white shadow-inner">
             <div class="flex justify-between items-center mb-2">
                 <span class="text-lg font-semibold">Total:</span>
