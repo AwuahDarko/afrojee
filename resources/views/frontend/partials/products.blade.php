@@ -237,7 +237,7 @@
                         </div>
 
                         <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {{ Str::limit($product->description, 100) }}
+                            {!! Str::limit($product->description, 100) !!}
                         </p>
 
                         <!-- Weight Display -->
