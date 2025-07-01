@@ -63,7 +63,7 @@
                             <a href="{{route('web.products.details', ['slug' => $product->slug])}}">{{ $product->name }}</a>
                         </h3>
                         <p class="text-gray-700 mb-4">
-                            ${{ number_format($product->price, 2) }}
+                            {{app_currency()}} {{ number_format($product->price, 2) }}
                         </p>
                         <div class="flex items-center gap-4">
                             <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}" class="flex-grow">

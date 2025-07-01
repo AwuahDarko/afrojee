@@ -29,7 +29,7 @@
                             </div>
                             <div class="col-md-3">
                                 <h6>Total Revenue</h6>
-                                <h4>GHS {{ number_format($stats['revenue'] ?? 0, 2) }}</h4>
+                                <h4>{{app_currency()}} {{ number_format($stats['revenue'] ?? 0, 2) }}</h4>
                             </div>
                         </div>
                     </div>
@@ -132,7 +132,7 @@
                                             </td>
                                             <td class="text-center">
                                                 <span
-                                                    class="text-xs font-weight-bold">{{ number_format($order->total_amount, 2) }}</span>
+                                                    class="text-xs font-weight-bold"> {{app_currency()}}  {{ number_format($order->total_amount, 2) }}</span>
                                             </td>
                                             <td class="text-center">
                                                 <span

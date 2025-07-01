@@ -68,7 +68,7 @@
                 </div>
 
                 <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">$
-                    {{ number_format($product->price, 2) }}
+                   {{app_currency()}} {{ number_format($product->price, 2) }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">

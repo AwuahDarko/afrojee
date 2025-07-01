@@ -60,7 +60,7 @@
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <span class="text-secondary text-xs font-weight-bold">
-                                                {{ number_format($product->price, 2) }} </span>
+                                               {{app_currency()}} {{ number_format($product->price, 2) }} </span>
                                         </td>
                                         <td class="align-middle text-center">
                                             <span class="text-secondary text-xs font-weight-bold"> {{ $product->quantity }}

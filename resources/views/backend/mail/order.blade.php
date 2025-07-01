@@ -19,7 +19,7 @@
         <ul>
             <li><strong>Order ID:</strong> {{ $data['order_id'] }}</li>
             <li><strong>Customer Email:</strong> {{ $data['customer_email'] }}</li>
-            <li><strong>Total:</strong> {{ $data['total'] }}</li>
+            <li><strong>Total:</strong> {{app_currency()}} {{ $data['total'] }}</li>
             <li><strong>Order Time:</strong> {{ $data['order_time'] }}</li>
         </ul>
 

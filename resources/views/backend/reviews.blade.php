@@ -12,7 +12,7 @@
                     <div class="d-flex justify-content-between">
                         <div>
                             <p class="text-sm mb-0 text-capitalize">Total Reviews</p>
-                            <h4 class="mb-0">{{ number_format($stats['total']) }}</h4>
+                            <h4 class="mb-0"> {{ number_format($stats['total']) }}</h4>
                         </div>
                         <div class="icon icon-md icon-shape bg-gradient-primary shadow-primary text-center border-radius-lg">
                             <i class="material-symbols-rounded opacity-10">reviews</i>
