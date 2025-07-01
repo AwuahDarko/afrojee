@@ -28,13 +28,21 @@ Route::get('/checkout/info/prices', [CheckoutController::class, 'calculatePrice'
 Route::get('/checkout/info/price', [CheckoutController::class, 'getPrice'])->name('web.checkoutDetails.info.getprice');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
-Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');
+// Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');
 // Featured reviews for testimonials section
 Route::get('/testimonials', [ReviewController::class, 'index'])->name('reviews.testimonials');
 // All reviews page
-Route::get('/reviews', [ReviewController::class, 'allReviews'])->name('reviews.all');
-// API endpoint for AJAX requests (optional)
-Route::get('/api/reviews/featured', [ReviewController::class, 'getFeaturedReviews'])->name('api.reviews.featured');
+Route::get('/reviews/all', [ReviewController::class, 'allReviews'])->name('reviews.all');
+
+Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews');
+
+// Get featured reviews (AJAX)
+Route::get('/reviews/featured', [ReviewController::class, 'getFeaturedReviews'])->name('reviews.featured');
+Route::get('/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+
+// New route for storing a new review (form submission)
+Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
+
 Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
 // Original GET route
 // Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
@@ -45,7 +53,7 @@ Route::post('/checkout/process-cart', [CheckoutController::class, 'processCartAn
 Route::post('/checkout/save-address', [CheckoutController::class, 'storeAddress'])->name('web.checkout.saveAddress'); // This is the missing one!
 
 
-// orders 
+// orders
 Route::post('/order/single/save', [OrderController::class, 'store'])->name('web.order.save');
 Route::post('/order/multiple/save', [OrderController::class, 'storeMultiple'])->name('web.order.multiple.save');
 
