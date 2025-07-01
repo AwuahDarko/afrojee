@@ -51,7 +51,7 @@
                 <h4>Thank you for your patronage!</h4>
                 <p>Your payment has been processed successfully.</p>
                 @if (isset($session))
-                    <p><strong>Amount:</strong> ${{ number_format($session->amount_total / 100, 2) }}</p>
+                    <p><strong>Amount:</strong> {{ number_format($session->amount_total / 100, 2) }}</p>
                     <p><strong>Payment Status:</strong> {{ ucfirst($session->payment_status) }}</p>
                 @endif
                 <a href="{{ route('home') }}" class="mbtn btn-primary">Continue</a>

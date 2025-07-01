@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\Web\OrderController;
+use App\Mail\DeliveryMail;
+use App\Mail\OrderMail;
+use App\Mail\ReceiptMail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\AboutUsController;
@@ -12,6 +15,11 @@ use App\Http\Controllers\Web\SignUpController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\QuestionsController;
 use App\Http\Controllers\Web\CartController;
+use App\Mail\TestMail;
+use Illuminate\Support\Facades\Mail;
+
+
+
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutUsController::class, 'index'])->name('web.about');
@@ -61,3 +69,26 @@ Route::post('/stripe/webhook', [CheckoutController::class, 'webhook'])
 // Or, if you want the original route to also handle POST:
 // Route::match(['GET', 'POST'], '/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
 
+Route::get('/send-test-email', function () {
+//     $data = ['name' => 'Dev Jav'];
+    $data = [
+    'customer_name' => 'Kwame',
+    'customer_email' => 'Kwame@email.com',
+    'order_id' => 'AFR123456',
+    'amount' => '150.00',
+    'payment_method' => 'Mobile Money',
+    'status' => 'Out for Delivery',
+    'estimated_delivery_date' => '2025-07-05',
+    'total' => 3400,
+    'order_time' => 'Once upon a time'
+];
+
+//     Mail::to(['mjadarko@gmail.com', 'max.seven.work@gmail.com'])->send(new TestMail($data));
+//     Mail::to(['mjadarko@gmail.com', 'max.seven.work@gmail.com'])->send(new ReceiptMail($data));
+//     Mail::to(['mjadarko@gmail.com', 'max.seven.work@gmail.com'])->send(new DeliveryMail($data));
+
+
+       Mail::to(['mjadarko@gmail.com', 'max.seven.work@gmail.com'])->queue(new OrderMail($data));
+
+    return 'Email sent!';
+});

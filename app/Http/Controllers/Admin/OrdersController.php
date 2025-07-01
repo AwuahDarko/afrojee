@@ -2,9 +2,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\DeliveryMail;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 
 class OrdersController extends Controller
 {
@@ -56,7 +58,7 @@ class OrdersController extends Controller
 
     public function viewOrder($id)
     {
-        $order = Order::with(['shippingAddress', 'orderProducts'], 'items.product')->findOrFail($id);
+        $order = Order::with(['billingAddress', 'orderProducts'], 'items.product')->findOrFail($id);
          
       
 
@@ -76,7 +78,9 @@ class OrdersController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $order = Order::findOrFail($request->id);
+        // $order = Order::findOrFail($request->id);
+        $order = Order::with('billingAddress')->where('id', '=', $request->id)->first();
+
         $order->status = $request->status;
         $order->save();
         // Optional: notify customer via email
@@ -91,13 +95,17 @@ class OrdersController extends Controller
         if ($request->has('notify_user')) {
             // Example: send email or SMS (you can expand this)
             try {
-                $user = $order->customer;
+                // $user = $order->customer;
 
-                if ($user && $user->email) {
-                    \Mail::raw("Your order #{$order->order_number} has been updated to '{$order->status}'.", function ($message) use ($user) {
-                        $message->to($user->email)
-                            ->subject('Order Status Updated');
-                    });
+                if ( $order->billingAddress->email) {
+
+                     $data = [
+                        'customer_name' => $order->billingAddress->first_name . ' '. $order->billingAddress->last_name,
+                        'order_id' => $order->order_number,
+                        'status' => $request->status,
+                    ];
+
+                    Mail::to($order->billingAddress->email)->queue(new DeliveryMail($data));
                 }
 
                 // You can add SMS logic here too if you have an SMS provider integrated.

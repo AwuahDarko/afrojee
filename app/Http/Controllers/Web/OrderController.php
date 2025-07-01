@@ -13,6 +13,8 @@ use App\Models\ShippingRate;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderMail;
 
 
 class OrderController extends Controller
@@ -50,12 +52,13 @@ class OrderController extends Controller
 
         $grand_total = $delivery_fee + $subtotal;
 
+        $orderNo = "AFR".rand(111111111, 999999999);
 
         $order = Order::create(
             [
                 'user_id' => 0,
                 'billing_address_id' => $guestAddressId ?? 0,
-                'order_number' => rand(111111111, 999999999),
+                'order_number' => $orderNo,
                 'subtotal' => $subtotal,
                 'delivery_fee' => $delivery_fee,
                 'total_weight' => $weight,
@@ -76,6 +79,18 @@ class OrderController extends Controller
             'total_weight' => $product->weight * $quantity,
         ]);
 
+        $address = Address::find($guestAddressId);
+
+        $data = [
+            'customer_name' => $address->first_name . ' '. $address->last_name,
+            'customer_email' => $address->email,
+            'order_id' => $orderNo,
+            'total' => number_format($grand_total, 2),
+            'estimated_delivery_date' => '2025-07-05',
+            'order_time' => date('Y-m-d H:i:s')
+        ];
+
+        Mail::to(env('ADMIN_EMAIL'))->queue(new OrderMail($data));
 
         $session = StripeSession::create(
             [
@@ -159,11 +174,13 @@ class OrderController extends Controller
 
         $grand_total = $rates->rate + $total_amount;
 
+          $orderNo = "AFR".rand(111111111, 999999999);
+
         $order = Order::create(
             [
                 'user_id' => 0,
                 'billing_address_id' => $guestAddressId ?? 0,
-                'order_number' => rand(111111111, 999999999),
+                'order_number' => $orderNo,
                 'subtotal' => $total_amount,
                 'delivery_fee' => $rates->rate,
                 'total_weight' => $total_weight,
@@ -196,6 +213,20 @@ class OrderController extends Controller
         }
 
         $total_items = count($products);
+
+        $address = Address::find($guestAddressId);
+
+
+
+        $data = [
+            'customer_name' => $address->first_name . ' '. $address->last_name,
+            'customer_email' => $address->email,
+            'order_id' => $orderNo,
+            'total' => number_format($grand_total, 2),
+            'order_time' => date('Y-m-d H:i:s')
+        ];
+
+        Mail::to(env('ADMIN_EMAIL'))->queue(new OrderMail($data));
 
         $session = StripeSession::create(
             [

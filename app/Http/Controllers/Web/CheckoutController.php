@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentMail;
+use App\Mail\ReceiptMail;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\Payment;
@@ -15,6 +17,9 @@ use Illuminate\Support\Facades\Session; // Import Session facade
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
+use Illuminate\Support\Facades\Mail;
+
+
 
 class CheckoutController extends Controller
 {
@@ -293,22 +298,25 @@ class CheckoutController extends Controller
             try {
                 $session = StripeSession::retrieve($sessionId);
 
+
+                // $paymentIntent = \Stripe\PaymentIntent::retrieve(
+                //     $session->payment_intent,
+                //     ['expand' => ['payment_method']]
+                // );
+
+                // $paymentMethod = $paymentIntent->payment_method;
+
                 // You can access session data here
                 $paymentStatus = $session->payment_status;
                 $amountTotal = $session->amount_total;
                 $currency = $session->currency;
                 $metadata = $session->metadata;
 
+             
+                // $paymentIntent = $session->payment_intent;
+                // $paymentMethod = $paymentIntent->payment_method;
 
-                // Payment::create([
-                //     'stripe_session_id' => $session['id'],
-                //     'user_id' => null,
-                //     'order_id' => $metadata->order_id,
-                //     'amount' => $session['amount_total'],
-                //     'currency' => $session['currency'],
-                //     'status' => 'completed',
-                //     'payment_method' => 'stripe',
-                // ]);
+                $paymentMethod = "Stripe";
 
                 Payment::firstOrCreate(
                     [
@@ -321,24 +329,56 @@ class CheckoutController extends Controller
                         'amount' => $session['amount_total'],
                         'currency' => $session['currency'],
                         'status' => 'completed',
-                        'payment_method' => 'stripe',
+                        'payment_method' => $paymentMethod,
                     ]
                 );
 
-                $order = Order::find($metadata->order_id);
+                $order = Order::with(['billingAddress', 'orderProducts'])->where('id', '=', $metadata->order_id)->first();
+
+                
+                // $order = Order::find($metadata->order_id);
                 $order->payment_status = 'paid';
                 $order->save();
+                
+                foreach($order->orderProducts as $oneProduct){
+                    $product = Product::find($oneProduct->product_id);
+                    $product->quantity -= $oneProduct->quantity;
+                    $product->save();
+                }
+                
+                $name = $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name;
+                $email = $order->billingAddress->email;
+             
+
+                $data = [
+                    'customer_name' => $name,
+                    'order_id' => $order->order_number,
+                    'amount' => number_format($session->amount_total/100, 2),
+                    'payment_method' => $paymentMethod,
+                    'payment_time' => date("Y-m-d H:i:s")
+                ];
+
+                $data2 = [
+                    'customer_name' => $name,
+                    'order_id' => $order->order_number,
+                    'amount' => number_format($session->amount_total/100, 2),
+                    'payment_method' => $paymentMethod,
+                ];
+
+
+                Mail::to(env('ADMIN_EMAIL'))->queue(new PaymentMail($data));
+                Mail::to($email)->queue(new ReceiptMail($data2));
 
 
                 return view('frontend.partials.stripeSuccess', compact('session'));
 
             } catch (\Exception $e) {
                 // dd($e->getMessage());
-                // Log::error('Error retrieving session: ' . $e->getMessage());
+                \Log::error('Error retrieving session: ' . $e->getMessage());
                 return redirect()->route('checkout.cancel.stripe');
             }
 
-    }
+        }
 
 
 
@@ -435,26 +475,26 @@ class CheckoutController extends Controller
         $userId = $session['metadata']['user_id'] ?? null;
         $orderId = $session['metadata']['order_id'] ?? null;
 
-       
 
-            Payment::firstOrCreate(
-                    [
-                        'stripe_session_id' => $session['id'], // Search criteria
-                    ],
-                    [
-                        // Data to create if not found
-                        'user_id' => null,
-                        'order_id' => $orderId,
-                        'amount' => $session['amount_total'],
-                        'currency' => $session['currency'],
-                        'status' => 'completed',
-                        'payment_method' => 'stripe',
-                    ]
-                );
 
-                $order = Order::find($orderId);
-                $order->payment_status = 'paid';
-                $order->save();
+        Payment::firstOrCreate(
+            [
+                'stripe_session_id' => $session['id'], // Search criteria
+            ],
+            [
+                // Data to create if not found
+                'user_id' => null,
+                'order_id' => $orderId,
+                'amount' => $session['amount_total'],
+                'currency' => $session['currency'],
+                'status' => 'completed',
+                'payment_method' => 'stripe',
+            ]
+        );
+
+        $order = Order::find($orderId);
+        $order->payment_status = 'paid';
+        $order->save();
     }
 
     private function handleFailedPayment($session)
@@ -463,22 +503,22 @@ class CheckoutController extends Controller
         $userId = $session['metadata']['user_id'] ?? null;
         $orderId = $session['metadata']['order_id'] ?? null;
 
-       
 
-            Payment::firstOrCreate(
-                    [
-                        'stripe_session_id' => $session['id'], // Search criteria
-                    ],
-                    [
-                        // Data to create if not found
-                        'user_id' => null,
-                        'order_id' => $orderId,
-                        'amount' => $session['amount_total'],
-                        'currency' => $session['currency'],
-                        'status' => 'failed',
-                        'payment_method' => 'stripe',
-                    ]
-                    );
+
+        Payment::firstOrCreate(
+            [
+                'stripe_session_id' => $session['id'], // Search criteria
+            ],
+            [
+                // Data to create if not found
+                'user_id' => null,
+                'order_id' => $orderId,
+                'amount' => $session['amount_total'],
+                'currency' => $session['currency'],
+                'status' => 'failed',
+                'payment_method' => 'stripe',
+            ]
+        );
     }
 
     // You will need a method to finalize the order later,

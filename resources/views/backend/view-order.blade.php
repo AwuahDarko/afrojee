@@ -18,9 +18,9 @@
                             <div class="col-md-6">
                                 <h6 class="mb-3">Customer Information</h6>
                                 <p><strong>Name:</strong>
-                                    {{ $order->shippingAddress->first_name . ' ' . $order->shippingAddress->last_name }}</p>
-                                <p><strong>Email:</strong> {{ $order->shippingAddress->email ?? 'N/A' }}</p>
-                                <p><strong>Phone:</strong> {{ $order->shippingAddress->mobile_number ?? 'N/A' }}</p>
+                                    {{ $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name }}</p>
+                                <p><strong>Email:</strong> {{ $order->billingAddress->email ?? 'N/A' }}</p>
+                                <p><strong>Phone:</strong> {{ $order->billingAddress->mobile_number ?? 'N/A' }}</p>
                             </div>
 
                             <div class="col-md-6">
