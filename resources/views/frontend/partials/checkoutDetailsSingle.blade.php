@@ -43,7 +43,7 @@
                         </button>
                     </div>
 
-                    {{-- @if ($editingAddress) --}}
+                    @if ($editingAddress)
                         <form id="addressForm" action="{{ route('web.checkout.saveAddress') }}" method="POST"
                             class="space-y-4">
                             @csrf {{-- CSRF protection --}}
@@ -146,7 +146,7 @@
                                 </button>
                             </div>
                         </form>
-                    {{-- @else
+                    @else
                         <div class="text-gray-700 leading-relaxed">
                             @if ($userAddress)
                                 <p class="font-bold">{{ $userAddress->first_name }} {{ $userAddress->last_name }}</p>
@@ -162,7 +162,7 @@
                                 <p>No billing address entered yet. Click "Change address" to add your details.</p>
                             @endif
                         </div>
-                    @endif --}}
+                    @endif
                 </div>
 
                 {{-- <div class="bg-white rounded-xl p-6 shadow-sm">

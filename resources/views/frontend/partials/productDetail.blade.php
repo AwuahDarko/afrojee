@@ -67,7 +67,7 @@
                     <span>★★★★★</span>
                 </div>
 
-                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">$
+                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                    {{app_currency()}} {{ number_format($product->price, 2) }}
                 </p>
 
