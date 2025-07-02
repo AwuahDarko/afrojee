@@ -171,7 +171,7 @@
         <!-- Products Grid -->
         <div class="grid-container" id="productsGrid">
             @forelse($featured_products as $product)
-                <div class="group relative product-card bg-white rounded-2xl shadow-lg overflow-hidden"
+                <div class="group relative product-card bg-secondary rounded-2xl shadow-lg overflow-hidden"
                     data-product-id="{{ $product->id }}">
                     <!-- Decorative Accent -->
                     <div class="hover-accent absolute -top-4 -left-4 z-10">

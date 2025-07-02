@@ -214,7 +214,7 @@
             const quantityStatus = getQuantityStatus(product.quantity);
             
             return `
-                <div class="group relative product-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div class="group relative product-card bg-secondary rounded-2xl shadow-lg overflow-hidden">
                     <!-- Decorative Accent -->
                     <div class="hover-accent absolute -top-4 -left-4 z-10">
                         <svg width="120" height="60" viewBox="0 0 231 94" fill="none" xmlns="http://www.w3.org/2000/svg">
