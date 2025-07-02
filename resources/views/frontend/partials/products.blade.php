@@ -250,7 +250,7 @@
                         <!-- Price and Actions -->
                         <div class="flex items-center justify-between">
                             <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg">
-                                {{app_currency()}} {{ number_format($product->price, 2) }}
+                                {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
                             </div>
 
                             <!-- Action Buttons -->
@@ -259,7 +259,7 @@
                                     <button id="add-to-cart-button"
                                         class="cart-button cart-item-btn bg-burgundy text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
                                         data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
-                                        data-product-price="{{ number_format($product->price, 2) }}"
+                                        data-product-price="{{ number_format($product->getPrice(), 2) }}"
                                         data-product-image="{{ $product->image }}" title="Add to Cart">
                                         <div class="loading-spinner hidden"></div>
                                         <svg width="30" class="w-5 h-5 cart-icon" stroke="currentColor" height="30" viewBox="0 0 30 30" fill="none"

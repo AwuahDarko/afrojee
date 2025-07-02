@@ -23,7 +23,7 @@
     <meta name="twitter:description" content="{{ $meta_description }}">
     <meta name="twitter:creator" content="@author_handle">
     <meta name="twitter:image" content="{{ $product->image }}">
-    <meta name="twitter:data1" content="{{ '€' . $product->price }}">
+    <meta name="twitter:data1" content="{{ '€' . $product->getPrice() }}">
     <meta name="twitter:label1" content="Price">
 
     <meta property="og:title" content="{{ $product->name }}" />
@@ -32,7 +32,7 @@
     <meta property="og:image" content="{{ $product->image }}" />
     <meta property="og:description" content="{{ $meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
-    <meta property="og:price:amount" content="{{ '€' . $product->price }}" />
+    <meta property="og:price:amount" content="{{ '€' . $product->getPrice() }}" />
     <meta property="product:price:currency" content="{{ '€' }}" />
 
 @endsection
@@ -68,7 +68,7 @@
                 </div>
 
                 <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
-                   {{app_currency()}} {{ number_format($product->price, 2) }}
+                   {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
@@ -105,7 +105,7 @@
                         <button 
                          data-product-id="{{ $product->id }}"
                                 data-product-name="{{ $product->name }}"
-                                data-product-price="{{ number_format($product->price, 2) }}"
+                                data-product-price="{{ number_format($product->getPrice(), 2) }}"
                                 data-product-image="{{ $product->image }}"
                             class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
                             <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">

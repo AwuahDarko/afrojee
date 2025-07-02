@@ -40,7 +40,7 @@ class OrderController extends Controller
         $guestAddressId = Session::get('guest_billing_address_id');
 
         $product = Product::findOrFail($product_id);
-        $subtotal = $product->price * $quantity;
+        $subtotal = $product->getPrice() * $quantity;
         $weight = $product->weight * $quantity;
 
         $rates = ShippingRate::where('shipping_zone_id', $zone_id)
@@ -73,8 +73,8 @@ class OrderController extends Controller
             'order_id' => $order->id,
             'product_id' => $product->id,
             'quantity' => $quantity,
-            'unit_price' => $product->price,
-            'total_price' => $product->price * $quantity,
+            'unit_price' => $product->getPrice(),
+            'total_price' => $product->getPrice() * $quantity,
             'unit_weight' => $product->weight,
             'total_weight' => $product->weight * $quantity,
         ]);
@@ -158,7 +158,7 @@ class OrderController extends Controller
                 $prod = $cartItems[$i];
                 if ($prod->productId == $product->id) {
                     $total_weight += $prod->quantity * $product->weight;
-                    $total_amount += $product->price * $prod->quantity;
+                    $total_amount += $product->getPrice() * $prod->quantity;
                 }
             }
         }
@@ -201,8 +201,8 @@ class OrderController extends Controller
                         'order_id' => $order->id,
                         'product_id' => $product->id,
                         'quantity' => $prod->quantity,
-                        'unit_price' => $product->price,
-                        'total_price' => $product->price * $prod->quantity,
+                        'unit_price' => $product->getPrice(),
+                        'total_price' => $product->getPrice() * $prod->quantity,
                         'unit_weight' => $product->weight,
                         'total_weight' => $product->weight * $prod->quantity,
                     ]);

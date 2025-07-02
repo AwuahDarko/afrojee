@@ -118,7 +118,7 @@ class CheckoutController extends Controller
 
         // dd($rates);
 
-        $total_price = $product->price * $quantity;
+        $total_price = $product->getPrice() * $quantity;
         $total_shipping = $rates->rate;
         $grand_total = $total_shipping + $total_price;
 
@@ -149,7 +149,7 @@ class CheckoutController extends Controller
                 $prod = $cartItems[$i];
                 if ($prod->productId == $product->id) {
                     $total_weight += $prod->quantity * $product->weight;
-                    $total_amount += $product->price * $prod->quantity;
+                    $total_amount += $product->getPrice() * $prod->quantity;
 
                 }
             }
@@ -164,7 +164,7 @@ class CheckoutController extends Controller
 
         // dd($rates);
 
-        // $total_price = $product->price * $quantity;
+     
         $total_shipping = $rates->rate ?? 200;
         // $grand_total = $total_shipping + $total_price;
 

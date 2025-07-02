@@ -30,14 +30,16 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css?v=3.2.0') }}" rel="stylesheet" />
 
+    
     <!-- aiz core css -->
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
-
-      <link rel='apple-touch-icon-precomposed' sizes='144x144' href="{{ asset('img/icons/apple-touch-icon.png') }}" type='image/x-icon' />
+    
+    <link rel='apple-touch-icon-precomposed' sizes='144x144' href="{{ asset('img/icons/apple-touch-icon.png') }}" type='image/x-icon' />
     <link rel='icon' href='{{ asset('img/icons/favicon.ico') }}' type='image/x-icon' />
     <link rel='shortcut icon' type='image/png' href='{{ asset('img/icons/favicon.png') }}' />
-
+    
     @yield('link')
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
 
 </head>
 
@@ -50,12 +52,13 @@
         </div>
 
     </main>
-
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="{{ asset('js/core/popper.min.js') }}"></script>
     <script src="{{ asset('js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('js/plugins/smooth-scrollbar.min.js') }}"></script>
     <script src="{{ asset('js/plugins/chartjs.min.js') }}"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
 
     <script src="{{ asset('js/admin.js') }}"></script>
 

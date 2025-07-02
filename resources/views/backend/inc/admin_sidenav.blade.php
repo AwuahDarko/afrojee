@@ -67,6 +67,14 @@
         </a>
       </li>
 
+       <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.promos') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+          href="{{ route('admin.promos') }}">
+          <i class="material-symbols-rounded opacity-5">table_view</i>
+          <span class="nav-link-text ms-1">Promos</span>
+        </a>
+      </li>
+
       <li class="nav-item">
         <a class="nav-link {{ request()->routeIs('admin.tables') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.tables') }}">

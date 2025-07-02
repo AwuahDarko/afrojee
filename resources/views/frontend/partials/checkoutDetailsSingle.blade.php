@@ -213,7 +213,7 @@
             <div class="md:col-span-1 bg-white rounded-xl p-6 shadow-sm h-fit sticky top-8">
 
                 <div class="cart-item flex sm:flex-col  items-center border-b border-gray-300 last:border-b-0 pb-3"
-                    data-product-id="{{ $product->id }}" data-price="{{ $product->price }}"
+                    data-product-id="{{ $product->id }}" data-price="{{ $product->getPrice() }}"
                     data-quantity="{{ $quantity }}">
                     <div class="flex sm:flex-row justify-start w-70 mb-2 items-center">
                         <img src="{{ $product->image }}" alt="{{ $product->name }}"
@@ -254,7 +254,7 @@
                 <div id="checkout-summary">
                     <div class="flex justify-between items-center mb-3">
                         <p class="text-gray-700">Product sub-total</p>
-                        <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format($product->price * $quantity, 2) }}</p>
+                        <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700">Delivery</p>
@@ -266,7 +266,7 @@
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
                         <p class="text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->price * $quantity, 2) }}
+                        <p class="text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}
                         </p>
                     </div>
                 </div>

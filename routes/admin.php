@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\OrdersController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\ReviewsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SignInController;
@@ -16,7 +17,6 @@ Route::prefix('admin')->group(function () {
     // });
 
     Route::get('/', [SignInController::class, 'index'])->name('admin.signin');
-   
     Route::post('/login', [SignInController::class, 'login'])->name('admin.signin.login');
 
 
@@ -85,7 +85,7 @@ Route::prefix('admin')->group(function () {
                 ->name('admin.reviews.bulk-action');
 
 
-            //country
+            // country
             Route::get('/countries', [CountryController::class, 'index'])
                 ->name('admin.countries');
             Route::get('/countries/new', [CountryController::class, 'newCountry'])->name('admin.countries.new');
@@ -94,6 +94,15 @@ Route::prefix('admin')->group(function () {
             Route::get('/countries/activate/{id}', [CountryController::class, 'activate'])->name('admin.countries.activate');
             Route::get('/countries/deactivate/{id}', [CountryController::class, 'deactivate'])->name('admin.countries.deactivate');
             Route::post('/countries/edit', [CountryController::class, 'update'])->name('admin.countries.edit');
+
+            // promo
+            Route::get('/promo', [PromoController::class, 'index'])->name('admin.promos');
+            Route::get('/promo/create', [PromoController::class, 'create'])->name('admin.promos.create');
+            Route::post('/promo/store', [PromoController::class, 'store'])->name('admin.promos.store');
+             Route::get('/promo/view/{id}', [PromoController::class, 'viewPromo'])->name('admin.promos.view');
+            Route::get('/promo/activate/{id}', [PromoController::class, 'activate'])->name('admin.promos.activate');
+            Route::get('/promo/deactivate/{id}', [PromoController::class, 'deactivate'])->name('admin.promos.deactivate');
+            Route::post('/promo/edit', [PromoController::class, 'update'])->name('admin.promos.edit');
         }
     );
 
