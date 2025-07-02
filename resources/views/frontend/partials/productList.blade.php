@@ -320,8 +320,33 @@
 
                             <!-- Price and Actions -->
                             <div class="flex items-center justify-between">
-                                <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg truncate">
-                                    {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
+                                <div class="price-tag text-white font-bold px-4 py-2 rounded-l-lg truncate relative">
+                                    @if ($product->getPrice() != $product->getOriginalPrice())
+                                        {{-- Display original price small on top --}}
+                                        <span class="block text-sm text-gray-300 line-through mb-1">
+                                            {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
+                                        </span>
+
+                                        {{-- Display current (discounted) price large --}}
+                                        <span class="text-xl">
+                                            {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                                        </span>
+
+                                        {{-- Calculate and display the discount badge --}}
+                                        @php
+                                            $discountAmount = $product->getOriginalPrice() - $product->getPrice();
+                                            $discountPercentage = ($discountAmount / $product->getOriginalPrice()) * 100;
+                                        @endphp
+                                        <span
+                                            class="absolute top-0 right-0 mt-2 -mr-8 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
+                                            -{{ number_format($discountPercentage, 0) }}%
+                                        </span>
+                                    @else
+                                        {{-- Display regular price (no discount) --}}
+                                        <span class="text-lg">
+                                            {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                                        </span>
+                                    @endif
                                 </div>
 
                                 <!-- Action Buttons -->

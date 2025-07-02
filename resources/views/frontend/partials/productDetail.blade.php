@@ -17,14 +17,21 @@
     <meta itemprop="description" content="{{ $meta_description }}">
     <meta itemprop="image" content="{{ $product->image }}">
 
-    <meta name="twitter:card" content="product">
-    <meta name="twitter:site" content="@publisher_handle">
-    <meta name="twitter:title" content="{{ $product->name }}">
-    <meta name="twitter:description" content="{{ $meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
-    <meta name="twitter:image" content="{{ $product->image }}">
-    <meta name="twitter:data1" content="{{ '€' . $product->getPrice() }}">
-    <meta name="twitter:label1" content="Price">
+    @if ($product->getPrice() != $product->getOriginalPrice())
+        {{-- If there's a discount, show the discounted price as primary --}}
+        <meta name="twitter:data1" content="{{ '€' . number_format($product->getPrice(), 2) }}">
+        <meta name="twitter:label1" content="Sale Price">
+        <meta name="twitter:data2" content="{{ '€' . number_format($product->getOriginalPrice(), 2) }}">
+        <meta name="twitter:label2" content="Original Price">
+        {{-- You can also enhance the description to mention the discount --}}
+        <meta name="twitter:description"
+            content="{{ $meta_description }} - Save now! Original Price: €{{ number_format($product->getOriginalPrice(), 2) }}">
+    @else
+        {{-- No discount, show the regular price --}}
+        <meta name="twitter:data1" content="{{ '€' . number_format($product->getPrice(), 2) }}">
+        <meta name="twitter:label1" content="Price">
+        <meta name="twitter:description" content="{{ $meta_description }}">
+    @endif
 
     <meta property="og:title" content="{{ $product->name }}" />
     <meta property="og:type" content="og:product" />
@@ -32,9 +39,21 @@
     <meta property="og:image" content="{{ $product->image }}" />
     <meta property="og:description" content="{{ $meta_description }}" />
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
-    <meta property="og:price:amount" content="{{ '€' . $product->getPrice() }}" />
-    <meta property="product:price:currency" content="{{ '€' }}" />
 
+    @if ($product->getPrice() != $product->getOriginalPrice())
+        {{-- If there's a discount, explicitly set the current price and original price --}}
+        <meta property="og:price:amount" content="{{ number_format($product->getPrice(), 2) }}" />
+        <meta property="og:price:currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
+        <meta property="og:price:standard_amount" content="{{ number_format($product->getOriginalPrice(), 2) }}" />
+        <meta property="og:price:standard_currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
+        {{-- You might also consider og:availability if applicable, e.g., 'in stock' --}}
+        {{-- <meta property="og:availability" content="instock" /> --}}
+    @else
+        {{-- No discount, just the regular price --}}
+        <meta property="og:price:amount" content="{{ number_format($product->getPrice(), 2) }}" />
+        <meta property="og:price:currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
+        {{-- <meta property="og:availability" content="instock" /> --}}
+    @endif
 @endsection
 
 @section('content')
@@ -68,7 +87,16 @@
                 </div>
 
                 <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
-                   {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
+                    @if ($product->getPrice() != $product->getOriginalPrice())
+                        <span class="text-red-600 mr-2">
+                            {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                        </span>
+                        <span class="text-gray-500 line-through text-lg">
+                            {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
+                        </span>
+                    @else
+                        {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                    @endif
                 </p>
 
                 <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
@@ -90,7 +118,8 @@
                     </div>
 
                     <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
-                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}" class="flex-grow" id="nav-link">
+                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}"
+                            class="flex-grow" id="nav-link">
                             <button
                                 class="relative bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base">
                                 <span id="buyNowCounter"
@@ -102,11 +131,9 @@
                                 </svg>
                             </button>
                         </a>
-                        <button 
-                         data-product-id="{{ $product->id }}"
-                                data-product-name="{{ $product->name }}"
-                                data-product-price="{{ number_format($product->getPrice(), 2) }}"
-                                data-product-image="{{ $product->image }}"
+                        <button data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
+                            data-product-price="{{ number_format($product->getPrice(), 2) }}"
+                            data-product-image="{{ $product->image }}"
                             class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
                             <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#a)" fill="#99395C">
