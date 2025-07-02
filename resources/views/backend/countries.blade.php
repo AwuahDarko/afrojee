@@ -47,7 +47,7 @@
 
                                         <td class="align-middle text-center text-sm">
 
-                                            @if ($country->status === 1)
+                                            @if ($country->status == 1)
                                                 <span class="badge badge-sm bg-gradient-success">Active</span>
                                             @else
                                                 <span class="badge badge-sm bg-gradient-secondary">Inactive</span>
@@ -64,7 +64,7 @@
                                                 Edit
                                             </a>
                                             <br>
-                                            @if ($country->status === 1)
+                                            @if ($country->status == 1)
                                                 <a href="{{ route('admin.countries.deactivate', ['id' => $country->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs text-danger"
                                                     data-toggle="tooltip" data-original-title="DeActivate">

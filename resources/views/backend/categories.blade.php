@@ -42,7 +42,7 @@ Categories
 
                       <td class="align-middle text-center text-sm">
 
-                        @if ($category->status === 1)
+                        @if ($category->status == 1)
                             
                         <span class="badge badge-sm bg-gradient-success">Active</span>
                         @else
@@ -57,7 +57,7 @@ Categories
                           Edit
                         </a>
                         <br>
-                        @if ($category->status === 1)
+                        @if ($category->status == 1)
                              <a href="{{ route('admin.category.deactivate', ['id' => $category->id] ) }}" class="text-secondary font-weight-bold text-xs text-danger" data-toggle="tooltip" data-original-title="DeActivate">
                           Deactivate
                         </a>

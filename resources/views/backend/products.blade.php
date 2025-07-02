@@ -11,7 +11,7 @@
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3 afrojee-spaceout afrojee-row">
                         <h6 class="text-white text-capitalize ps-3">All Products</h6>
-                        <a class="text-white pe-3" href="{{ route('admin.products.new') }}">New </a>
+                        <a class="text-white pe-3" href="{{ route('admin.products.new') }}">Add New </a>
                     </div>
                 </div>
                 <div class="card-body px-0 pb-2">
@@ -67,7 +67,7 @@
                                             </span>
                                         </td>
                                         <td class="align-middle text-center">
-                                            @if ($product->status === 1)
+                                            @if ($product->status == 1)
                                                 <span class="badge badge-sm bg-gradient-success">Active</span>
                                             @else
                                                 <span class="badge badge-sm bg-gradient-secondary">Inactive</span>
@@ -85,7 +85,7 @@
                                                 Edit
                                             </a>
                                             <br>
-                                            @if ($product->status === 1)
+                                            @if ($product->status == 1)
                                                 <a href="{{ route('admin.products.deactivate', ['id' => $product->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs text-danger"
                                                     data-toggle="tooltip" data-original-title="DeActivate">
@@ -99,11 +99,11 @@
                                                 </a>
                                             @endif
                                             <br>
-                                            @if ($product->featured === 1)
+                                            @if ($product->featured == 1)
                                                 <a href="{{ route('admin.products.remove', ['id' => $product->id]) }}"
                                                     class="text-secondary font-weight-bold text-xs text-danger"
                                                     data-toggle="tooltip" data-original-title="Remove">
-                                                    Remove
+                                                    Unfeature
                                                 </a>
                                             @else
                                                 <a href="{{ route('admin.products.feature', ['id' => $product->id]) }}"

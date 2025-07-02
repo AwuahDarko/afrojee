@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     
     public function index(){
-        $featured_products = Product::with('Category')->where(['featured' => 1])->limit(4)->get();
+        $featured_products = Product::with('Category')->where(['featured' => 1])->limit(9)->get();
         // Get only featured and approved reviews
         $featuredReviews = Review::where('is_featured', true)
             ->where('status', 'approved')
