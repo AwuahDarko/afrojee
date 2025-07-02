@@ -33,7 +33,7 @@
                             </div>
                         @endif
                         <p>Edit Promo</p>
-                        <form role="form" class="text-start" method="POST" action="{{ route('admin.promos.store') }}">
+                        <form role="form" class="text-start" method="POST" action="{{ route('admin.promos.edit') }}">
                             @csrf
                             <input type="hidden" name="id" value="{{ $promo->id }}">
                             <div class="input-group input-group-outline my-3">
