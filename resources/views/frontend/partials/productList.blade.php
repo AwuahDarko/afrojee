@@ -235,7 +235,6 @@
                         data-product-id="{{ $product->id }}"
                         data-category="{{ strtolower(str_replace(' ', '-', $product->category->name)) }}">
 
-                        <!-- Decorative Accent -->
                         <div class="hover-accent absolute -top-4 -left-4 z-10">
                             <svg width="120" height="60" viewBox="0 0 231 94" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g opacity="0.6">
@@ -247,19 +246,29 @@
                             </svg>
                         </div>
 
-                        <!-- Badges -->
                         <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
                             @if($product->created_at && $product->created_at->diffInDays(now()) <= 50)
-                                <span class="new-badge text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+                                <span class="new-badge text-white text-xs font-bold px-3 py-1 rounded-full bg-blue-500">NEW</span>
                             @endif
                             @if(isset($product->quantity))
-                                <span class="quantity-badge text-white text-xs font-bold px-3 py-1 rounded-full">
+                                <span class="quantity-badge text-white text-xs font-bold px-3 py-1 rounded-full bg-purple-500">
                                     {{ $product->quantity }} left
+                                </span>
+                            @endif
+
+                            {{-- NEW: Discount Badge --}}
+                            @if ($product->getPrice() != $product->getOriginalPrice())
+                                @php
+                                    $discountAmount = $product->getOriginalPrice() - $product->getPrice();
+                                    // Ensure original price is not zero to prevent division by zero
+                                    $discountPercentage = $product->getOriginalPrice() > 0 ? ($discountAmount / $product->getOriginalPrice()) * 100 : 0;
+                                @endphp
+                                <span class="discount-badge text-white text-xs font-bold px-3 py-1 rounded-full bg-red-600">
+                                    -{{ number_format($discountPercentage, 0) }}%
                                 </span>
                             @endif
                         </div>
 
-                        <!-- Stock Status -->
                         @if(isset($product->quantity))
                             <div class="absolute top-4 right-4 z-20">
                                 <div class="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
@@ -277,7 +286,6 @@
                             </div>
                         @endif
 
-                        <!-- Product Image -->
                         <div class="relative h-64 md:h-72 overflow-hidden">
                             <a href="{{route('web.products.details', ['slug' => $product->slug])}}">
                                 <img src="{{ $product->image }}" alt="{{ $product->name }}"
@@ -285,13 +293,11 @@
                                     onerror="this.src='https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop'">
                             </a>
 
-                            <!-- Overlay on hover -->
                             <div
                                 class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             </div>
                         </div>
 
-                        <!-- Product Info -->
                         <div class="p-6">
                             <div class="flex items-start justify-between mb-2">
                                 <h3 class="text-xl font-bold text-gray-800 group-hover:text-burgundy transition-colors flex-1">
@@ -311,54 +317,36 @@
                                 </p>
                             @endif
 
-                            <!-- Weight Display -->
                             @if(isset($product->weight) && $product->weight > 0)
                                 <div class="text-xs text-gray-500 mb-3">
                                     Weight: {{ $product->weight }}kg
                                 </div>
                             @endif
 
-                            <!-- Price and Actions -->
                             <div class="flex items-center justify-between">
-                                <div class="price-tag text-white font-bold px-4 py-2 rounded-l-lg truncate relative">
+                                {{-- Price Display (as per previous discussion) --}}
+                                <div class="price-tag text-white font-bold px-4 py-2 rounded-l-lg truncate">
                                     @if ($product->getPrice() != $product->getOriginalPrice())
-                                        {{-- Display original price small on top --}}
-                                        <span class="block text-sm text-gray-300 line-through mb-1">
+                                        <span class="block text-xs text-gray-300 line-through text-right">
                                             {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
                                         </span>
-
-                                        {{-- Display current (discounted) price large --}}
-                                        <span class="text-xl">
+                                        <span class="text-lg">
                                             {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
                                         </span>
-
-                                        {{-- Calculate and display the discount badge --}}
-                                        @php
-                                            $discountAmount = $product->getOriginalPrice() - $product->getPrice();
-                                            $discountPercentage = ($discountAmount / $product->getOriginalPrice()) * 100;
-                                        @endphp
-                                        <span
-                                            class="absolute top-0 right-0 mt-2 -mr-8 bg-green-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-md">
-                                            -{{ number_format($discountPercentage, 0) }}%
-                                        </span>
                                     @else
-                                        {{-- Display regular price (no discount) --}}
                                         <span class="text-lg">
                                             {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
                                         </span>
                                     @endif
                                 </div>
 
-                                <!-- Action Buttons -->
                                 <div class="flex gap-2">
                                     @if(!isset($product->quantity) || $product->quantity > 0)
-                                        <!-- Buy Now Button -->
                                         <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}"
-                                            class="cart-button bg-pink-800 text-white px-4 py-2 rounded-full hover:bg-pink-900 transition-all duration-300 hover:scale-110 text-sm font-medium">
+                                            class="cart-button bg-pink-800 text-white px-4 py-2 rounded-full hover:bg-pink-900 transition-all duration-300 hover:scale-110 text-xs font-medium flex items-center justify-center">
                                             Buy Now
                                         </a>
 
-                                        <!-- Add to Cart Button -->
                                         <button
                                             class="cart-button cart-item-btn bg-burgundy text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
                                             data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
@@ -390,9 +378,8 @@
                                         </button>
                                     @endif
 
-                                    <!-- View Details Button -->
                                     <a href="{{ route('web.products.details', $product->slug) }}"
-                                        class="cart-button bg-taupe text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
+                                        class="cart-button bg-taupe text-white p-2 rounded-full hover:bg-opacity-90 flex items-center justify-center transition-all duration-300 hover:scale-110"
                                         title="View Details">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -408,7 +395,6 @@
                     </div>
                 @endforeach
             </div>
-
             <!-- Pagination -->
             <div class="flex justify-center items-center space-x-2 mt-12">
                 <a href="{{ $products->previousPageUrl() }}"

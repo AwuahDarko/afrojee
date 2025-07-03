@@ -167,141 +167,158 @@
                 effective
             </p>
         </div>
-
+        <!-- View All Products Button -->
+        @if($featured_products->count() > 0)
+            <div class="flex justify-end mb-12">
+                <a href="{{ route('web.products') }}"
+                    class="inline-flex items-center justify-center px-8 py-3 rounded-full border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white transition-colors">
+                    View All Products
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+        @endif
         <!-- Products Grid -->
         <div class="grid-container" id="productsGrid">
             @forelse($featured_products as $product)
-                <div class="group relative product-card bg-secondary rounded-2xl shadow-lg overflow-hidden"
-                    data-product-id="{{ $product->id }}">
-                    <!-- Decorative Accent -->
-                    <div class="hover-accent absolute -top-4 -left-4 z-10">
-                        <svg width="120" height="60" viewBox="0 0 231 94" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g opacity="0.6">
-                                <path d="M9.89791 12.1723C32.8258 10.1112 99.2605 12.0607 181.576 36.3473" stroke="#F3BF45"
-                                    stroke-width="8" stroke-linecap="round" />
-                                <path d="M28.9994 34.4957C48.8452 31.1511 107.093 26.8951 181.32 36.6272" stroke="#F3BF45"
-                                    stroke-width="8" stroke-linecap="round" />
+<div class="group relative product-card bg-secondary rounded-2xl shadow-lg overflow-hidden"
+     data-product-id="{{ $product->id }}">
+    
+    <!-- Make this link cover the entire card but sit ABOVE other interactive elements -->
+    <a href="{{ route('web.products.details', $product->slug) }}" 
+       class="absolute inset-0 z-30 pointer-events-auto"
+       aria-label="View {{ $product->name }} details"></a>
+            
+    <!-- Decorative Accent -->
+    <div class="hover-accent absolute -top-4 -left-4 z-10">
+        <svg width="120" height="60" viewBox="0 0 231 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g opacity="0.6">
+                <path d="M9.89791 12.1723C32.8258 10.1112 99.2605 12.0607 181.576 36.3473" stroke="#F3BF45"
+                    stroke-width="8" stroke-linecap="round" />
+                <path d="M28.9994 34.4957C48.8452 31.1511 107.093 26.8951 181.32 36.6272" stroke="#F3BF45"
+                    stroke-width="8" stroke-linecap="round" />
+            </g>
+        </svg>
+    </div>
+
+    <!-- Badges -->
+    <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
+        @if($product->created_at->diffInDays(now()) <= 10)
+            <span class="new-badge text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
+        @endif
+        <span class="quantity-badge text-white text-xs font-bold px-3 py-1 rounded-full">
+            {{ $product->quantity }} left
+        </span>
+    </div>
+
+    <!-- Stock Status -->
+    <div class="absolute top-4 right-4 z-20">
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
+            @if($product->quantity <= 5)
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <span class="text-xs font-medium text-gray-700">Almost Out!</span>
+            @elseif($product->quantity <= 20)
+                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+                <span class="text-xs font-medium text-gray-700">Low Stock</span>
+            @else
+                <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                <span class="text-xs font-medium text-gray-700">In Stock</span>
+            @endif
+        </div>
+    </div>
+
+    <!-- Product Image -->
+    <div class="relative h-64 md:h-72 overflow-hidden">
+        <img src="{{ $product->image }}" alt="{{ $product->name }}"
+            class="product-image w-full h-full object-cover"
+            onerror="this.src='https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop'">
+
+        <!-- Overlay on hover -->
+        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="p-6">
+        <div class="flex items-start justify-between mb-2">
+            <h3 class="text-xl font-bold text-gray-800 group-hover:text-burgundy transition-colors flex-1">
+                {{ $product->name }}
+            </h3>
+            @if($product->category)
+                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full ml-2">
+                    {{ $product->category->name }}
+                </span>
+            @endif
+        </div>
+
+        <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+            {!! Str::limit($product->description, 100) !!}
+        </p>
+
+        <!-- Weight Display -->
+        @if($product->weight > 0)
+            <div class="text-xs text-gray-500 mb-3">
+                Weight: {{ $product->weight }}kg
+            </div>
+        @endif
+
+        <!-- Price and Actions -->
+        <div class="flex items-center justify-between">
+            <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg">
+                {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
+            </div>
+
+            <!-- Action Buttons - These need higher z-index to be clickable -->
+            <div class="flex gap-2 relative z-40">
+                @if($product->quantity > 0)
+                    <button id="add-to-cart-button"
+                        class="cart-button cart-item-btn bg-burgundy text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
+                        data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
+                        data-product-price="{{ number_format($product->getPrice(), 2) }}"
+                        data-product-image="{{ $product->image }}" title="Add to Cart">
+                        <div class="loading-spinner hidden"></div>
+                        <svg width="30" class="w-5 h-5 cart-icon" stroke="currentColor" height="30" viewBox="0 0 30 30" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#a)" fill="#fff">
+                                <path
+                                    d="M21.25 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.088L6.513 5H25a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313L9 18.288l-.037.15a.313.313 0 0 0 .312.312H23.75v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.75 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5M20 13.75l3.475-6.25h-15.8l2.95 6.25z" />
+                                <path d="M25 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#F4F3E7"
+                                    stroke-width="1" />
                             </g>
+                            <defs>
+                                <clipPath id="a">
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
                         </svg>
-                    </div>
+                    </button>
+                @else
+                    <button class="cart-button bg-gray-400 text-white p-3 rounded-full cursor-not-allowed"
+                        disabled title="Out of Stock">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                @endif
 
-                    <!-- Badges -->
-                    <div class="absolute top-4 left-4 z-20 flex flex-col gap-2">
-                        @if($product->created_at->diffInDays(now()) <= 50)
-                            <span class="new-badge text-white text-xs font-bold px-3 py-1 rounded-full">NEW</span>
-                        @endif
-                        <span class="quantity-badge text-white text-xs font-bold px-3 py-1 rounded-full">
-                            {{ $product->quantity }} left
-                        </span>
-                    </div>
-
-                    <!-- Stock Status -->
-                    <div class="absolute top-4 right-4 z-20">
-                        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
-                            @if($product->quantity <= 5)
-                                <div class="w-2 h-2 rounded-full bg-red-500"></div>
-                                <span class="text-xs font-medium text-gray-700">Almost Out!</span>
-                            @elseif($product->quantity <= 20)
-                                <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
-                                <span class="text-xs font-medium text-gray-700">Low Stock</span>
-                            @else
-                                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                <span class="text-xs font-medium text-gray-700">In Stock</span>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Product Image -->
-                    <div class="relative h-64 md:h-72 overflow-hidden">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                            class="product-image w-full h-full object-cover"
-                            onerror="this.src='https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop'">
-
-                        <!-- Overlay on hover -->
-                        <div
-                            class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        </div>
-                    </div>
-
-                    <!-- Product Info -->
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-2">
-                            <h3 class="text-xl font-bold text-gray-800 group-hover:text-burgundy transition-colors flex-1">
-                                {{ $product->name }}
-                            </h3>
-                            @if($product->category)
-                                <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full ml-2">
-                                    {{ $product->category->name }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {!! Str::limit($product->description, 100) !!}
-                        </p>
-
-                        <!-- Weight Display -->
-                        @if($product->weight > 0)
-                            <div class="text-xs text-gray-500 mb-3">
-                                Weight: {{ $product->weight }}kg
-                            </div>
-                        @endif
-
-                        <!-- Price and Actions -->
-                        <div class="flex items-center justify-between">
-                            <div class="price-tag text-white font-bold text-lg px-4 py-2 rounded-l-lg">
-                                {{app_currency()}} {{ number_format($product->getPrice(), 2) }}
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="flex gap-2">
-                                @if($product->quantity > 0)
-                                    <button id="add-to-cart-button"
-                                        class="cart-button cart-item-btn bg-burgundy text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
-                                        data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
-                                        data-product-price="{{ number_format($product->getPrice(), 2) }}"
-                                        data-product-image="{{ $product->image }}" title="Add to Cart">
-                                        <div class="loading-spinner hidden"></div>
-                                        <svg width="30" class="w-5 h-5 cart-icon" stroke="currentColor" height="30" viewBox="0 0 30 30" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <g clip-path="url(#a)" fill="#fff">
-                                                <path
-                                                    d="M21.25 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.088L6.513 5H25a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313L9 18.288l-.037.15a.313.313 0 0 0 .312.312H23.75v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.75 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5M20 13.75l3.475-6.25h-15.8l2.95 6.25z" />
-                                                <path d="M25 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#F4F3E7"
-                                                    stroke-width="1" />
-                                            </g>
-                                            <defs>
-                                                <clipPath id="a">
-                                                    <path fill="#fff" d="M0 0h30v30H0z" />
-                                                </clipPath>
-                                            </defs>
-                                        </svg>
-                                    </button>
-                                @else
-                                    <button class="cart-button bg-gray-400 text-white p-3 rounded-full cursor-not-allowed"
-                                        disabled title="Out of Stock">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    </button>
-                                @endif
-
-                                <a href="{{ route('web.products.details', $product->slug) }}"
-                                    class="cart-button bg-taupe text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
-                                    title="View Details">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                        </path>
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <a href="{{ route('web.products.details', $product->slug) }}"
+                    class="cart-button bg-taupe text-white p-3 rounded-full hover:bg-opacity-90 transition-all duration-300 hover:scale-110"
+                    title="View Details">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                        </path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
             @empty
                 <div class="col-span-full text-center py-12">
                     <div class="text-gray-400 mb-4">
@@ -315,20 +332,5 @@
                 </div>
             @endforelse
         </div>
-
-        <!-- View All Products Button -->
-        @if($featured_products->count() > 0)
-            <div class="flex justify-end mt-12">
-                <a href="{{ route('web.products') }}"
-                    class="inline-flex items-center justify-center px-8 py-3 rounded-full border-2 border-burgundy text-burgundy hover:bg-burgundy hover:text-white transition-colors">
-                    View All Products
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
-                            clip-rule="evenodd" />
-                    </svg>
-                </a>
-            </div>
-        @endif
     </div>
 </section>
