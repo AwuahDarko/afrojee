@@ -210,73 +210,68 @@
                 </div> --}}
             </div>
 
-            <div class="md:col-span-1 bg-white rounded-xl p-6 shadow-sm h-fit sticky top-8">
+            <div class="md:col-span-1 bg-white rounded-xl p-4 sm:p-6 shadow-sm h-fit sticky top-4 sm:top-8 mx-auto w-full max-w-md md:max-w-none">
+                {{-- Container for responsiveness --}}
 
-                <div class="cart-item flex sm:flex-col  items-center border-b border-gray-300 last:border-b-0 pb-3"
-                    data-product-id="{{ $product->id }}" data-price="{{ $product->getPrice() }}"
-                    data-quantity="{{ $quantity }}">
-                    <div class="flex sm:flex-row justify-start w-70 mb-2 items-center">
+                <div class="cart-item flex flex-col sm:flex-row items-center sm:items-start border-b border-gray-300 last:border-b-0 pb-4 mb-4">
+                    {{-- Changed to flex-col on mobile, sm:flex-row on wider screens --}}
+                    <div class="flex flex-col sm:flex-row justify-center sm:justify-start items-center mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto">
+                        {{-- Centered on mobile, aligned left on sm+ --}}
                         <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                            class="w-24 h-24 sm:w-10 sm:h-10 rounded-lg mb-4 sm:mb-0 sm:mr-4 object-cover" />
-                        <div class="flex flex-col sm:flex-col sm:items-center text-gray-600 mt-2 sm:mt-0">
-                            <p class="font-semibold text-l sm:text-l mb-2 sm:mb-0 p-0">
+                            class="w-24 h-24 rounded-lg object-cover mb-2 sm:mb-0 sm:mr-4" />
+                        <div class="text-center sm:text-left text-gray-600">
+                            <p class="font-semibold text-base sm:text-lg mb-1 sm:mb-0">
                                 {{ $product->name }}
                             </p>
-
                         </div>
                     </div>
-                    <div class="flex-grow w-full">
-                        <div class="flex flex-col sm:flex-col sm:items-center text-gray-600 mt-2 sm:mt-0">
-
-                            {{-- <span class="mr-2 font-bold mb-2 sm:mb-0">Qty</span> --}}
-                            <div class="flex items-center">
-                                <button
-                                    class="quantity-minus px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
-                                    data-product-id="{{ $product->id }}" id="decrease-btn">
-                                    -
-                                </button>
-                                <input type="text" value="{{ $quantity }}"
-                                    class="quantity-input w-10 text-center mx-2 border-none focus:outline-none bg-transparent font-bold"
-                                    readonly data-product-id="{{ $product->id }}" id="p-qty" />
-                                <button
-                                    class="quantity-plus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 mr-auto"
-                                    data-product-id="{{ $product->id }}" id="increase-btn">
-                                    +
-                                </button>
-                            </div>
-
+                    <div class="flex-grow w-full text-center sm:text-left">
+                        {{-- Quantity control for mobile --}}
+                        <div class="flex items-center justify-center sm:justify-start mt-2 sm:mt-0">
+                            <button
+                                class="quantity-minus px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 text-sm"
+                                data-product-id="{{ $product->id }}" id="decrease-btn">
+                                -
+                            </button>
+                            <input type="text" value="{{ $quantity }}"
+                                class="quantity-input w-10 text-center mx-2 border-none focus:outline-none bg-transparent font-bold text-base"
+                                readonly data-product-id="{{ $product->id }}" id="p-qty" />
+                            <button
+                                class="quantity-plus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 text-sm"
+                                data-product-id="{{ $product->id }}" id="increase-btn">
+                                +
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                <h2 class="text-xl font-semibold text-gray-800 mb-6 my-2">Your Bill</h2>
+                <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 mt-2">Your Bill</h2>
 
                 <div id="checkout-summary">
                     <div class="flex justify-between items-center mb-3">
-                        <p class="text-gray-700">Product sub-total</p>
-                        <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
+                        <p class="text-gray-700 text-sm sm:text-base">Product sub-total</p>
+                        <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
-                        <p class="text-gray-700">Delivery</p>
+                        <p class="text-gray-700 text-sm sm:text-base">Delivery</p>
                         @if ($userAddress)
-                            <p class="font-bold text-gray-900">{{app_currency()}} {{ number_format(0, 2) }}</p>
+                            <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format(0, 2) }}</p>
                         @else
-                            <p class="font-bold text-gray-900"> Select region to determine cost </p>
+                            <p class="font-bold text-gray-900 text-center text-sm sm:text-base"> Select region to determine cost </p>
                         @endif
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
-                        <p class="text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}
-                        </p>
+                        <p class="text-lg sm:text-xl font-bold text-gray-900">Total</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
                     </div>
                 </div>
                 <form action="{{route('web.order.save')}}" method="POST">
-                     @csrf
+                    @csrf
                     <input type="hidden" name="product_id" value="{{$product->id}}">
                     <input type="hidden" name="quantity" value="1" id="order-qty">
                     <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
-                    <button @if (!$userAddress) disabled @endif type="submit" 
-                    class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
+                    <button @if (!$userAddress) disabled @endif type="submit"
+                    class="bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium w-full flex items-center justify-center gap-2 text-base">
                     Proceed to checkout
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />

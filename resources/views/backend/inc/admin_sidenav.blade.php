@@ -75,7 +75,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.tables') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.tables') }}">
           <i class="material-symbols-rounded opacity-5">table_view</i>
@@ -83,7 +83,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.billing') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.billing') }}">
           <i class="material-symbols-rounded opacity-5">receipt_long</i>
@@ -91,7 +91,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.icons') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.icons') }}">
           <i class="material-symbols-rounded opacity-5">receipt_long</i>
@@ -99,7 +99,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.vr') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.vr') }}">
           <i class="material-symbols-rounded opacity-5">view_in_ar</i>
@@ -107,7 +107,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.rtl') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.rtl') }}">
           <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
@@ -115,7 +115,7 @@
         </a>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.notification') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.notification') }}">
           <i class="material-symbols-rounded opacity-5">notifications</i>
@@ -123,11 +123,11 @@
         </a>
       </li>
 
-      <li class="nav-item mt-3">
+      <li class="nav-item mt-3 visually-hidden">
         <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
       </li>
 
-      <li class="nav-item">
+      <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.profile') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.profile') }}">
           <i class="material-symbols-rounded opacity-5">person</i>

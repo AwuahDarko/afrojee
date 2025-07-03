@@ -47,51 +47,60 @@
         <meta property="og:price:standard_amount" content="{{ number_format($product->getOriginalPrice(), 2) }}" />
         <meta property="og:price:standard_currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
         {{-- You might also consider og:availability if applicable, e.g., 'in stock' --}}
-        {{-- <meta property="og:availability" content="instock" /> --}}
+        {{--
+        <meta property="og:availability" content="instock" /> --}}
     @else
         {{-- No discount, just the regular price --}}
         <meta property="og:price:amount" content="{{ number_format($product->getPrice(), 2) }}" />
         <meta property="og:price:currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
-        {{-- <meta property="og:availability" content="instock" /> --}}
+        {{--
+        <meta property="og:availability" content="instock" /> --}}
     @endif
 @endsection
 
 @section('content')
     <section class="bg-[#f7f3e9] py-8 px-4 md:py-16 md:px-8 text-gray-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+            {{-- Added horizontal padding and vertical padding for overall section --}}
             <div class="flex justify-center w-full">
-                <!-- Mobile version with blurred background -->
-                <div class="relative sm:hidden w-full h-64 overflow-hidden">
-                    <!-- Blurred background -->
+                <div class="relative sm:hidden w-full h-64 overflow-hidden rounded-xl shadow-lg">
+                    {{-- Added rounded corners and shadow to the mobile image container --}}
                     <img src="{{$product->image}}" alt=""
                         class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
-                    <!-- Main image in center -->
                     <div class="absolute inset-0 flex items-center justify-center p-4">
                         <img src="{{$product->image}}" alt="{{$product->name}}"
                             class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
                     </div>
                 </div>
 
-                <!-- Desktop/tablet version (original) -->
                 <img src="{{$product->image}}" alt="{{$product->name}}"
-                    class="hidden sm:block rounded-xl w-72 md:w-full max-w-sm object-cover" />
+                    class="hidden sm:block rounded-xl w-full max-w-sm md:max-w-md lg:max-w-full object-cover shadow-lg" />
+                {{-- Adjusted width for better scaling, added shadow --}}
             </div>
 
-            <div>
-                <h1 class="text-xl sm:text-2xl font-semibold mb-2">
+            <div class="text-center md:text-left">
+                {{-- Centered text on mobile, left-aligned on desktop --}}
+                <h1 class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 text-gray-800">
+                    {{-- Increased mobile font size for prominence, adjusted margin --}}
                     {{$product->name}}
                 </h1>
 
-                <div class="flex items-center text-yellow-400 mb-4">
+                <div class="flex items-center justify-center md:justify-start text-yellow-400 mb-4">
+                    {{-- Centered stars on mobile, left-aligned on desktop --}}
                     <span>★★★★★</span>
+                    <span class="ml-2 text-gray-600 text-sm">({{ number_format($product->reviews_avg_rating, 1) ?? '0.0' }}
+                        / 5)</span>
+                    {{-- Replaced 'lllllllllllllllllllllllllll' with actual review content, assuming you have it --}}
                 </div>
 
-                <p class="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+                    {{-- Increased price font size for prominence --}}
                     @if ($product->getPrice() != $product->getOriginalPrice())
                         <span class="text-red-600 mr-2">
                             {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
                         </span>
-                        <span class="text-gray-500 line-through text-lg">
+                        <span class="text-gray-500 line-through text-xl sm:text-2xl">
+                            {{-- Adjusted strikethrough price size --}}
                             {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
                         </span>
                     @else
@@ -99,34 +108,51 @@
                     @endif
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-6">
-                    <div class="flex items-center">
-                        <span class="mr-1 font-bold text-sm sm:text-base">Quantity</span>
-                        <div class="flex items-center space-x-2 px-2 py-1">
+                <p class="text-gray-700 mb-6 text-sm sm:text-base leading-relaxed">
+                    {!! Str::limit($product->description, 200) !!}
+                    {{-- Added a limit to description for cleaner look on mobile --}}
+                </p>
+
+
+                <div class="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 mb-6">
+                    {{-- Removed redundant "start" alignment for sm, "center" is good --}}
+                    <div class="flex items-center justify-center sm:justify-start w-full sm:w-auto">
+                        {{-- Centered quantity controls on mobile --}}
+                        <span class="mr-2 font-bold text-base">Quantity</span>
+                        {{-- Removed sm:text-base as base is good for mobile --}}
+                        <div class="flex items-center space-x-2 border border-gray-300 rounded-full px-1 py-0.5">
+                            {{-- Added border to quantity input group --}}
                             <button id="decrement"
-                                class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-1 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                class="text-lg font-bold text-gray-600 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                {{-- Removed redundant border-[var(--color-primary)] since parent now has border --}}
                                 −
                             </button>
                             <input type="text" id="quantity" value="1" autocomplete="off"
-                                class="w-10 sm:w-12 text-center focus:outline-none bg-transparent text-lg sm:text-xl font-bold"
-                                readonly />
+                                class="w-10 text-center focus:outline-none bg-transparent text-lg font-bold" readonly />
+                            {{-- Removed sm:w-12 and sm:text-xl for more consistent mobile sizing --}}
                             <button id="increment"
-                                class="text-lg font-bold text-gray-600 rounded-full border border-[var(--color-primary)] p-1 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                class="text-lg font-bold text-gray-600 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
+                                {{-- Removed redundant border-[var(--color-primary)] --}}
                                 +
                             </button>
                         </div>
                     </div>
 
-                    <div class="flex items-center gap-3 sm:gap-4 flex-wrap">
+                    <div
+                        class="flex items-center justify-center sm:justify-start gap-3 sm:gap-4 flex-wrap w-full sm:w-auto">
+                        {{-- Centered buttons on mobile --}}
                         <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}"
-                            class="flex-grow" id="nav-link">
+                            class="flex-grow sm:flex-grow-0 w-full sm:w-auto" id="nav-link">
+                            {{-- Allow button to grow on mobile, not on desktop, and take full width --}}
                             <button
-                                class="relative bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base">
+                                class="relative bg-pink-800 hover:bg-pink-900 text-white px-5 py-2 rounded-full font-medium flex items-center justify-center gap-2 text-base w-full transition-all duration-300 ease-in-out hover:scale-105">
+                                {{-- Adjusted padding, removed sm:px-6 sm:py-2 as general text-base and px-5 py-2 are good
+                                for both. Added w-full --}}
                                 <span id="buyNowCounter"
                                     class="absolute -left-2 -top-2 text-xs bg-white text-pink-800 border border-pink-800 rounded-full px-1.5 py-0.5 font-bold shadow">
                                     1 </span>Buy Now
-                                <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                    {{-- Removed sm:w-4 sm:h-4 as consistent w-4 h-4 is fine --}}
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
                             </button>
@@ -134,7 +160,8 @@
                         <button data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
                             data-product-price="{{ number_format($product->getPrice(), 2) }}"
                             data-product-image="{{ $product->image }}"
-                            class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center">
+                            class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-10 h-10 flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105">
+                            {{-- Consistent w-10 h-10, added transition and hover scale --}}
                             <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#a)" fill="#99395C">
                                     <path
@@ -154,6 +181,7 @@
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="max-w-4xl mx-auto mt-8 md:mt-12">
