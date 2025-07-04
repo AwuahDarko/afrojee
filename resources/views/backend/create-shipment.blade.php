@@ -6,7 +6,6 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <!-- Header -->
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
@@ -19,8 +18,6 @@
                         @csrf
 
                          <div class="mb-3 input-group input-group-outline">
-                            {{-- <label class="form-label">Shipping Country</label> --}}
-                            {{-- <input type="text" name="zone_name" class="form-control" required placeholder=""> --}}
                             <select name="country" class="form-control">
                                  <option value="0"> Select shipping country </option>
                                 @foreach ($countries as $country)
@@ -29,19 +26,16 @@
                             </select>
                         </div>
 
-                        <!-- Zone Name -->
                         <div class="mb-3 input-group input-group-outline">
                             <label class="form-label">Zone Name</label>
                             <input type="text" name="zone_name" class="form-control" required placeholder="">
                         </div>
 
-                        <!-- City/Region -->
-                        <div class="mb-3 input-group input-group-outline"> 
+                        <div class="mb-3 input-group input-group-outline">
                             <label class="form-label">City / Region</label>
                             <input type="text" name="region" class="form-control" required placeholder="">
                         </div>
 
-                        <!-- Shipping Rates Table -->
                         <div class="mb-4">
                             <label class="form-label d-block">Shipping Rates by Weight (kg)</label>
 
@@ -51,14 +45,13 @@
                                         <th style="width: 40%">Weight From (kg)</th>
                                         <th style="width: 40%">Weight To (kg)</th>
                                         <th style="width: 15%">Rate </th>
-                                        {{-- <th style="width: 5%"></th> --}}
+                                        <th style="width: 5%"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>
                                             <div class="input-group input-group-outline">
-
                                                 <input type="number" step="0.01" name="rates[0][weight_from]" class="form-control" required>
                                             </div>
                                         </td>
@@ -70,7 +63,6 @@
                                         <td>
                                             <div class="input-group input-group-outline">
                                                 <input type="number" step="0.01" name="rates[0][rate]" class="form-control" required>
-
                                             </div>
                                         </td>
                                         <td class="text-center">
@@ -85,7 +77,6 @@
                             </button>
                         </div>
 
-                        <!-- Submit -->
                         <div class="text-end">
                             <button type="submit" class="btn btn-dark">Save Zone & Rates</button>
                         </div>
@@ -97,28 +88,3 @@
 </div>
 
 @endsection
-
-@push('scripts')
-<script>
-    let rateIndex = 1;
-
-    document.getElementById('addRateRow').addEventListener('click', function () {
-        const tableBody = document.querySelector('#ratesTable tbody');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td><input type="number" step="0.01" name="rates[${rateIndex}][weight_from]" class="form-control" required></td>
-            <td><input type="number" step="0.01" name="rates[${rateIndex}][weight_to]" class="form-control" required></td>
-            <td><input type="number" step="0.01" name="rates[${rateIndex}][rate]" class="form-control" required></td>
-            <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button></td>
-        `;
-        tableBody.appendChild(newRow);
-        rateIndex++;
-    });
-
-    document.addEventListener('click', function (e) {
-        if (e.target.closest('.remove-rate')) {
-            e.target.closest('tr').remove();
-        }
-    });
-</script>
-@endpush

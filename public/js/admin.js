@@ -2,12 +2,16 @@ console.log('admin.js loaded...........')
 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 // Select All Checkbox
-document.getElementById('select-all').addEventListener('change', function () {
-    const checkboxes = document.querySelectorAll('.review-checkbox');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
+const selectAll = document.getElementById('select-all');
+if (selectAll) {
+
+    selectAll.addEventListener('change', function () {
+        const checkboxes = document.querySelectorAll('.review-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
     });
-});
+}
 
 // Quick Actions
 function quickAction(reviewId, action) {
@@ -165,31 +169,74 @@ function updateStatsCards(stats) {
 }
 
 // Bulk Actions Form Handler
-document.getElementById('bulk-action-form').addEventListener('submit', function (e) {
-    e.preventDefault();
+const bulkActionForm = document.getElementById('bulk-action-form');
+if (bulkActionForm) {
+    bulkActionForm.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-    const selectedReviews = document.querySelectorAll('.review-checkbox:checked');
-    const action = document.querySelector('select[name="action"]').value;
+        const selectedReviews = document.querySelectorAll('.review-checkbox:checked');
+        const action = document.querySelector('select[name="action"]').value;
 
-    if (!action) {
-        showNotification('Please select an action.', 'warning');
-        return;
-    }
-
-    if (selectedReviews.length === 0) {
-        showNotification('Please select at least one review.', 'warning');
-        return;
-    }
-
-    const confirmMessage = `Are you sure you want to ${action} ${selectedReviews.length} review(s)?`;
-    if (action === 'delete') {
-        if (!confirm(confirmMessage + ' This action cannot be undone.')) {
+        if (!action) {
+            showNotification('Please select an action.', 'warning');
             return;
         }
-    } else if (!confirm(confirmMessage)) {
-        return;
-    }
 
-    // Submit the form
-    this.submit();
-});
+        if (selectedReviews.length === 0) {
+            showNotification('Please select at least one review.', 'warning');
+            return;
+        }
+
+        const confirmMessage = `Are you sure you want to ${action} ${selectedReviews.length} review(s)?`;
+        if (action === 'delete') {
+            if (!confirm(confirmMessage + ' This action cannot be undone.')) {
+                return;
+            }
+        } else if (!confirm(confirmMessage)) {
+            return;
+        }
+
+        // Submit the form
+        this.submit();
+    });
+}
+
+
+    let rateIndex = 1;
+
+    console.log('===========================> ',document.getElementById('addRateRow'))
+    const addRateRow = document.getElementById('addRateRow');
+    addRateRow.addEventListener('click', function () {
+        const tableBody = document.querySelector('#ratesTable tbody');
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td>
+                <div class="input-group input-group-outline">
+                    <input type="number" step="0.01" name="rates[${rateIndex}][weight_from]" class="form-control" required>
+                </div>
+            </td>
+            <td>
+                <div class="input-group input-group-outline">
+                    <input type="number" step="0.01" name="rates[${rateIndex}][weight_to]" class="form-control" required>
+                </div>
+            </td>
+            <td>
+                <div class="input-group input-group-outline">
+                    <input type="number" step="0.01" name="rates[${rateIndex}][rate]" class="form-control" required>
+                </div>
+            </td>
+            <td class="text-center">
+                <button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button>
+            </td>
+        `;
+        tableBody.appendChild(newRow);
+        rateIndex++;
+    });
+
+    // Delegated event listener for removing rows
+    document.addEventListener('click', function (e) {
+        // Check if the clicked element (or its closest parent) has the 'remove-rate' class
+        if (e.target.closest('.remove-rate')) {
+            e.target.closest('tr').remove();
+        }
+    });
