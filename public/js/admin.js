@@ -204,7 +204,6 @@ if (bulkActionForm) {
 
     let rateIndex = 1;
 
-    console.log('===========================> ',document.getElementById('addRateRow'))
     const addRateRow = document.getElementById('addRateRow');
     addRateRow.addEventListener('click', function () {
         const tableBody = document.querySelector('#ratesTable tbody');
