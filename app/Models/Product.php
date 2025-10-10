@@ -22,13 +22,15 @@ class Product extends Model
         'featured'
     ];
 
-
-
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
+    public function sizes()
+    {
+        return $this->hasMany(ProductSize::class);
+    }
 
     public function isActive()
     {
@@ -39,29 +41,40 @@ class Product extends Model
     {
         $now = Carbon::now();
 
-        $promoProduct = PromoProduct::where(
-            'product_id',
-            '=',
-            $this->id
-        )->join('promos', 'promos.id', '=', 'promo_products.promo_id')
+        // Check for active promotions
+        $promoProduct = PromoProduct::where('product_id', '=', $this->id)
+            ->join('promos', 'promos.id', '=', 'promo_products.promo_id')
             ->where('promos.status', '=', 1)
-            ->where('start_at', '<=', $now)   // started
+            ->where('start_at', '<=', $now)
             ->where('end_at', '>=', $now)
-            ->orderBy('promo_products.id', 'desc')->limit(1)->first();
+            ->orderBy('promo_products.id', 'desc')
+            ->limit(1)
+            ->first();
+
+        // If the product has sizes, return the price of the first size (or adjust logic as needed)
+        if ($this->sizes()->exists()) {
+            $basePrice = $this->sizes()->first()->price;
+        } else {
+            $basePrice = $this->price;
+        }
 
         if (!$promoProduct) {
-            return $this->price;
+            return $basePrice;
         }
 
-        if($promoProduct->discount_type == 'fixed'){
-            return $this->price - (float)$promoProduct->discount;
+        if ($promoProduct->discount_type == 'fixed') {
+            return $basePrice - (float) $promoProduct->discount;
         }
 
-        return $this->price - ($promoProduct->discount / 100) * $this->price;
+        return $basePrice - ($promoProduct->discount / 100) * $basePrice;
     }
 
     public function getOriginalPrice()
     {
+        // If the product has sizes, return the price of the first size (or adjust logic as needed)
+        if ($this->sizes()->exists()) {
+            return $this->sizes()->first()->price;
+        }
         return $this->price;
     }
 }

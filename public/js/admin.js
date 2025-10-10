@@ -205,32 +205,34 @@ if (bulkActionForm) {
     let rateIndex = 1;
 
     const addRateRow = document.getElementById('addRateRow');
-    addRateRow.addEventListener('click', function () {
-        const tableBody = document.querySelector('#ratesTable tbody');
-        const newRow = document.createElement('tr');
-        newRow.innerHTML = `
-            <td>
-                <div class="input-group input-group-outline">
-                    <input type="number" step="0.01" name="rates[${rateIndex}][weight_from]" class="form-control" required>
-                </div>
-            </td>
-            <td>
-                <div class="input-group input-group-outline">
-                    <input type="number" step="0.01" name="rates[${rateIndex}][weight_to]" class="form-control" required>
-                </div>
-            </td>
-            <td>
-                <div class="input-group input-group-outline">
-                    <input type="number" step="0.01" name="rates[${rateIndex}][rate]" class="form-control" required>
-                </div>
-            </td>
-            <td class="text-center">
-                <button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button>
-            </td>
-        `;
-        tableBody.appendChild(newRow);
-        rateIndex++;
-    });
+    if(addRateRow){
+        addRateRow.addEventListener('click', function () {
+            const tableBody = document.querySelector('#ratesTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>
+                    <div class="input-group input-group-outline">
+                        <input type="number" step="0.01" name="rates[${rateIndex}][weight_from]" class="form-control" required>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group input-group-outline">
+                        <input type="number" step="0.01" name="rates[${rateIndex}][weight_to]" class="form-control" required>
+                    </div>
+                </td>
+                <td>
+                    <div class="input-group input-group-outline">
+                        <input type="number" step="0.01" name="rates[${rateIndex}][rate]" class="form-control" required>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-sm btn-danger remove-rate"><i class="fas fa-trash"></i></button>
+                </td>
+            `;
+            tableBody.appendChild(newRow);
+            rateIndex++;
+        });
+    }
 
     // Delegated event listener for removing rows
     document.addEventListener('click', function (e) {

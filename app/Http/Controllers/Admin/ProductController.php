@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
-use Faker\Extension\Helper;
+use App\Models\ProductSize;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,16 +13,13 @@ class ProductController extends Controller
 {
     public function index()
     {
-
-        $products = Product::with('category')->orderBy('name', 'asc')->paginate(30);
-
+        $products = Product::with(['category', 'sizes'])->orderBy('name', 'asc')->paginate(30);
         return view('backend.products', compact('products'));
     }
 
     public function newProduct()
     {
         $categories = Category::where(['status' => 1])->get();
-
         return view('backend.new-product', compact('categories'));
     }
 
@@ -30,16 +27,18 @@ class ProductController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'price' => 'required',
-            'quantity' => 'required',
-            'category' => 'required',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:0',
+            'category' => 'required|exists:categories,id',
             'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
             'description' => 'required',
             'how_to_use' => 'required',
             'ingredients' => 'required',
-            'weight' => 'required',
+            'weight' => 'required|numeric|min:0',
+            'sizes.*.size' => 'nullable|string|max:255',
+            'sizes.*.price' => 'required_with:sizes.*.size|numeric|min:0',
+            'sizes.*.quantity' => 'required_with:sizes.*.size|integer|min:0',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -48,72 +47,65 @@ class ProductController extends Controller
         }
 
         $filePath = "";
-        // Handle the uploaded file
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-
-            // Optional: give the file a unique name
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-
-            // Move it to public/uploads
             $image->move(public_path('uploads'), $filename);
-
-            // Return the relative path (or full URL if needed)
             $filePath = asset('uploads/' . $filename);
-            // Or use: asset('uploads/' . $filename) for full URL
         }
 
-
-        $product = new Product(
-            [
-                'name' => $request->name,
-                'price' => $request->price,
-                'quantity' => $request->quantity,
-                'category_id' => $request->category,
-                'image' => $filePath,
-                'description' => $request->description,
-                'how_to_use' => $request->how_to_use,
-                'ingredients' => $request->ingredients,
-                'slug' => generateUuidV4(),
-                'weight' => $request->weight
-            ]
-        );
+        $product = new Product([
+            'name' => $request->name,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'category_id' => $request->category,
+            'image' => $filePath,
+            'description' => $request->description,
+            'how_to_use' => $request->how_to_use,
+            'ingredients' => $request->ingredients,
+            'slug' => generateUuidV4(),
+            'weight' => $request->weight
+        ]);
         $product->save();
 
-        return redirect()->intended(route('admin.products'));
+        // Save sizes if provided
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $sizeData) {
+                if (!empty($sizeData['size'])) {
+                    ProductSize::create([
+                        'product_id' => $product->id,
+                        'size' => $sizeData['size'],
+                        'price' => $sizeData['price'],
+                        'quantity' => $sizeData['quantity'],
+                    ]);
+                }
+            }
+        }
 
+        return redirect()->intended(route('admin.products'))->with('success', 'Product created successfully');
     }
 
     public function viewProduct(Request $request)
     {
-        $product = Product::find($request->id);
+        $product = Product::with('sizes')->find($request->id);
         if (!$product) {
             abort(404);
         }
-
-        // dd($product->category_id);
         $categories = Category::where(['status' => 1])->get();
-
         return view('backend.edit-product', compact('product', 'categories'));
     }
 
     public function activate(Request $request)
     {
-
-
         if (!$request->id) {
             abort(404);
         }
-
         $product = Product::find($request->id);
         if (!$product) {
             abort(404);
         }
-
         $product->status = 1;
-
         $product->save();
-
         return redirect()->intended(route('admin.products'));
     }
 
@@ -122,36 +114,31 @@ class ProductController extends Controller
         if (!$request->id) {
             abort(404);
         }
-
-
         $product = Product::find($request->id);
         if (!$product) {
             abort(404);
         }
-
         $product->status = 0;
-
         $product->save();
-
         return redirect()->intended(route('admin.products'));
     }
 
-
     public function update(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'price' => 'required',
-            'quantity' => 'required',
-            'category' => 'required',
-            //  'image' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048',
+            'price' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:0',
+            'category' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
             'description' => 'required',
             'how_to_use' => 'required',
             'ingredients' => 'required',
-            'weight' => 'required',
+            'weight' => 'required|numeric|min:0',
+            'sizes.*.size' => 'nullable|string|max:255',
+            'sizes.*.price' => 'required_with:sizes.*.size|numeric|min:0',
+            'sizes.*.quantity' => 'required_with:sizes.*.size|integer|min:0',
         ]);
-
 
         if ($validator->fails()) {
             return redirect()->back()
@@ -164,24 +151,14 @@ class ProductController extends Controller
             abort(404);
         }
 
-        $filePath = "";
-        // Handle the uploaded file
+        $filePath = $product->image;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-
-            // Optional: give the file a unique name
             $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-
-            // Move it to public/uploads
             $image->move(public_path('uploads'), $filename);
-
-            // Return the relative path (or full URL if needed)
-            $filePath = asset('uploads/' . $filename);
-            // Or use: asset('uploads/' . $filename) for full URL
-
+            $filePath = asset('Uploads/' . $filename);
             $product->image = $filePath;
         }
-
 
         $product->name = $request->name;
         $product->price = $request->price;
@@ -191,29 +168,46 @@ class ProductController extends Controller
         $product->how_to_use = $request->how_to_use;
         $product->ingredients = $request->ingredients;
         $product->weight = $request->weight;
-        
         $product->save();
 
-        return redirect()->intended(route('admin.products'));
+        // Update sizes
+        $existingSizeIds = $product->sizes()->pluck('id')->toArray();
+        $submittedSizeIds = array_filter(array_column($request->sizes ?? [], 'id', 'id'));
+
+        // Delete sizes that are no longer in the request
+        $sizesToDelete = array_diff($existingSizeIds, $submittedSizeIds);
+        ProductSize::whereIn('id', $sizesToDelete)->delete();
+
+        // Update or create sizes
+        if ($request->has('sizes')) {
+            foreach ($request->sizes as $sizeData) {
+                if (!empty($sizeData['size'])) {
+                    ProductSize::updateOrCreate(
+                        ['id' => $sizeData['id'] ?? null, 'product_id' => $product->id],
+                        [
+                            'size' => $sizeData['size'],
+                            'price' => $sizeData['price'],
+                            'quantity' => $sizeData['quantity'],
+                        ]
+                    );
+                }
+            }
+        }
+
+        return redirect()->intended(route('admin.products'))->with('success', 'Product updated successfully');
     }
 
-     public function feature(Request $request)
+    public function feature(Request $request)
     {
-
-
         if (!$request->id) {
             abort(404);
         }
-
         $product = Product::find($request->id);
         if (!$product) {
             abort(404);
         }
-
         $product->featured = 1;
-
         $product->save();
-
         return redirect()->intended(route('admin.products'));
     }
 
@@ -222,19 +216,28 @@ class ProductController extends Controller
         if (!$request->id) {
             abort(404);
         }
-
-
         $product = Product::find($request->id);
         if (!$product) {
             abort(404);
         }
-
         $product->featured = 0;
-
         $product->save();
-
         return redirect()->intended(route('admin.products'));
     }
 
+    public function delete(Request $request)
+    {
+        if (!$request->id) {
+            abort(404);
+        }
+        $product = Product::find($request->id);
+        if (!$product) {
+            abort(404);
+        }
+        if ($product->image && file_exists(public_path(parse_url($product->image, PHP_URL_PATH)))) {
+            unlink(public_path(parse_url($product->image, PHP_URL_PATH)));
+        }
+        $product->delete();
+        return redirect()->intended(route('admin.products'))->with('success', 'Product deleted successfully');
+    }
 }
-
