@@ -419,7 +419,7 @@
 
                                 <div class="flex gap-2">
                                     @if(!isset($product->quantity) || $product->quantity > 0)
-                                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}"
+                                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0]) }}"
                                             class="cart-button bg-pink-800 text-white px-4 py-2 rounded-full hover:bg-pink-900 transition-all duration-300 hover:scale-110 text-xs font-medium flex items-center justify-center">
                                             Buy Now
                                         </a>

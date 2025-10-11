@@ -1,5 +1,7 @@
 @extends('frontend.layouts.app')
-
+<script>
+    const appCurrency = @json(app_currency());
+</script>
 @section('title')
 Afrojee - Hair and skin care products
 @endsection

@@ -25,10 +25,10 @@ window.addEventListener("DOMContentLoaded", () => {
     const currentValue = parseInt(quantityInput.value);
     buyNowCounter.textContent = currentValue;
     addToCartCounter.textContent = currentValue;
-    const nav = document.getElementById('nav-link')
+    const nav = document.getElementById('buy-now-link')
     const link = nav.getAttribute('href')
     const arr = link.split('/')
-    arr[arr.length - 1] = currentValue
+    arr[arr.length - 2] = currentValue  // Adjust for quantity in URL
     const newlink = arr.join('/')
     
     nav.setAttribute('href', newlink)
@@ -203,7 +203,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   clientNavs.forEach(nav => {
     nav.addEventListener('click', () => {
-      currentIndex = parseInt(nav.getAttribute('data-index'));
+      currentIndex = parseInt(nav.getAttribute('data-index-client'));
       updateSlide();
     });
   });
@@ -218,7 +218,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // Update client navs
     clientNavs.forEach(nav => {
-      const navIndex = parseInt(nav.getAttribute('data-index'));
+      console.log(nav.getAttribute('data-index-client'), currentIndex);
+      const navIndex = parseInt(nav.getAttribute('data-index-client'));
       if (navIndex === currentIndex) {
         nav.classList.remove('opacity-50');
         nav.querySelector('.client-nav-c').classList.remove('border-gray-300');
@@ -241,4 +242,118 @@ window.addEventListener("DOMContentLoaded", () => {
     updateSlide();
   }, 5000);
 
+
+    const sizeSelect = document.getElementById('size');
+    const priceDisplay = document.getElementById('price-display');
+    const currentPrice = document.getElementById('current-price');
+    const originalPrice = document.getElementById('original-price');
+    // const quantityInput = document.getElementById('quantity');
+    const buyNowLink = document.getElementById('buy-now-link');
+    // const buyNowCounter = document.getElementById('buyNowCounter');
+    const addToCartButton = document.querySelector('.cart-item-btn');
+    // const addToCartCounter = document.getElementById('addToCartCounter');
+    // const incrementButton = document.getElementById('increment');
+    // const decrementButton = document.getElementById('decrement');
+    const currency = appCurrency;
+
+    let selectedSizeId = sizeSelect ? sizeSelect.value : '0';
+    let maxQuantity = sizeSelect ? sizeSelect.options[sizeSelect.selectedIndex].dataset.quantity : quantityInput.dataset.maxQuantity;
+
+    // Update price display based on selected size
+    function updatePriceDisplay() {
+        const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
+        const price = parseFloat(selectedOption.dataset.price);
+        maxQuantity = parseInt(selectedOption.dataset.quantity);
+        selectedSizeId = selectedOption.value;
+
+        // Update price display (assuming getPrice and getOriginalPrice handle discounts)
+        const originalPriceValue = price; // Adjust if discounts are size-specific
+        const currentPriceValue = price; // Adjust if discounts are size-specific
+
+        if (currentPriceValue !== originalPriceValue) {
+            priceDisplay.innerHTML = `
+                <span class="text-red-600 mr-2" id="current-price">${currency} ${currentPriceValue.toFixed(2)}</span>
+                <span class="text-gray-500 line-through text-xl sm:text-2xl" id="original-price">${currency} ${originalPriceValue.toFixed(2)}</span>
+            `;
+        } else {
+            priceDisplay.innerHTML = `<span id="current-price">${currency} ${currentPriceValue.toFixed(2)}</span>`;
+        }
+
+        // Update Buy Now link with selected size
+      buyNowLink.href = checkoutRoute
+        .replace('/1/', `/${quantityInput.value}/`) // update quantity dynamically if needed
+        .replace(/\/\d+$/, `/${selectedSizeId}`); // update size_id dynamically
+
+        // Update Add to Cart button data
+        addToCartButton.dataset.productPrice = currentPriceValue.toFixed(2);
+        addToCartButton.dataset.sizeId = selectedSizeId;
+    }
+
+    // Handle size selection
+    if (sizeSelect) {
+        sizeSelect.addEventListener('change', updatePriceDisplay);
+    }
+
+    // // Quantity controls
+    // incrementButton.addEventListener('click', function () {
+    //     let quantity = parseInt(quantityInput.value);
+    //     if (quantity < maxQuantity) {
+    //         quantityInput.value = quantity + 1;
+    //         buyNowCounter.textContent = quantityInput.value;
+    //         addToCartCounter.textContent = quantityInput.value;
+    //         buyNowLink.href = buyNowLink.href.replace(/quantity=\d+/, `quantity=${quantityInput.value}`);
+    //     }
+    // });
+
+    // decrementButton.addEventListener('click', function () {
+    //     let quantity = parseInt(quantityInput.value);
+    //     if (quantity > 1) {
+    //         quantityInput.value = quantity - 1;
+    //         buyNowCounter.textContent = quantityInput.value;
+    //         addToCartCounter.textContent = quantityInput.value;
+    //         buyNowLink.href = buyNowLink.href.replace(/quantity=\d+/, `quantity=${quantityInput.value}`);
+    //     }
+    // });
+
+    // // Tab functionality (unchanged)
+    // const tabButtons = document.querySelectorAll('.tab-button');
+    // const tabContents = document.querySelectorAll('.tab-content');
+
+    // tabButtons.forEach(button => {
+    //     button.addEventListener('click', () => {
+    //         tabButtons.forEach(btn => btn.classList.remove('active'));
+    //         tabContents.forEach(content => content.classList.add('hidden'));
+
+    //         button.classList.add('active');
+    //         const tabId = button.dataset.tab;
+    //         document.getElementById(`${tabId}-content`).classList.remove('hidden');
+    //     });
+    // });
+
+    
+    // Add to Cart functionality (UNCOMMENTED and UPDATED: Include size_id in cart item)
+    // addToCartButton.addEventListener('click', function () {
+    //     const product = {
+    //         productId: this.dataset.productId,
+    //         name: this.dataset.productName,
+    //         price: parseFloat(this.dataset.productPrice),
+    //         image: this.dataset.productImage,
+    //         quantity: parseInt(quantityInput.value),
+    //         sizeId: this.dataset.sizeId  // NEW: Include sizeId
+    //     };
+
+    //     // Example: Store in localStorage or send to server
+    //     let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    //     const existingItem = cart.find(item => item.productId === product.productId && item.sizeId === product.sizeId);
+    //     if (existingItem) {
+    //         existingItem.quantity += product.quantity;
+    //     } else {
+    //         cart.push(product);
+    //     }
+    //     localStorage.setItem('cart', JSON.stringify(cart));
+    //     alert('Product added to cart!');
+    // });
+
+    // Initialize price display
+    updatePriceDisplay();
 });

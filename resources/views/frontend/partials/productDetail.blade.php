@@ -1,9 +1,31 @@
+<!-- <script>
+    const appCurrency = @json(app_currency());
+
+    const checkoutRoute = {!! json_encode(
+        route('web.checkoutDetails.single', [
+            'product_id' => $product->id,
+            'quantity' => 1,
+            'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0,
+        ])
+    ) !!};
+</script> -->
+@php
+    $checkoutUrl = route('web.checkoutDetails.single', [
+        'product_id' => $product->id,
+        'quantity' => 1,
+        'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0,
+    ]);
+@endphp
+<script>
+    const appCurrency = @json(app_currency());
+    const checkoutRoute = @json($checkoutUrl);
+</script>
 <script src="{{ asset('js/productDetail.js') }}"></script>
 
 @extends('frontend.layouts.app')
 
 @section('title')
-    {{$product->name}} | Afrojee
+    {{ $product->name }} | Afrojee
 @endsection
 
 @section('meta_title'){{ $product->name }}@stop
@@ -18,17 +40,14 @@
     <meta itemprop="image" content="{{ $product->image }}">
 
     @if ($product->getPrice() != $product->getOriginalPrice())
-        {{-- If there's a discount, show the discounted price as primary --}}
-        <meta name="twitter:data1" content="{{ '€' . number_format($product->getPrice(), 2) }}">
+        <meta name="twitter:data1" content="{{ app_currency() . number_format($product->getPrice(), 2) }}">
         <meta name="twitter:label1" content="Sale Price">
-        <meta name="twitter:data2" content="{{ '€' . number_format($product->getOriginalPrice(), 2) }}">
+        <meta name="twitter:data2" content="{{ app_currency() . number_format($product->getOriginalPrice(), 2) }}">
         <meta name="twitter:label2" content="Original Price">
-        {{-- You can also enhance the description to mention the discount --}}
         <meta name="twitter:description"
-            content="{{ $meta_description }} - Save now! Original Price: €{{ number_format($product->getOriginalPrice(), 2) }}">
+            content="{{ $meta_description }} - Save now! Original Price: {{ app_currency() }}{{ number_format($product->getOriginalPrice(), 2) }}">
     @else
-        {{-- No discount, show the regular price --}}
-        <meta name="twitter:data1" content="{{ '€' . number_format($product->getPrice(), 2) }}">
+        <meta name="twitter:data1" content="{{ app_currency() . number_format($product->getPrice(), 2) }}">
         <meta name="twitter:label1" content="Price">
         <meta name="twitter:description" content="{{ $meta_description }}">
     @endif
@@ -41,127 +60,120 @@
     <meta property="og:site_name" content="{{ get_setting('meta_title') }}" />
 
     @if ($product->getPrice() != $product->getOriginalPrice())
-        {{-- If there's a discount, explicitly set the current price and original price --}}
         <meta property="og:price:amount" content="{{ number_format($product->getPrice(), 2) }}" />
-        <meta property="og:price:currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
+        <meta property="og:price:currency" content="EUR" />
         <meta property="og:price:standard_amount" content="{{ number_format($product->getOriginalPrice(), 2) }}" />
-        <meta property="og:price:standard_currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
-        {{-- You might also consider og:availability if applicable, e.g., 'in stock' --}}
-        {{--
-        <meta property="og:availability" content="instock" /> --}}
+        <meta property="og:price:standard_currency" content="EUR" />
     @else
-        {{-- No discount, just the regular price --}}
         <meta property="og:price:amount" content="{{ number_format($product->getPrice(), 2) }}" />
-        <meta property="og:price:currency" content="EUR" /> {{-- Use ISO 4217 currency code --}}
-        {{--
-        <meta property="og:availability" content="instock" /> --}}
+        <meta property="og:price:currency" content="EUR" />
     @endif
 @endsection
 
 @section('content')
     <section class="bg-[#f7f3e9] py-8 px-4 md:py-16 md:px-8 text-gray-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-            {{-- Added horizontal padding and vertical padding for overall section --}}
             <div class="flex justify-center w-full">
                 <div class="relative sm:hidden w-full h-64 overflow-hidden rounded-xl shadow-lg">
-                    {{-- Added rounded corners and shadow to the mobile image container --}}
-                    <img src="{{$product->image}}" alt=""
+                    <img src="{{ $product->image }}" alt=""
                         class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
                     <div class="absolute inset-0 flex items-center justify-center p-4">
-                        <img src="{{$product->image}}" alt="{{$product->name}}"
+                        <img src="{{ $product->image }}" alt="{{ $product->name }}"
                             class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
                     </div>
                 </div>
-
-                <img src="{{$product->image}}" alt="{{$product->name}}"
+                <img src="{{ $product->image }}" alt="{{ $product->name }}"
                     class="hidden sm:block rounded-xl w-full max-w-sm md:max-w-md lg:max-w-full object-cover shadow-lg" />
-                {{-- Adjusted width for better scaling, added shadow --}}
             </div>
 
             <div class="text-center md:text-left">
-                {{-- Centered text on mobile, left-aligned on desktop --}}
                 <h1 class="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3 text-gray-800">
-                    {{-- Increased mobile font size for prominence, adjusted margin --}}
-                    {{$product->name}}
+                    {{ $product->name }}
                 </h1>
 
                 <div class="flex items-center justify-center md:justify-start text-yellow-400 mb-4">
-                    {{-- Centered stars on mobile, left-aligned on desktop --}}
                     <span>★★★★★</span>
-                    <span class="ml-2 text-gray-600 text-sm">({{ number_format($product->reviews_avg_rating, 1) ?? '0.0' }}
-                        / 5)</span>
-                    {{-- Replaced 'lllllllllllllllllllllllllll' with actual review content, assuming you have it --}}
+                    <span class="ml-2 text-gray-600 text-sm">({{ number_format($product->reviews_avg_rating, 1) ?? '0.0' }} / 5)</span>
                 </div>
 
-                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
-                    {{-- Increased price font size for prominence --}}
+                <div class="mb-4 @if($product->sizes->isEmpty()) hidden @endif">
+                    <label for="size" class="font-bold text-base mr-2">Size</label>
+                    <select id="size" name="size" class="border border-gray-300 rounded-full px-3 py-1 text-sm focus:outline-none">
+                        @if ($product->sizes->isNotEmpty())
+                            @foreach ($product->sizes as $size)
+                                <option value="{{ $size->id }}"
+                                    data-price="{{ $size->price }}"
+                                    data-quantity="{{ $size->quantity }}"
+                                    {{ $loop->first ? 'selected' : '' }}>
+                                    {{ $size->size }} ({{ app_currency() }}{{ number_format($size->price, 2) }})
+                                </option>
+                            @endforeach
+                        @else
+                            <option value="0" data-price="{{ $product->price }}" data-quantity="{{ $product->quantity }}" selected>
+                                Default ({{ app_currency() }}{{ number_format($product->price, 2) }})
+                            </option>
+                        @endif
+                    </select>
+                    @error('size')
+                        <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <p class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6" id="price-display">
                     @if ($product->getPrice() != $product->getOriginalPrice())
-                        <span class="text-red-600 mr-2">
+                        <span class="text-red-600 mr-2" id="current-price">
                             {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
                         </span>
-                        <span class="text-gray-500 line-through text-xl sm:text-2xl">
-                            {{-- Adjusted strikethrough price size --}}
+                        <span class="text-gray-500 line-through text-xl sm:text-2xl" id="original-price">
                             {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
                         </span>
                     @else
-                        {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                        <span id="current-price">{{ app_currency() }} {{ number_format($product->getPrice(), 2) }}</span>
                     @endif
                 </p>
 
                 <p class="text-gray-700 mb-6 text-sm sm:text-base leading-relaxed">
                     {!! Str::limit($product->description, 200) !!}
-                    {{-- Added a limit to description for cleaner look on mobile --}}
                 </p>
 
-
                 <div class="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:gap-6 mb-6">
-                    {{-- Removed redundant "start" alignment for sm, "center" is good --}}
                     <div class="flex items-center justify-center sm:justify-start w-full sm:w-auto">
-                        {{-- Centered quantity controls on mobile --}}
                         <span class="mr-2 font-bold text-base">Quantity</span>
-                        {{-- Removed sm:text-base as base is good for mobile --}}
                         <div class="flex items-center space-x-2 border border-gray-300 rounded-full px-1 py-0.5">
-                            {{-- Added border to quantity input group --}}
                             <button id="decrement"
                                 class="text-lg font-bold text-gray-600 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
-                                {{-- Removed redundant border-[var(--color-primary)] since parent now has border --}}
                                 −
                             </button>
                             <input type="text" id="quantity" value="1" autocomplete="off"
                                 class="w-10 text-center focus:outline-none bg-transparent text-lg font-bold" readonly />
-                            {{-- Removed sm:w-12 and sm:text-xl for more consistent mobile sizing --}}
                             <button id="increment"
                                 class="text-lg font-bold text-gray-600 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition duration-300 ease-in-out">
-                                {{-- Removed redundant border-[var(--color-primary)] --}}
                                 +
                             </button>
                         </div>
                     </div>
 
-                    <div
-                        class="flex items-center justify-center sm:justify-start gap-3 sm:gap-4 flex-wrap w-full sm:w-auto">
-                        {{-- Centered buttons on mobile --}}
-                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1]) }}"
-                            class="flex-grow sm:flex-grow-0 w-full sm:w-auto" id="nav-link">
-                            {{-- Allow button to grow on mobile, not on desktop, and take full width --}}
+                    <div class="flex items-center justify-center sm:justify-start gap-3 sm:gap-4 flex-wrap w-full sm:w-auto">
+                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0]) }}"
+                            class="flex-grow sm:flex-grow-0 w-full sm:w-auto" id="buy-now-link">
                             <button
                                 class="relative bg-pink-800 hover:bg-pink-900 text-white px-5 py-2 rounded-full font-medium flex items-center justify-center gap-2 text-base w-full transition-all duration-300 ease-in-out hover:scale-105">
-                                {{-- Adjusted padding, removed sm:px-6 sm:py-2 as general text-base and px-5 py-2 are good
-                                for both. Added w-full --}}
                                 <span id="buyNowCounter"
                                     class="absolute -left-2 -top-2 text-xs bg-white text-pink-800 border border-pink-800 rounded-full px-1.5 py-0.5 font-bold shadow">
-                                    1 </span>Buy Now
+                                    1
+                                </span>
+                                Buy Now
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                    {{-- Removed sm:w-4 sm:h-4 as consistent w-4 h-4 is fine --}}
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                                 </svg>
                             </button>
                         </a>
-                        <button data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
-                            data-product-price="{{ number_format($product->getPrice(), 2) }}"
+                        <button data-product-id="{{ $product->id }}"
+                            data-product-name="{{ $product->name }}"
+                            data-product-price="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->price : $product->price }}"
                             data-product-image="{{ $product->image }}"
+                            data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : null }}"
                             class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-10 h-10 flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105">
-                            {{-- Consistent w-10 h-10, added transition and hover scale --}}
                             <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#a)" fill="#99395C">
                                     <path
@@ -181,9 +193,9 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
+
         <div class="max-w-4xl mx-auto mt-8 md:mt-12">
             <div class="flex flex-wrap gap-2 sm:gap-4 mt-4 mb-6">
                 <button
@@ -232,8 +244,7 @@
                                         <p class="text-base sm:text-lg text-gray-800 mb-4">"The simplicity and effectiveness
                                             of Afro Jee's
                                             products are unmatched. Even with just a few items, my skin feels healthier and
-                                            more
-                                            vibrant every day."</p>
+                                            more vibrant every day."</p>
 
                                         <div class="flex items-center mt-6">
                                             <div
@@ -477,7 +488,7 @@
 
                         <div class="lg:w-1/4 mt-8 lg:mt-1">
                             <div class="space-y-4 sm:space-y-6">
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="0">
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="0">
                                     <div
                                         class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
                                         <img src="/images/sami.png" alt="Jean Harper" class="w-full h-full object-cover">
@@ -485,7 +496,7 @@
                                     <p class="ml-4 font-medium text-gray-700 text-sm sm:text-base">Jean Harper</p>
                                 </div>
 
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="1">
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="1">
                                     <div
                                         class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
                                         <img src="/images/sami.png" alt="Reinette Akosua"
@@ -494,7 +505,7 @@
                                     <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Reinette Akosua</p>
                                 </div>
 
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="2">
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="2">
                                     <div
                                         class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
                                         <img src="/images/sami.png" alt="Sami Raimi" class="w-full h-full object-cover">
@@ -502,7 +513,7 @@
                                     <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Sami Raimi</p>
                                 </div>
 
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index="3">
+                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="3">
                                     <div
                                         class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
                                         <img src="/images/karma.png" alt="Karma Yarn" class="w-full h-full object-cover">
@@ -547,7 +558,7 @@
                     <h2 class="text-xl font-bold mb-8">Reviews</h2>
 
                     <div id="reviews-list">
-                        {{-- Reviews will be dynamically loaded here by productDetail.js --}}
+                        <!-- Reviews will be dynamically loaded here by productDetail.js -->
                     </div>
 
                     <div

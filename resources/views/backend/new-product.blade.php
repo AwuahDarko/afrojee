@@ -118,17 +118,21 @@
                                 <div id="sizes-container">
                                     <div class="size-row mb-2">
                                         <div class="row">
-                                            <div class="col-md-4 mb-2">
+                                            <div class="col-md-3 mb-2">
                                                 <input type="text" class="form-control" name="sizes[0][size]"
                                                     placeholder="Size (e.g., Small)">
                                             </div>
-                                            <div class="col-md-3 mb-2">
+                                            <div class="col-md-2 mb-2">
                                                 <input type="number" step="0.01" class="form-control"
                                                     name="sizes[0][price]" placeholder="Price">
                                             </div>
-                                            <div class="col-md-3 mb-2">
+                                            <div class="col-md-2 mb-2">
                                                 <input type="number" class="form-control" name="sizes[0][quantity]"
                                                     placeholder="Quantity">
+                                            </div>
+                                            <div class="col-md-2 mb-2">
+                                                <input type="number" step="0.01" class="form-control input-group-outline"
+                                                    name="sizes[0][weight]" placeholder="Weight (kg)">
                                             </div>
                                             <div class="col-md-2 mb-2">
                                                 <button type="button"
@@ -183,6 +187,9 @@
                     </div>
                     <div class="col-md-3 mb-2">
                         <input type="number" class="form-control" name="sizes[${index}][quantity]" placeholder="Quantity">
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <input type="number" step="0.01" class="form-control" name="sizes[${index}][weight]" placeholder="Weight (kg)">
                     </div>
                     <div class="col-md-2 mb-2">
                         <button type="button" class="btn btn-danger btn-sm remove-size w-100">Remove</button>

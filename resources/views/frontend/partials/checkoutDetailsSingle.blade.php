@@ -6,7 +6,7 @@
 
 @section('content')
     <section class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Checkout</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Afrojee Checkout</h1>
 
         {{-- Session messages --}}
         @if (session('success'))
@@ -250,7 +250,7 @@
                 <div id="checkout-summary">
                     <div class="flex justify-between items-center mb-3">
                         <p class="text-gray-700 text-sm sm:text-base">Product sub-total</p>
-                        <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
+                        <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}</p>  <!-- UPDATED: Use selected size price -->
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700 text-sm sm:text-base">Delivery</p>
@@ -262,7 +262,7 @@
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
                         <p class="text-lg sm:text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format($product->getPrice() * $quantity, 2) }}</p>
+                        <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}</p>  <!-- UPDATED: Use selected size price -->
                     </div>
                 </div>
                 <form action="{{route('web.order.save')}}" method="POST">
@@ -270,6 +270,7 @@
                     <input type="hidden" name="product_id" value="{{$product->id}}">
                     <input type="hidden" name="quantity" value="1" id="order-qty">
                     <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
+                    <input type="hidden" name="size_id" value="{{ $size_id }}">  <!-- NEW: Pass size_id to order -->
                     <button @if (!$userAddress) disabled @endif type="submit"
                     class="bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium w-full flex items-center justify-center gap-2 text-base">
                     Proceed to checkout
@@ -346,7 +347,6 @@
 
 @endsection
 
-
 @section('script')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -383,8 +383,9 @@
             const maxQty = {{ $product->quantity }}
             const id = {{ $product->id }}
             const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
+            const sizeId = {{ $size_id ?? 0 }};  // NEW: Get size_id from view variable
         
-            getNewPrice(1, id, global_zone_id)
+            getNewPrice(1, id, global_zone_id, sizeId)  // UPDATED: Pass sizeId
 
             region?.addEventListener('change', (evt) => {
                 const val = region.value
@@ -395,7 +396,7 @@
                 orderZone.value = region.value
 
 
-                getNewPrice(qty, id, region.value)
+                getNewPrice(qty, id, region.value, sizeId)  // UPDATED: Pass sizeId
             })
 
             country?.addEventListener('change', (evt) => {
@@ -423,7 +424,7 @@
 
                 }
                 
-                getNewPrice(qty, id, region?.value ?? 0)
+                getNewPrice(qty, id, region?.value ?? 0, sizeId)  // UPDATED: Pass sizeId
             })
 
             document.getElementById('increase-btn').addEventListener('click', (evt) => {
@@ -436,17 +437,17 @@
                      qtylbl.value = quantity.value
                  }
                 
-                getNewPrice(qty, id, region?.value ?? 0)
+                getNewPrice(qty, id, region?.value ?? 0, sizeId)  // UPDATED: Pass sizeId
             })
 
-            function getNewPrice(qty, id, zone_id) {
+            function getNewPrice(qty, id, zone_id, size_id) {  // UPDATED: Accept size_id param
                 if (!zone_id && !global_zone_id) return
 
                 const z = zone_id || global_zone_id
 
                 const url = "{{ route('web.checkoutDetails.info.price') }}"
 
-                fetch(`${url}?qty=${qty}&id=${id}&zone_id=${z}`, )
+                fetch(`${url}?qty=${qty}&id=${id}&zone_id=${z}&size_id=${size_id}`)  // UPDATED: Include size_id in query
                     .then(res => res.text())
                     .then(data => {
                         summary.innerHTML = data

@@ -11,6 +11,7 @@ class ProductSize extends Model
         'size',
         'price',
         'quantity',
+        'weight'
     ];
 
     public function product()

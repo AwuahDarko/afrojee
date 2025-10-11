@@ -45,7 +45,7 @@
     <div class="container">
         <div class="success">
 
-            <img src="{{ asset('img/removed.png') }}" alt="failed" width="100px" height="100px">
+            <img src="{{ asset('img/remove.png') }}" alt="failed" width="100px" height="100px">
             <div class="card-header">Payment Failed</div>
             <div class="card-body">
                 {{-- <h4>Thank you for your patronage!</h4> --}}

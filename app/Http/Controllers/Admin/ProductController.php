@@ -38,6 +38,7 @@ class ProductController extends Controller
             'sizes.*.size' => 'nullable|string|max:255',
             'sizes.*.price' => 'required_with:sizes.*.size|numeric|min:0',
             'sizes.*.quantity' => 'required_with:sizes.*.size|integer|min:0',
+            'sizes.*.weight' => 'nullable|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -77,6 +78,7 @@ class ProductController extends Controller
                         'size' => $sizeData['size'],
                         'price' => $sizeData['price'],
                         'quantity' => $sizeData['quantity'],
+                        'weight' => $sizeData['weight'] ?? null
                     ]);
                 }
             }
@@ -138,6 +140,7 @@ class ProductController extends Controller
             'sizes.*.size' => 'nullable|string|max:255',
             'sizes.*.price' => 'required_with:sizes.*.size|numeric|min:0',
             'sizes.*.quantity' => 'required_with:sizes.*.size|integer|min:0',
+            'sizes.*.weight' => 'nullable|numeric|min:0',
         ]);
 
         if ($validator->fails()) {
@@ -188,6 +191,7 @@ class ProductController extends Controller
                             'size' => $sizeData['size'],
                             'price' => $sizeData['price'],
                             'quantity' => $sizeData['quantity'],
+                            'weight' => $sizeData['weight'] ?? null
                         ]
                     );
                 }

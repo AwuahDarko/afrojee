@@ -35,7 +35,7 @@
         @endif
 
         <h2 class="text-xl font-semibold text-gray-800 mb-4">Billing address</h2>
-        <div class="grid md:grid-cols-3 gap-8">
+        <div class="grid md:grid-cols-4 gap-8">
             <div class="md:col-span-2">
                 <div class="bg-pink-100-light rounded-xl p-6 shadow-sm mb-8">
                     <div class="flex justify-between items-center mb-4">
@@ -159,7 +159,7 @@
                                 <p>{{ $userAddress->postcode }}</p>
                                 <p>{{ $userAddress->mobile_number }}</p>
                             @else
-                                <p>No billing address entered yet. Click "Change address" to add your details.ddddd</p>
+                                <p>No billing address entered yet. Click "Change address" to add your details.</p>
                             @endif
                         </div>
                     @endif
@@ -210,14 +210,21 @@
                 </div> --}}
             </div>
 
-            <div class="md:col-span-1 bg-white rounded-xl p-6 shadow-sm h-fit sticky top-8">
+            <div class="md:col-span-2 bg-white rounded-xl p-6 shadow-sm h-fit sticky top-8">
 
                
 
                 <h2 class="text-xl font-semibold text-gray-800 mb-6 my-2">Your Bill</h2>
 
                 <div id="checkout-summary">
-                    <div class="flex justify-between items-center mb-3">
+                    <div id="checkout-cart-items" class="space-y-4">
+                        {{-- Populated by JS --}}
+                    </div>
+                     <div class="border-t border-gray-200 pt-4 mt-4 flex justify-between hidden">
+                        <p class="text-lg font-semibold text-gray-800">Subtotal</p>
+                        <p id="checkout-subtotal" class="text-lg font-bold text-pink-800">₵0.00</p>
+                    </div>
+                    <div class="flex justify-between items-center mb-3 mt-3">
                         <p class="text-gray-700">Product sub-total</p>
                         <p class="font-bold text-gray-900" id="total-lbl"> {{app_currency()}} {{ number_format(0, 2) }}</p>
                     </div>
@@ -315,103 +322,160 @@
 @endsection
 
 @section('script')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('toggleAddressBtn');
-            const cancelBtn = document.getElementById('cancelEditBtn');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('toggleAddressBtn');
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    const region = document.getElementById('region');
+    const country = document.getElementById('country');
+    const summary = document.getElementById('del-lbl');
+    const grand = document.getElementById('grand-lbl');
+    const totalLbl = document.getElementById('total-lbl');
+    const orderZone = document.getElementById('order-zone');
+    const orderCart = document.getElementById('order-cart');
+    const cartItemsContainer = document.getElementById('checkout-cart-items');
+    const subtotalElement = document.getElementById('checkout-subtotal');
+    const appCurrency = @json(app_currency());
+    const global_zone_id = {{ $userAddress?->zone->id ?? 0 }};
+    const regionPriceUrl = "{{ route('web.checkoutDetails.info.getprice') }}";
+    const regionUrl = "{{ route('web.checkoutDetails.info.region') }}";
 
-            // Toggle between edit and view modes by redirecting with a query parameter
-            function toggleEditMode() {
-                const currentUrl = new URL(window.location.href);
-                if ({{ $editingAddress ? 'true' : 'false' }}) {
-                    currentUrl.searchParams.delete('edit_address');
-                } else {
-                    currentUrl.searchParams.set('edit_address', 'true');
-                }
-                window.location.href = currentUrl.toString();
-            }
+    // -------------------- Address Editing Toggle --------------------
+    function toggleEditMode() {
+        const currentUrl = new URL(window.location.href);
+        if ({{ $editingAddress ? 'true' : 'false' }}) {
+            currentUrl.searchParams.delete('edit_address');
+        } else {
+            currentUrl.searchParams.set('edit_address', 'true');
+        }
+        window.location.href = currentUrl.toString();
+    }
 
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleEditMode);
-            }
-            if (cancelBtn) {
-                cancelBtn.addEventListener('click', toggleEditMode);
-            }
-            // The saveAddressBtn now performs a standard form submission,
-            // handled by the route defined in the form's action attribute.
+    toggleBtn?.addEventListener('click', toggleEditMode);
+    cancelBtn?.addEventListener('click', toggleEditMode);
 
+    // -------------------- CART LOGIC --------------------
+    let cartData = JSON.parse(localStorage.getItem('shoppingCart') || '[]');
 
-            const region = document.getElementById('region')
-            const country = document.getElementById('country')
-            const quantity = document.getElementById('p-qty')
-            const summary = document.getElementById('del-lbl')
-            const grand = document.getElementById('grand-lbl')
-             const orderZone = document.getElementById('order-zone')
-             const orderCart = document.getElementById('order-cart')
-            const maxQty = 0
-            const id = 0
-            const global_zone_id = {{ $userAddress?->zone->id ?? 0 }};
+    function saveAndRenderCart() {
+        localStorage.setItem('shoppingCart', JSON.stringify(cartData));
+        renderCart();
+        getNewPrice(orderZone.value || global_zone_id);
+    }
 
-            const cart = localStorage.getItem('shoppingCart')
+    function renderCart() {
+        cartItemsContainer.innerHTML = '';
+        let subtotal = 0;
+        console.log(subtotalElement)
+        if (cartData.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="text-gray-600 text-center py-6">
+                    Your cart is empty.<br>
+                    <a href="/" class="text-pink-700 hover:underline font-medium">Continue shopping</a>
+                </div>`;
+            subtotalElement.textContent = `${appCurrency} 0.00`;
+            totalLbl.textContent = `${appCurrency} 0.00`;
+            summary.textContent = `${appCurrency} 0.00`;
+            grand.textContent = `${appCurrency} 0.00`;
+            return;
+        }
 
-            const cartItems = JSON.parse(cart)
+        cartData.forEach((item, index) => {
+            const itemSubtotal = parseFloat(item.price) * item.quantity;
+            subtotal += itemSubtotal;
 
-            let total = 0
-            for(const item of cartItems){
-                total += item.price * item.quantity
-            }
-
-            orderCart.value = cart
-
-            document.getElementById('total-lbl').innerHTML =  '€ ' + total.toFixed(2)
-
-            getNewPrice(global_zone_id)
-
-            region?.addEventListener('change', (evt) => {
-                const val = region.value
-
-                if (!val) return
-
-                orderZone.value = region.value
-
-                getNewPrice(region.value)
-            })
-
-            country?.addEventListener('change', (evt) => {
-                const val = country.value
-                if (val != '0') {
-
-                    const url = "{{ route('web.checkoutDetails.info.region') }}"
-
-                    fetch(`${url}?country_id=${val}`, )
-                        .then(res => res.text())
-                        .then(data => {
-                            region.innerHTML = data
-                        }).catch(error => console.log(error))
-                }
-            })
-
-
-
-
-
-            function getNewPrice(zone_id) {
-                if (!zone_id && !global_zone_id) return
-
-                const z = zone_id || global_zone_id
-
-                const url = "{{ route('web.checkoutDetails.info.getprice') }}"
-
-                fetch(`${url}?cart=${cart}&zone_id=${z}`, )
-                    .then(res => res.json())
-                    .then(data => {
-                       
-                        summary.innerHTML = data.total_shipping
-                        grand.innerHTML = data.grand_total
-                    }).catch(error => console.log(error))
-            }
-
-
+            const cartItem = document.createElement('div');
+            cartItem.className = "flex items-center justify-between bg-gray-50 rounded-lg p-4 shadow-sm transition-all";
+            cartItem.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-md object-cover border border-gray-200">
+                    <div>
+                        <p class="font-semibold text-gray-800">${item.name}</p>
+                        ${item.sizeName ? `<p class="text-sm text-gray-500">Size: ${item.sizeName}</p>` : ''}
+                        <p class="text-sm text-gray-500">${appCurrency} ${parseFloat(item.price).toFixed(2)}</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center border border-gray-300 rounded-full overflow-hidden">
+                        <button class="quantity-btn decrease px-3 py-1 text-gray-700 hover:bg-pink-100 font-bold" data-index="${index}">−</button>
+                        <span class="px-3 font-medium">${item.quantity}</span>
+                        <button class="quantity-btn increase px-3 py-1 text-gray-700 hover:bg-pink-100 font-bold" data-index="${index}">+</button>
+                    </div>
+                    <p class="font-bold text-pink-800 w-20 text-right">${appCurrency} ${itemSubtotal.toFixed(2)}</p>
+                </div>
+            `;
+            cartItemsContainer.appendChild(cartItem);
         });
-    </script>
+
+        subtotalElement.textContent = `${appCurrency} ${subtotal.toFixed(2)}`;
+        totalLbl.textContent = `${appCurrency} ${subtotal.toFixed(2)}`;
+        if (orderCart) orderCart.value = JSON.stringify(cartData);
+    }
+
+    // Quantity handlers
+    cartItemsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('quantity-btn')) {
+            const index = parseInt(e.target.dataset.index);
+            const item = cartData[index];
+
+            if (e.target.classList.contains('increase')) {
+                item.quantity += 1;
+            } else if (e.target.classList.contains('decrease')) {
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                } else if (confirm(`Remove ${item.name} from cart?`)) {
+                    cartData.splice(index, 1);
+                }
+            }
+            saveAndRenderCart();
+        }
+    });
+
+    // -------------------- REGION & COUNTRY HANDLING --------------------
+    region?.addEventListener('change', () => {
+        const val = region.value;
+        if (!val) return;
+        orderZone.value = val;
+        getNewPrice(val);
+    });
+
+    country?.addEventListener('change', () => {
+        const val = country.value;
+        if (val != '0') {
+            fetch(`${regionUrl}?country_id=${val}`)
+                .then(res => res.text())
+                .then(data => region.innerHTML = data)
+                .catch(console.error);
+        }
+    });
+
+    // -------------------- PRICE RECALCULATION --------------------
+    function getNewPrice(zone_id) {
+        if (!zone_id && !global_zone_id) return;
+        const z = zone_id || global_zone_id;
+        const cart = JSON.stringify(cartData);
+
+        fetch(`${regionPriceUrl}?cart=${encodeURIComponent(cart)}&zone_id=${z}`)
+            .then(res => res.json())
+            .then(data => {
+                summary.textContent = data.total_shipping;
+                grand.textContent = data.grand_total;
+            })
+            .catch(console.error);
+    }
+
+    // -------------------- Initialize --------------------
+    renderCart();
+    getNewPrice(global_zone_id);
+
+    @if(!$userAddress)
+        const currentUrl = new URL(window.location.href);
+        if (!currentUrl.searchParams.has('edit_address')) {
+            currentUrl.searchParams.set('edit_address', 'true');
+            window.location.replace(currentUrl.toString());
+        }
+    @endif
+});
+</script>
+
 @endsection

@@ -133,20 +133,25 @@
                                         @foreach ($product->sizes as $index => $size)
                                             <div class="size-row mb-2">
                                                 <div class="row">
-                                                    <div class="col-md-4 mb-2">
+                                                    <div class="col-md-3 mb-2">
                                                         <input type="text" class="form-control"
                                                             name="sizes[{{ $index }}][size]"
                                                             value="{{ $size->size }}" placeholder="Size (e.g., Small)">
                                                     </div>
-                                                    <div class="col-md-3 mb-2">
+                                                    <div class="col-md-2 mb-2">
                                                         <input type="number" step="0.01" class="form-control"
                                                             name="sizes[{{ $index }}][price]"
                                                             value="{{ $size->price }}" placeholder="Price">
                                                     </div>
-                                                    <div class="col-md-3 mb-2">
+                                                    <div class="col-md-2 mb-2">
                                                         <input type="number" class="form-control"
                                                             name="sizes[{{ $index }}][quantity]"
                                                             value="{{ $size->quantity }}" placeholder="Quantity">
+                                                    </div>
+                                                    <div class="col-md-2 mb-2">
+                                                        <input type="number" step="0.01" class="form-control"
+                                                            name="sizes[{{ $index }}][weight]"
+                                                            value="{{ $size->weight }}" placeholder="Weight (kg)">
                                                     </div>
                                                     <div class="col-md-2 mb-2">
                                                         <button type="button"
@@ -159,19 +164,23 @@
                                         {{-- Default empty row --}}
                                         <div class="size-row mb-2">
                                             <div class="row">
-                                                <div class="col-md-4 mb-2">
-                                                    <input type="text" class="form-control" name="sizes[0][size]"
-                                                        placeholder="Size (e.g., Small)">
+                                                <div class="col-3 mb-2">
+                                                    <input type="text" class="form-control input-group-outline" name="sizes[0][size]"
+                                                        placeholder="Size (e.g., Small)" style="border: 1px solid #ced4da;">
                                                 </div>
-                                                <div class="col-md-3 mb-2">
-                                                    <input type="number" step="0.01" class="form-control"
-                                                        name="sizes[0][price]" placeholder="Price">
+                                                <div class="col-2 mb-2">
+                                                    <input type="number" step="0.01" class="form-control input-group-outline"
+                                                        name="sizes[0][price]" placeholder="Price" style="border: 1px solid #ced4da;">
                                                 </div>
-                                                <div class="col-md-3 mb-2">
-                                                    <input type="number" class="form-control"
-                                                        name="sizes[0][quantity]" placeholder="Quantity">
+                                                <div class="col-2 mb-2">
+                                                    <input type="number" class="form-control input-group-outline"
+                                                        name="sizes[0][quantity]" placeholder="Quantity" style="border: 1px solid #ced4da;">
                                                 </div>
-                                                <div class="col-md-2 mb-2">
+                                                <div class="col-2 mb-2">
+                                                    <input type="number" step="0.01" class="form-control input-group-outline"
+                                                        name="sizes[0][weight]" placeholder="Weight (kg)" style="border: 1px solid #ced4da;">
+                                                </div>
+                                                <div class="col-2 mb-2">
                                                     <button type="button"
                                                         class="btn btn-danger btn-sm remove-size w-100">Remove</button>
                                                 </div>
@@ -224,16 +233,19 @@
                 newRow.className = 'size-row mb-2';
                 newRow.innerHTML = `
                     <div class="row">
-                        <div class="col-md-4 mb-2">
-                            <input type="text" class="form-control" name="sizes[${index}][size]" placeholder="Size (e.g., Medium)">
+                        <div class="col-3 mb-2">
+                            <input type="text" class="form-control input-group-outline" name="sizes[${index}][size]" placeholder="Size (e.g., Medium)" style="border: 1px solid #ced4da;">
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <input type="number" step="0.01" class="form-control" name="sizes[${index}][price]" placeholder="Price">
+                        <div class="col-2 mb-2">
+                            <input type="number" step="0.01" class="form-control input-group-outline" name="sizes[${index}][price]" placeholder="Price" style="border: 1px solid #ced4da;">
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <input type="number" class="form-control" name="sizes[${index}][quantity]" placeholder="Quantity">
+                        <div class="col-2 mb-2">
+                            <input type="number" class="form-control input-group-outline" name="sizes[${index}][quantity]" placeholder="Quantity" style="border: 1px solid #ced4da;">
                         </div>
-                        <div class="col-md-2 mb-2">
+                        <div class="col-2 mb-2">
+                            <input type="number" step="0.01" class="form-control input-group-outline" name="sizes[${index}][weight]" placeholder="Weight (kg)" style="border: 1px solid #ced4da;">
+                        </div>
+                        <div class="col-2 mb-2">
                             <button type="button" class="btn btn-danger btn-sm remove-size w-100">Remove</button>
                         </div>
                     </div>

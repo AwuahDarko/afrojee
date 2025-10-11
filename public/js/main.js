@@ -107,12 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
       // Remove active class from all buttons and hide all content
       tabButtons.forEach(btn => btn.classList.remove('active'));
       tabContents.forEach(content => content.classList.add('hidden'));
-
+      
       // Add active class to the clicked button
       button.classList.add('active');
-
+      
       // Show the corresponding content
       const targetTab = button.dataset.tab;
+      console.log("================> ",targetTab, document.getElementById(`${targetTab}-content`).classList);
       document.getElementById(`${targetTab}-content`).classList.remove('hidden');
     });
   });

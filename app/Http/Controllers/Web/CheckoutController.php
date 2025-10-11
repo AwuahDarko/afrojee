@@ -19,8 +19,6 @@ use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
 use Illuminate\Support\Facades\Mail;
 
-
-
 class CheckoutController extends Controller
 {
     public function __construct()
@@ -56,7 +54,6 @@ class CheckoutController extends Controller
         ]);
     }
 
-
     public function single(Request $request)
     {
         if (!$request->product_id) {
@@ -64,8 +61,17 @@ class CheckoutController extends Controller
         }
 
         $scountries = Country::where('status', '=', 1)->get();
-        $product = Product::find($request->product_id);
+        $product = Product::with('sizes')->find($request->product_id);  // Updated: Load sizes
 
+        $size_id = $request->size_id ?? null;  // NEW: Get size_id from URL
+
+        $selectedSize = null;
+        if ($size_id) {
+            $selectedSize = $product->sizes->firstWhere('id', $size_id);  // NEW: Find selected size
+            if (!$selectedSize) {
+                abort(404); // Invalid size_id
+            }
+        }
 
         $userAddress = null;
 
@@ -85,52 +91,56 @@ class CheckoutController extends Controller
             'cartItems' => $cartItems,
             'countries' => $scountries,
             'product' => $product,
-            'quantity' => $request->quantity
+            'quantity' => $request->quantity,
+            'size_id' => $size_id,  // NEW: Pass size_id to view
+            'selectedSize' => $selectedSize  // NEW: Pass selected size to view
         ]);
     }
 
     public function getRegionByCountry(Request $request)
     {
-
-
         $zones = ShippingZone::where('country_id', $request->country_id)->get();
-
 
         return view('frontend.partials.zone-option', compact('zones'));
     }
-
 
     public function calculatePrice(Request $request)
     {
         $quantity = $request->qty;
         $product_id = $request->id;
         $zone_id = $request->zone_id;
+        $size_id = $request->size_id ?? null;  // NEW: Optional size_id param
 
         // get product details
-        $product = Product::findOrFail($product_id);
-        $weight = $product->weight * $quantity;
+        $product = Product::with('sizes')->findOrFail($product_id);  // Updated: Load sizes
 
-        // $rate = ShippingRate::where(['shipping_zone_id', '=', $zone_id)->get();
+        $price = $product->getPrice();  // Default price
+        $weight = $product->weight;
+
+        if ($size_id) {
+            $size = $product->sizes->firstWhere('id', $size_id);
+            if ($size) {
+                $price = $size->price;  // Use size price if available
+                // Weight remains product-level (add size->weight if added to model)
+            }
+        }
+
+        $weight = $weight * $quantity;
+
         $rates = ShippingRate::where('shipping_zone_id', $zone_id)
             ->where('weight_from', '<=', $weight)
             ->where('weight_to', '>=', $weight)
             ->first();
 
-        // dd($rates);
-
-        $total_price = $product->getPrice() * $quantity;
-        $total_shipping = $rates->rate;
+        $total_price = $price * $quantity;
+        $total_shipping = $rates->rate ?? 0;
         $grand_total = $total_shipping + $total_price;
-
-
 
         return view('frontend.partials.checkoutSummary', compact('total_price', 'total_shipping', 'grand_total'));
     }
 
     public function getPrice(Request $request)
     {
-        // $quantity = $request->qty;
-        // $product_id = $request->id;
         $zone_id = $request->zone_id;
         $cartItems = json_decode($request->cart);
 
@@ -140,7 +150,7 @@ class CheckoutController extends Controller
             array_push($ids, $product->productId);
         }
 
-        $products = Product::whereIn('id', $ids)->get();
+        $products = Product::whereIn('id', $ids)->with('sizes')->get();  // Updated: Load sizes
 
         $total_weight = 0;
         foreach ($products as $product) {
@@ -148,33 +158,33 @@ class CheckoutController extends Controller
             for ($i = 0; $i < count($cartItems); ++$i) {
                 $prod = $cartItems[$i];
                 if ($prod->productId == $product->id) {
-                    $total_weight += $prod->quantity * $product->weight;
-                    $total_amount += $product->getPrice() * $prod->quantity;
+                    $price = $product->getPrice();  // Default
 
+                    if (property_exists($prod, 'sizeId') && $prod->sizeId) {
+                        $size = $product->sizes->firstWhere('id', $prod->sizeId);
+                        if ($size) {
+                            $price = $size->price;  // NEW: Use size price if available
+                        }
+                    }
+
+                    $total_weight += $prod->quantity * $product->weight;
+                    $total_amount += $price * $prod->quantity;
                 }
             }
         }
 
-
-        // $rate = ShippingRate::where(['shipping_zone_id', '=', $zone_id)->get();
         $rates = ShippingRate::where('shipping_zone_id', $zone_id)
             ->where('weight_from', '<=', $total_weight)
             ->where('weight_to', '>=', $total_weight)
             ->first();
 
-        // dd($rates);
-
-     
         $total_shipping = $rates->rate ?? 200;
-        // $grand_total = $total_shipping + $total_price;
-
 
         return json_encode([
             'total_shipping' => app_currency(). ' '. number_format($total_shipping, 2),
             'grand_total' => app_currency(). ' '. number_format($total_shipping + $total_amount, 2)
         ]);
     }
-
     /**
      * Process cart data (e.g., from client-side localStorage) and store it in session, then redirect to checkout.
      * This method is typically called via a POST request from your cart page.
