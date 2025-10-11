@@ -210,76 +210,109 @@
                 </div> --}}
             </div>
 
-            <div class="md:col-span-1 bg-white rounded-xl p-4 sm:p-6 shadow-sm h-fit sticky top-4 sm:top-8 mx-auto w-full max-w-md md:max-w-none">
-                {{-- Container for responsiveness --}}
-
-                <div class="cart-item flex flex-col sm:flex-row items-center sm:items-start border-b border-gray-300 last:border-b-0 pb-4 mb-4">
-                    {{-- Changed to flex-col on mobile, sm:flex-row on wider screens --}}
-                    <div class="flex flex-col sm:flex-row justify-center sm:justify-start items-center mb-4 sm:mb-0 sm:mr-4 w-full sm:w-auto">
-                        {{-- Centered on mobile, aligned left on sm+ --}}
+        <div class="md:col-span-1 bg-gradient-to-br from-white to-gray-50 rounded-2xl p-5 sm:p-7 shadow-lg border border-gray-100 h-fit sticky top-4 sm:top-8 mx-auto w-full max-w-md md:max-w-none">
+            
+            <!-- Product Item Card -->
+            <div class="cart-item bg-white rounded-xl p-4 sm:p-5 shadow-sm border border-gray-100 mb-6">
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                    <!-- Product Image -->
+                    <div class="relative group">
                         <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                            class="w-24 h-24 rounded-lg object-cover mb-2 sm:mb-0 sm:mr-4" />
-                        <div class="text-center sm:text-left text-gray-600">
-                            <p class="font-semibold text-base sm:text-lg mb-1 sm:mb-0">
-                                {{ $product->name }}
-                            </p>
-                        </div>
+                            class="w-28 h-28 rounded-xl object-cover shadow-md ring-2 ring-gray-100 group-hover:ring-pink-200 transition-all duration-300" />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
-                    <div class="flex-grow w-full text-center sm:text-left">
-                        {{-- Quantity control for mobile --}}
-                        <div class="flex items-center justify-center sm:justify-start mt-2 sm:mt-0">
+                    
+                    <!-- Product Info & Quantity -->
+                    <div class="flex-1 w-full text-center sm:text-left">
+                        <h3 class="font-bold text-lg sm:text-xl text-gray-900 mb-3">
+                            {{ $product->name }}
+                        </h3>
+                        
+                        <!-- Quantity Controls -->
+                        <div class="inline-flex items-center bg-gray-50 rounded-full px-2 py-1.5 gap-1 shadow-inner">
                             <button
-                                class="quantity-minus px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 text-sm"
+                                class="quantity-minus w-8 h-8 flex items-center justify-center bg-white border-2 border-gray-200 rounded-full hover:bg-pink-50 hover:border-pink-300 active:scale-95 transition-all duration-200 text-gray-700 font-semibold"
                                 data-product-id="{{ $product->id }}" id="decrease-btn">
-                                -
+                                −
                             </button>
                             <input type="text" value="{{ $quantity }}"
-                                class="quantity-input w-10 text-center mx-2 border-none focus:outline-none bg-transparent font-bold text-base"
+                                class="quantity-input w-12 text-center border-none focus:outline-none bg-transparent font-bold text-lg text-gray-900"
                                 readonly data-product-id="{{ $product->id }}" id="p-qty" />
                             <button
-                                class="quantity-plus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200 text-sm"
+                                class="quantity-plus w-8 h-8 flex items-center justify-center bg-white border-2 border-gray-200 rounded-full hover:bg-pink-50 hover:border-pink-300 active:scale-95 transition-all duration-200 text-gray-700 font-semibold"
                                 data-product-id="{{ $product->id }}" id="increase-btn">
                                 +
                             </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4 mt-2">Your Bill</h2>
+            <!-- Bill Summary -->
+            <div class="space-y-4 mb-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="h-1 w-8 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full"></div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Order Summary</h2>
+                </div>
 
-                <div id="checkout-summary">
-                    <div class="flex justify-between items-center mb-3">
-                        <p class="text-gray-700 text-sm sm:text-base">Product sub-total</p>
-                        <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}</p>  <!-- UPDATED: Use selected size price -->
+                <div id="checkout-summary" class="space-y-3">
+                    <!-- Subtotal -->
+                    <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                        <span class="text-gray-600 text-sm sm:text-base font-medium">Subtotal</span>
+                        <span class="font-bold text-gray-900 text-base sm:text-lg">
+                            {{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}
+                        </span>
                     </div>
-                    <div class="flex justify-between items-center mb-6">
-                        <p class="text-gray-700 text-sm sm:text-base">Delivery</p>
+                    
+                    <!-- Delivery -->
+                    <div class="flex justify-between items-center py-3 border-b border-gray-200">
+                        <span class="text-gray-600 text-sm sm:text-base font-medium">Delivery Fee</span>
                         @if ($userAddress)
-                            <p class="font-bold text-gray-900 text-sm sm:text-base">{{app_currency()}} {{ number_format(0, 2) }}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">FREE</span>
+                                <span class="font-bold text-gray-900 text-base sm:text-lg">{{app_currency()}} 0.00</span>
+                            </div>
                         @else
-                            <p class="font-bold text-gray-900 text-center text-sm sm:text-base"> Select region to determine cost </p>
+                            <span class="text-xs sm:text-sm text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full font-semibold">
+                                Select address
+                            </span>
                         @endif
                     </div>
-                    <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
-                        <p class="text-lg sm:text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-2xl sm:text-3xl font-bold text-gray-900">{{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}</p>  <!-- UPDATED: Use selected size price -->
+                    
+                    <!-- Total -->
+                    <div class="flex justify-between items-center pt-4 pb-2">
+                        <span class="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
+                        <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent">
+                            {{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}
+                        </span>
                     </div>
                 </div>
-                <form action="{{route('web.order.save')}}" method="POST">
-                    @csrf
-                    <input type="hidden" name="product_id" value="{{$product->id}}">
-                    <input type="hidden" name="quantity" value="1" id="order-qty">
-                    <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
-                    <input type="hidden" name="size_id" value="{{ $size_id }}">  <!-- NEW: Pass size_id to order -->
-                    <button @if (!$userAddress) disabled @endif type="submit"
-                    class="bg-pink-800 hover:bg-pink-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full font-medium w-full flex items-center justify-center gap-2 text-base">
-                    Proceed to checkout
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
+            </div>
+
+            <!-- Checkout Button -->
+            <form action="{{route('web.order.save')}}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{$product->id}}">
+                <input type="hidden" name="quantity" value="1" id="order-qty">
+                <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
+                <input type="hidden" name="size_id" value="{{ $size_id }}">
+                
+                <button @if (!$userAddress) disabled @endif type="submit"
+                    class="group relative w-full bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl disabled:shadow-none transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden active:scale-98">
+                    <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
+                    <span class="relative z-10">Proceed to Checkout</span>
+                    <svg class="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
                 </button>
-                </form>
-            </div>
+                
+                @if (!$userAddress)
+                    <p class="text-center text-xs sm:text-sm text-gray-500 mt-3">
+                        Please add a delivery address to continue
+                    </p>
+                @endif
+            </form>
+        </div>
         </div>
 
     </section>
