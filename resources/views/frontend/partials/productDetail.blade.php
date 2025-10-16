@@ -19,6 +19,9 @@
 <script>
     const appCurrency = @json(app_currency());
     const checkoutRoute = @json($checkoutUrl);
+
+    const productReviews = @json($product->reviews);
+
 </script>
 <script src="{{ asset('js/productDetail.js') }}"></script>
 
@@ -73,17 +76,44 @@
 @section('content')
     <section class="bg-[#f7f3e9] py-8 px-4 md:py-16 md:px-8 text-gray-800">
         <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-            <div class="flex justify-center w-full">
-                <div class="relative sm:hidden w-full h-64 overflow-hidden rounded-xl shadow-lg">
-                    <img src="{{ $product->image }}" alt=""
-                        class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
-                    <div class="absolute inset-0 flex items-center justify-center p-4">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                            class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
+                        <div class="flex flex-col justify-center w-full">
+                {{-- Product Image Gallery --}}
+                @if($product->images->isNotEmpty())
+                    @php
+                        $primary = $product->getPrimaryImage() ?? $product->images->first();
+                        $initialImage = $primary->image_path;
+                    @endphp
+
+                    {{-- Main Image Display --}}
+                    <div class="relative w-full">
+                        {{-- Mobile Version with Blur Background --}}
+                        <div class="relative sm:hidden w-full h-64 overflow-hidden rounded-xl shadow-lg">
+                            <img id="blur-bg-mobile" src="{{ $initialImage }}" alt=""
+                                class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
+                            <div class="absolute inset-0 flex items-center justify-center p-4">
+                                <img id="main-img-mobile" src="{{ $initialImage }}" alt="{{ $product->name }}"
+                                    class="max-w-full max-h-full object-contain rounded-lg shadow-lg" />
+                            </div>
+                        </div>
+
+                        {{-- Desktop Version --}}
+                        <img id="main-img-desktop" src="{{ $initialImage }}" alt="{{ $product->name }}"
+                            class="hidden sm:block rounded-xl w-full max-w-sm md:max-w-md lg:max-w-full object-cover shadow-lg" />
                     </div>
-                </div>
-                <img src="{{ $product->image }}" alt="{{ $product->name }}"
-                    class="hidden sm:block rounded-xl w-full max-w-sm md:max-w-md lg:max-w-full object-cover shadow-lg" />
+
+                    {{-- Thumbnails (Clickable to Change Main Image) --}}
+                    <div class="flex gap-2 mt-4 overflow-x-auto pb-2 thumbnails-container">
+                        @foreach($product->images as $image)
+                            <img src="{{ $image->image_path }}" alt="{{ $product->name }} thumbnail"
+                                class="thumbnail w-20 h-20 object-cover rounded-md cursor-pointer border-2 transition-all {{ $image->is_primary || ($loop->first && !$product->getPrimaryImage()) ? 'border-pink-800 opacity-100' : 'border-gray-300 opacity-75 hover:opacity-100' }}"
+                                data-src="{{ $image->image_path }}">
+                        @endforeach
+                    </div>
+                @else
+                    {{-- Fallback if no images --}}
+                    <img src="{{ asset('images/default-product.jpg') }}" alt="{{ $product->name }}"
+                        class="rounded-xl w-full object-cover shadow-lg" />
+                @endif
             </div>
 
             <div class="text-center md:text-left">
@@ -93,7 +123,7 @@
 
                 <div class="flex items-center justify-center md:justify-start text-yellow-400 mb-4">
                     <span>★★★★★</span>
-                    <span class="ml-2 text-gray-600 text-sm">({{ number_format($product->reviews_avg_rating, 1) ?? '0.0' }} / 5)</span>
+                    <span class="ml-2 text-gray-600 text-sm">({{ number_format($product->average_rating, 1) }} / 5)</span>
                 </div>
 
                 <div class="mb-4 @if($product->sizes->isEmpty()) hidden @endif">
@@ -226,6 +256,8 @@
                     {!! $product->description !!}
                 </div>
 
+                {{-- 🆕 REAL TOP FEATURED REVIEWS --}}
+                @if($product->reviews->where('is_featured', 1)->count() > 0)
                 <div class="container mx-auto px-0 py-8 sm:py-12">
                     <div class="mb-10 sm:mb-16">
                         <div class="flex flex-col md:flex-row items-center">
@@ -239,247 +271,49 @@
                     <div class="flex flex-col lg:flex-row gap-6">
                         <div class="lg:w-3/4 relative">
                             <div class="testimonial-container relative">
-                                <div class="testimonial-slide active" data-index="0">
+                                @foreach($product->reviews->where('is_featured', 1)->take(4) as $index => $review)
+                                <div class="testimonial-slide {{ $loop->first ? 'active' : '' }}" data-index="{{ $index }}">
                                     <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
-                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"The simplicity and effectiveness
-                                            of Afro Jee's
-                                            products are unmatched. Even with just a few items, my skin feels healthier and
-                                            more vibrant every day."</p>
-
+                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"{{ $review->review }}"</p>
                                         <div class="flex items-center mt-6">
-                                            <div
-                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                                <img src="/images/sami.png" alt="Jean Harper"
-                                                    class="w-full h-full object-cover">
+                                            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
+                                                <div class="w-full h-full flex items-center justify-center bg-rose-200 text-rose-600 font-bold text-sm">
+                                                    {{ substr($review->name, 0, 1) }}
+                                                </div>
                                             </div>
                                             <div class="ml-4">
                                                 <div class="flex text-yellow-400 mb-1">
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
+                                                    @for($i = 1; $i <= 5; $i++)
+                                                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                                        </svg>
+                                                    @endfor
                                                 </div>
-                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Jean Harper</p>
-                                                <p class="text-xs sm:text-sm text-gray-500">Student</p>
+                                                <p class="font-medium text-gray-700 text-sm sm:text-base">{{ $review->name }}</p>
+                                                <p class="text-xs sm:text-sm text-gray-500">{{ $review->created_at->format('M Y') }}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="testimonial-slide" data-index="1">
-                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
-                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"Afro Jee's natural ingredients
-                                            have transformed my
-                                            skincare routine. I've never received so many compliments on my skin!"</p>
-
-                                        <div class="flex items-center mt-6">
-                                            <div
-                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                                <img src="/images/sami.png" alt="Reinette Akosua"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="flex text-yellow-400 mb-1">
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                </div>
-                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Reinette Akosua
-                                                </p>
-                                                <p class="text-xs sm:text-sm text-gray-500">Makeup Artist</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="testimonial-slide" data-index="2">
-                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
-                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"As someone with sensitive skin,
-                                            finding Afro Jee was
-                                            a game-changer. Their products are gentle yet effective - exactly what I
-                                            needed."</p>
-
-                                        <div class="flex items-center mt-6">
-                                            <div
-                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                                <img src="/images/sami.png" alt="Sami Raimi"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="flex text-yellow-400 mb-1">
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                </div>
-                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Sami Raimi</p>
-                                                <p class="text-xs sm:text-sm text-gray-500">Photographer</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="testimonial-slide" data-index="3">
-                                    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-sm mb-6 sm:mb-8">
-                                        <p class="text-base sm:text-lg text-gray-800 mb-4">"The quality and attention to
-                                            detail in every Afro Jee
-                                            product is exceptional. I'm completely devoted to their skincare line!"</p>
-
-                                        <div class="flex items-center mt-6">
-                                            <div
-                                                class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                                <img src="/images/sami.png" alt="Karma Yarn"
-                                                    class="w-full h-full object-cover">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="flex text-yellow-400 mb-1">
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                        viewBox="0 0 20 20">
-                                                        <path
-                                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                        </path>
-                                                    </svg>
-                                                </div>
-                                                <p class="font-medium text-gray-700 text-sm sm:text-base">Karma Yarn</p>
-                                                <p class="text-xs sm:text-sm text-gray-500">Fashion Designer</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
 
                             <div class="flex mt-4">
-                                <button id="prev-btn"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition">
-                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 19l-7-7 7-7">
-                                        </path>
+                                <button id="prev-btn" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                     </svg>
                                 </button>
-                                <button id="next-btn"
-                                    class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition ml-4">
-                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 5l7 7-7 7">
-                                        </path>
+                                <button id="next-btn" class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-rose-600 text-white rounded-full shadow-md hover:bg-rose-700 transition ml-4">
+                                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </button>
-
                                 <div class="ml-auto flex items-center">
-                                    <a href="#"
-                                        class="text-rose-700 font-medium flex items-center hover:underline text-sm sm:text-base">
+                                    <a href="#" class="text-rose-700 font-medium flex items-center hover:underline text-sm sm:text-base" onclick="document.getElementById('reviews-tab').click(); return false;">
                                         View All Reviews
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7">
-                                            </path>
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                         </svg>
                                     </a>
                                 </div>
@@ -488,42 +322,21 @@
 
                         <div class="lg:w-1/4 mt-8 lg:mt-1">
                             <div class="space-y-4 sm:space-y-6">
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="0">
-                                    <div
-                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
-                                        <img src="/images/sami.png" alt="Jean Harper" class="w-full h-full object-cover">
+                                @foreach($product->reviews->where('is_featured', 1)->take(4) as $index => $review)
+                                <div class="flex items-center cursor-pointer client-nav {{ $loop->first ? '' : 'opacity-50' }}" data-index-client="{{ $index }}">
+                                    <div class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 {{ $loop->first ? 'border-rose-500' : 'border-gray-300' }}">
+                                        <div class="w-full h-full flex items-center justify-center bg-rose-200 text-rose-600 font-bold text-xs">
+                                            {{ substr($review->name, 0, 1) }}
+                                        </div>
                                     </div>
-                                    <p class="ml-4 font-medium text-gray-700 text-sm sm:text-base">Jean Harper</p>
+                                    <p class="ml-4 font-medium {{ $loop->first ? 'text-gray-700' : 'text-gray-500' }} text-sm sm:text-base">{{ $review->name }}</p>
                                 </div>
-
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="1">
-                                    <div
-                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                                        <img src="/images/sami.png" alt="Reinette Akosua"
-                                            class="w-full h-full object-cover">
-                                    </div>
-                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Reinette Akosua</p>
-                                </div>
-
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="2">
-                                    <div
-                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                                        <img src="/images/sami.png" alt="Sami Raimi" class="w-full h-full object-cover">
-                                    </div>
-                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Sami Raimi</p>
-                                </div>
-
-                                <div class="flex items-center cursor-pointer client-nav opacity-50" data-index-client="3">
-                                    <div
-                                        class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-rose-100 rounded-full overflow-hidden border-2 border-gray-300">
-                                        <img src="/images/karma.png" alt="Karma Yarn" class="w-full h-full object-cover">
-                                    </div>
-                                    <p class="ml-4 font-medium text-gray-500 text-sm sm:text-base">Karma Yarn</p>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
 
             <div id="ingredients-content" class="tab-content hidden">
@@ -555,33 +368,109 @@
                     </button>
                 </div>
                 <div class="pt-6">
-                    <h2 class="text-xl font-bold mb-8">Reviews</h2>
+                    <h2 class="text-xl font-bold mb-8">Reviews ({{ $product->review_count }})</h2>
+                    {{-- 🆕 SORTING DROPDOWN --}}
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                        <div class="flex items-center space-x-2">
+                            <label class="text-sm font-medium text-gray-700">Sort by:</label>
+                            <select id="sortReviews" class="border border-gray-300 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-pink-800">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="highest">Highest Rating</option>
+                                <option value="lowest">Lowest Rating</option>
+                                <option value="helpful">Most Helpful</option>
+                            </select>
+                        </div>
+                    </div>
+                    {{-- 🆕 RATING SUMMARY --}}
+                    @if($product->review_count > 0)
+                    <div class="bg-white p-6 rounded-xl mb-8">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="text-center">
+                                <h3 class="text-4xl font-bold text-yellow-400">{{ number_format($product->average_rating, 1) }}</h3>
+                                <div class="flex text-yellow-400 text-2xl mt-1">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        <i class="fas fa-star {{ $i <= $product->average_rating ? '' : 'text-gray-300' }}"></i>
+                                    @endfor
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold">{{ $product->review_count }} Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
 
                     <div id="reviews-list">
-                        <!-- Reviews will be dynamically loaded here by productDetail.js -->
+                        {{-- REAL REVIEWS LOADED BY JS --}}
                     </div>
 
-                    <div
-                        class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-2 mt-8">
-                        <button id="prevPage"
-                            class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
-                            <svg width="8" height="13" viewBox="0 0 8 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="m7.41 11.572-4.58-4.59 4.58-4.59L6 .982l-6 6 6 6z" fill="#000" />
+                    <div class="flex flex-col sm:flex-row justify-start items-center space-y-4 sm:space-y-0 sm:space-x-2 mt-8">
+                        <button id="prevPage" class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
+                            <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
+                                <path d="m7.41 11.572-4.58-4.59 4.58-4.59L6 .982l-6 6 6 6z" fill="#000"></path>
                             </svg>
                             <span class="ml-2 sm:ml-3">Previous</span>
                         </button>
-                        <div id="pagination-numbers" class="flex space-x-2 text-gray-600">
-                        </div>
-                        <button id="nextPage"
-                            class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
+                        <div id="pagination-numbers" class="flex space-x-2 text-gray-600"></div>
+                        <button id="nextPage" class="pagination-button text-pink-800 font-bold px-3 py-1 rounded-full border border-transparent hover:border-pink-800 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
                             <span class="mr-2 sm:mr-3">Next</span>
-                            <svg width="9" height="13" viewBox="0 0 9 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="m.824 2.392 4.58 4.59-4.58 4.59 1.41 1.41 6-6-6-6z" fill="#000" />
+                            <svg width="9" height="13" viewBox="0 0 9 13" fill="none">
+                                <path d="m.824 2.392 4.58 4.59-4.58 4.59 1.41 1.41 6-6-6-6z" fill="#000"></path>
                             </svg>
                         </button>
                     </div>
-                </div>
             </div>
         </div>
+        @push('styles')
+<style>
+/* 🆕 Review Sorting */
+#sortReviews {
+    background: white;
+    min-width: 140px;
+}
+
+.pagination-button.active {
+    background: #99395C !important;
+    color: white !important;
+}
+
+.review-transition {
+    transition: all 0.3s ease;
+}
+</style>
+@endpush
     </section>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const thumbnails = document.querySelectorAll('.thumbnail');
+            const mainImgDesktop = document.getElementById('main-img-desktop');
+            const mainImgMobile = document.getElementById('main-img-mobile');
+            const blurBgMobile = document.getElementById('blur-bg-mobile');
+
+            function updateMainImage(src) {
+                if (mainImgDesktop) mainImgDesktop.src = src;
+                if (mainImgMobile) mainImgMobile.src = src;
+                if (blurBgMobile) blurBgMobile.src = src;
+
+                // Highlight active thumbnail
+                thumbnails.forEach(thumb => {
+                    thumb.classList.remove('border-pink-800', 'opacity-100');
+                    thumb.classList.add('border-gray-300', 'opacity-75');
+                    if (thumb.dataset.src === src) {
+                        thumb.classList.remove('border-gray-300', 'opacity-75');
+                        thumb.classList.add('border-pink-800', 'opacity-100');
+                    }
+                });
+            }
+
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', () => {
+                    updateMainImage(thumb.dataset.src);
+                });
+            });
+
+            // Optional: Add keyboard navigation or swipe for mobile if needed
+        });
+    </script>
 @endsection

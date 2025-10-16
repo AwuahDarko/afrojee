@@ -1,4 +1,56 @@
 @extends('frontend.layouts.app') @section('content')
+<style>
+    .faq-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .faq-content.active {
+      max-height: 1000px;
+      transition: max-height 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .plus-icon, .minus-icon {
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    .faq-button[aria-expanded="true"] .plus-icon {
+      opacity: 0;
+      transform: rotate(90deg);
+    }
+    
+    .faq-button[aria-expanded="false"] .minus-icon {
+      opacity: 0;
+      transform: rotate(-90deg);
+    }
+    
+    .faq-button[aria-expanded="true"] span:not(.plus-icon):not(.minus-icon) {
+      color: #be123c; /* rose-700 */
+      transition: color 0.3s ease;
+    }
+    
+    .faq-button[aria-expanded="false"] span:not(.plus-icon):not(.minus-icon) {
+      color: #374151; /* gray-700 */
+      transition: color 0.3s ease;
+    }
+    
+    /* Smooth transform for the icons */
+    .plus-icon, .minus-icon {
+      transform-origin: center;
+    }
+    
+    .faq-button[aria-expanded="true"] .minus-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+    
+    .faq-button[aria-expanded="false"] .plus-icon {
+      opacity: 1;
+      transform: rotate(0deg);
+    }
+  </style>
+    <script src="{{ asset('js/admin.js') }}"></script>
     <section class="bg-[#f5f3e8]">
         <div class="container mx-auto px-1 py-30 ">
             <div>

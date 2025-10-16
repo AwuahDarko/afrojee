@@ -53,132 +53,134 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
   // Reviews Pagination Logic
-  const reviews = [
-    {
-      name: "Maya, 23",
-      title: "Thee growth hair & scalp oil",
-      text: "This body butter is a game-changer! My skin feels so soft and hydrated, and the scent is absolutely divine. A little goes a long way, so it's great value for money. Highly recommend!",
-      rating: 4, // out of 5
-      avatar: "https://placehold.co/30x30/99395C/FFFFFF?text=M"
-    },
-    {
-      name: "John D., 30",
-      title: "Amazing Product!",
-      text: "I've tried many body butters, but this one is by far the best. It absorbs quickly and leaves my skin feeling incredibly smooth. The scent is subtle and pleasant. Will definitely repurchase!",
-      rating: 5,
-      avatar: "https://placehold.co/30x30/99395C/FFFFFF?text=J"
-    },
-    {
-      name: "Sarah L., 28",
-      title: "Great for Dry Skin",
-      text: "My skin gets very dry, especially in winter. This body butter has been a lifesaver. It provides deep hydration without feeling greasy. Highly recommend for anyone with dry or sensitive skin.",
-      rating: 5,
-      avatar: "https://placehold.co/30x30/99395C/FFFFFF?text=S"
-    },
-    {
-      name: "Emily R., 35",
-      title: "Lovely Scent",
-      text: "The scent is absolutely lovely and not overpowering. It makes my skin feel so soft and moisturized all day. I use it daily after my shower. Very happy with this purchase!",
-      rating: 4,
-      avatar: "https://placehold.co/30x30/99395C/FFFFFF?text=E"
-    },
-    {
-      name: "David K., 42",
-      title: "Good Value",
-      text: "A little goes a long way with this body butter. It's very effective and lasts a long time, making it great value for money. My skin feels healthier since I started using it.",
-      rating: 4,
-      avatar: "https://placehold.co/30x30/99395C/FFFFFF?text=D"
-    }
-  ];
-
-  const reviewsPerPage = 3; // Display one review per page
+  const reviewsData = productReviews || [];
+  const reviewsPerPage = 3;
   let currentPage = 1;
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-
+  const totalPages = Math.ceil(reviewsData.length / reviewsPerPage);
+  let sortBy = 'newest'; // 🆕 Default sort
   const reviewsList = document.getElementById('reviews-list');
   const paginationNumbers = document.getElementById('pagination-numbers');
   const prevPageBtn = document.getElementById('prevPage');
   const nextPageBtn = document.getElementById('nextPage');
-
-  // Function to render reviews for the current page
-  const renderReviews = () => {
-    reviewsList.innerHTML = ''; // Clear existing reviews
-    const startIndex = (currentPage - 1) * reviewsPerPage;
-    const endIndex = startIndex + reviewsPerPage;
-    const reviewsToDisplay = reviews.slice(startIndex, endIndex);
-
-    reviewsToDisplay.forEach(review => {
-      const reviewElement = document.createElement('div');
-      reviewElement.className = 'border-b border-gray-300 pb-5 mb-5'; // Added mb-5 for spacing between reviews
-      reviewElement.innerHTML = `
-                    <div class="flex items-center mb-2">
-                        <img src="${review.avatar}" alt="User Avatar" class="rounded-full mr-2"/>
-                        <span class="font-semibold">${review.name}</span>
-                    </div>
-                    <h2 class="text-xl font-bold mb-4">${review.title}</h2>
-                    <p class="text-gray-700 italic mb-2">"${review.text}"</p>
-                    <div class="flex text-yellow-400 text-3xl">
-                        <span>${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</span>
-                    </div>
-                `;
-      reviewsList.appendChild(reviewElement);
-    });
-  };
-
-
-  // Function to render pagination numbers
-  const renderPaginationNumbers = () => {
-    paginationNumbers.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-      const pageButton = document.createElement('button');
-      pageButton.textContent = i;
-      pageButton.className = `pagination-button px-3 py-1 rounded-full font-medium border border-transparent hover:border-pink-800 transition duration-300 ${i === currentPage ? 'active' : ''}`;
-      pageButton.addEventListener('click', () => {
-        currentPage = i;
-        renderReviews();
-        updatePaginationButtons();
-      });
-      paginationNumbers.appendChild(pageButton);
-    }
-  };
-
-  // Function to update pagination button states (disabled/active)
-  const updatePaginationButtons = () => {
-    prevPageBtn.disabled = currentPage === 1;
-    nextPageBtn.disabled = currentPage === totalPages;
-
-    // Update active class for page numbers
-    document.querySelectorAll('#pagination-numbers .pagination-button').forEach(btn => {
-      if (parseInt(btn.textContent) === currentPage) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
+  const sortSelect = document.getElementById('sortReviews');
+  const sortReviewsData = (data, sortType) => {
+      switch(sortType) {
+          case 'newest':
+              return [...data].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+          case 'oldest':
+              return [...data].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+          case 'highest':
+              return [...data].sort((a, b) => b.rating - a.rating);
+          case 'lowest':
+              return [...data].sort((a, b) => a.rating - b.rating);
+          case 'helpful':
+              // 🆕 Simulate helpful (you can add helpful_count column later)
+              return [...data].sort((a, b) => (b.rating * 10 + Math.random() * 100) - (a.rating * 10 + Math.random() * 100));
+          default:
+              return data;
       }
-    });
   };
 
-  // Event Listeners for Previous/Next buttons
+  const renderReviews = () => {
+      const sortedReviews = sortReviewsData(reviewsData, sortBy);
+      reviewsList.innerHTML = '';
+      const startIndex = (currentPage - 1) * reviewsPerPage;
+      const endIndex = startIndex + reviewsPerPage;
+      const reviewsToDisplay = sortedReviews.slice(startIndex, endIndex);
+
+      reviewsToDisplay.forEach(review => {
+          const reviewElement = document.createElement('div');
+          reviewElement.className = 'border-b border-gray-300 pb-5 mb-5';
+          reviewElement.innerHTML = `
+              <div class="flex items-center mb-2">
+                  <div class="w-10 h-10 bg-rose-100 rounded-full flex items-center justify-center mr-3">
+                      <span class="text-rose-600 font-bold text-sm">${review.name.charAt(0)}</span>
+                  </div>
+                  <div>
+                      <span class="font-semibold">${review.name}</span>
+                      <span class="text-gray-500 text-sm ml-2">${new Date(review.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                  </div>
+              </div>
+              <h3 class="text-xl font-bold mb-2">${review.title}</h3>
+              <p class="text-gray-700 italic mb-3">"${review.review}"</p>
+              ${review.image ? `<img src="/uploads/reviews/${review.image}" alt="Review image" class="w-20 h-20 object-cover rounded mb-3">` : ''}
+              <div class="flex text-yellow-400 text-2xl">
+                  ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+              </div>
+          `;
+          reviewsList.appendChild(reviewElement);
+      });
+  };
+
+  // 🆕 SORTING EVENT LISTENER
+  if (sortSelect) {
+      sortSelect.addEventListener('change', (e) => {
+          sortBy = e.target.value;
+          currentPage = 1; // Reset to first page
+          renderReviews();
+          renderPaginationNumbers();
+          updatePaginationButtons();
+      });
+  }
+
+  // 🆕 UPDATED PAGINATION
+  const updatePagination = () => {
+      const sortedReviews = sortReviewsData(reviewsData, sortBy);
+      const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
+      
+      paginationNumbers.innerHTML = '';
+      for (let i = 1; i <= totalPages; i++) {
+          const pageButton = document.createElement('button');
+          pageButton.textContent = i;
+          pageButton.className = `pagination-button px-3 py-1 rounded-full font-medium border border-transparent hover:border-pink-800 transition duration-300 ${i === currentPage ? 'bg-pink-800 text-white' : ''}`;
+          pageButton.addEventListener('click', () => {
+              currentPage = i;
+              renderReviews();
+              updatePaginationButtons();
+          });
+          paginationNumbers.appendChild(pageButton);
+      }
+      
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages;
+      
+      document.querySelectorAll('#pagination-numbers .pagination-button').forEach(btn => {
+          btn.classList.toggle('bg-pink-800', parseInt(btn.textContent) === currentPage);
+          btn.classList.toggle('text-white', parseInt(btn.textContent) === currentPage);
+      });
+  };
+
+  const updatePaginationButtons = () => {
+      const sortedReviews = sortReviewsData(reviewsData, sortBy);
+      const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = currentPage === totalPages;
+  };
+
+  // 🆕 EVENT LISTENERS
   prevPageBtn.addEventListener('click', () => {
-    if (currentPage > 1) {
-      currentPage--;
-      renderReviews();
-      updatePaginationButtons();
-    }
+      if (currentPage > 1) {
+          currentPage--;
+          renderReviews();
+          updatePaginationButtons();
+      }
   });
 
   nextPageBtn.addEventListener('click', () => {
-    if (currentPage < totalPages) {
-      currentPage++;
-      renderReviews();
-      updatePaginationButtons();
-    }
+      const sortedReviews = sortReviewsData(reviewsData, sortBy);
+      const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
+      if (currentPage < totalPages) {
+          currentPage++;
+          renderReviews();
+          updatePaginationButtons();
+      }
   });
 
-  // Initial render
-  renderReviews();
-  renderPaginationNumbers();
-  updatePaginationButtons();
-
+  // 🆕 INITIALIZE
+  if (reviewsList) {
+      renderReviews();
+      updatePagination();
+  }
   // Variables
   const slides = document.querySelectorAll('.testimonial-slide');
   const clientNavs = document.querySelectorAll('.client-nav');
@@ -293,66 +295,6 @@ window.addEventListener("DOMContentLoaded", () => {
     if (sizeSelect) {
         sizeSelect.addEventListener('change', updatePriceDisplay);
     }
-
-    // // Quantity controls
-    // incrementButton.addEventListener('click', function () {
-    //     let quantity = parseInt(quantityInput.value);
-    //     if (quantity < maxQuantity) {
-    //         quantityInput.value = quantity + 1;
-    //         buyNowCounter.textContent = quantityInput.value;
-    //         addToCartCounter.textContent = quantityInput.value;
-    //         buyNowLink.href = buyNowLink.href.replace(/quantity=\d+/, `quantity=${quantityInput.value}`);
-    //     }
-    // });
-
-    // decrementButton.addEventListener('click', function () {
-    //     let quantity = parseInt(quantityInput.value);
-    //     if (quantity > 1) {
-    //         quantityInput.value = quantity - 1;
-    //         buyNowCounter.textContent = quantityInput.value;
-    //         addToCartCounter.textContent = quantityInput.value;
-    //         buyNowLink.href = buyNowLink.href.replace(/quantity=\d+/, `quantity=${quantityInput.value}`);
-    //     }
-    // });
-
-    // // Tab functionality (unchanged)
-    // const tabButtons = document.querySelectorAll('.tab-button');
-    // const tabContents = document.querySelectorAll('.tab-content');
-
-    // tabButtons.forEach(button => {
-    //     button.addEventListener('click', () => {
-    //         tabButtons.forEach(btn => btn.classList.remove('active'));
-    //         tabContents.forEach(content => content.classList.add('hidden'));
-
-    //         button.classList.add('active');
-    //         const tabId = button.dataset.tab;
-    //         document.getElementById(`${tabId}-content`).classList.remove('hidden');
-    //     });
-    // });
-
-    
-    // Add to Cart functionality (UNCOMMENTED and UPDATED: Include size_id in cart item)
-    // addToCartButton.addEventListener('click', function () {
-    //     const product = {
-    //         productId: this.dataset.productId,
-    //         name: this.dataset.productName,
-    //         price: parseFloat(this.dataset.productPrice),
-    //         image: this.dataset.productImage,
-    //         quantity: parseInt(quantityInput.value),
-    //         sizeId: this.dataset.sizeId  // NEW: Include sizeId
-    //     };
-
-    //     // Example: Store in localStorage or send to server
-    //     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    //     const existingItem = cart.find(item => item.productId === product.productId && item.sizeId === product.sizeId);
-    //     if (existingItem) {
-    //         existingItem.quantity += product.quantity;
-    //     } else {
-    //         cart.push(product);
-    //     }
-    //     localStorage.setItem('cart', JSON.stringify(cart));
-    //     alert('Product added to cart!');
-    // });
 
     // Initialize price display
     updatePriceDisplay();

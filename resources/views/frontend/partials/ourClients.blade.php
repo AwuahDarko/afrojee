@@ -25,7 +25,7 @@
                             <div class="flex items-center mt-6">
                                 <div class="w-12 h-12 bg-rose-100 rounded-full overflow-hidden border-2 border-rose-500">
                                     @if($review->image)
-                                        <img src="{{ asset('storage/reviews/' . $review->image) }}" 
+                                        <img src="{{ asset('uploads/reviews/' . $review->image) }}" 
                                              alt="{{ $review->name }}" 
                                              class="w-full h-full object-cover">
                                     @else
@@ -94,7 +94,7 @@
                     <div class="flex items-center cursor-pointer client-nav {{ $index === 0 ? '' : 'opacity-50' }}" data-index="{{ $index }}">
                         <div class="w-10 h-10 bg-rose-100 rounded-full overflow-hidden border-2 {{ $index === 0 ? 'border-rose-500' : 'border-gray-300' }}">
                             @if($review->image)
-                                <img src="{{ asset('storage/reviews/' . $review->image) }}" 
+                                <img src="{{ asset('uploads/reviews/' . $review->image) }}" 
                                      alt="{{ $review->name }}" 
                                      class="w-full h-full object-cover">
                             @else

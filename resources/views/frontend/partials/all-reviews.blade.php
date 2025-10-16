@@ -80,7 +80,7 @@
                         <div class="review-item bg-white p-6 rounded-lg shadow-md mb-6">
                             <div class="flex items-center mb-3">
                                 @if($review->image)
-                                    <img src="{{ asset('storage/reviews/' . $review->image) }}" alt="{{ $review->name }}" class="w-12 h-12 rounded-full object-cover mr-4">
+                                    <img src="{{ asset('uploads/reviews/' . $review->image) }}" alt="{{ $review->name }}" class="w-12 h-12 rounded-full object-cover mr-4">
                                 @else
                                     <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-xl mr-4">
                                         {{ substr($review->name, 0, 1) }}

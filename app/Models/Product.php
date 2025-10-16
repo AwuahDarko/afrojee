@@ -1,4 +1,5 @@
 <?php
+// app/Models/Product.php
 
 namespace App\Models;
 
@@ -13,7 +14,6 @@ class Product extends Model
         'price',
         'category_id',
         'description',
-        'image',
         'how_to_use',
         'ingredients',
         'quantity',
@@ -32,6 +32,18 @@ class Product extends Model
         return $this->hasMany(ProductSize::class);
     }
 
+    /** NEW: Product Images Relationship */
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    /** Get primary image */
+    public function getPrimaryImage()
+    {
+        return $this->images()->where('is_primary', 1)->first();
+    }
+
     public function isActive()
     {
         return $this->status === 1;
@@ -40,8 +52,6 @@ class Product extends Model
     public function getPrice()
     {
         $now = Carbon::now();
-
-        // Check for active promotions
         $promoProduct = PromoProduct::where('product_id', '=', $this->id)
             ->join('promos', 'promos.id', '=', 'promo_products.promo_id')
             ->where('promos.status', '=', 1)
@@ -51,7 +61,6 @@ class Product extends Model
             ->limit(1)
             ->first();
 
-        // If the product has sizes, return the price of the first size (or adjust logic as needed)
         if ($this->sizes()->exists()) {
             $basePrice = $this->sizes()->first()->price;
         } else {
@@ -71,10 +80,30 @@ class Product extends Model
 
     public function getOriginalPrice()
     {
-        // If the product has sizes, return the price of the first size (or adjust logic as needed)
         if ($this->sizes()->exists()) {
             return $this->sizes()->first()->price;
         }
         return $this->price;
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class)->approved()->orderBy('created_at', 'desc');
+    }
+
+    public function allReviews()
+    {
+        return $this->hasMany(Review::class)->orderBy('created_at', 'desc');
+    }
+
+    // 🆕 ADD TO ACCESSORS
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function getReviewCountAttribute()
+    {
+        return $this->reviews()->count();
     }
 }

@@ -14,7 +14,13 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $categories = Category::where('status', '=', 1)->get();
-        $products = Product::where('status', '=', 1)->with(['category', 'sizes'])->paginate($this->items_per_page);
+        $products = Product::where('status', '=', 1)->with([
+            'category',
+            'sizes',
+            'images' => function ($query) {
+                $query->orderBy('sort_order');
+            }
+        ])->paginate($this->items_per_page);
 
         return view('frontend.partials.productList', compact('categories', 'products'));
     }
@@ -27,7 +33,13 @@ class ProductController extends Controller
 
         $categories = Category::where('status', '=', 1)->get();
         $products = Product::where(['status' => 1, 'category_id' => $category->id])
-            ->with(['category', 'sizes'])
+            ->with([
+                'category',
+                'sizes',
+                'images' => function ($query) {
+                    $query->orderBy('sort_order');
+                }
+            ])
             ->paginate($this->items_per_page);
 
         return view('frontend.partials.productList', compact('categories', 'products'));
@@ -44,7 +56,13 @@ class ProductController extends Controller
                 ->orWhere('description', 'like', '%' . $search . '%')
                 ->orWhere('ingredients', 'like', '%' . $search . '%')
                 ->orWhere('how_to_use', 'like', '%' . $search . '%');
-        })->with(['category', 'sizes'])->paginate($this->items_per_page);
+        })->with([
+                    'category',
+                    'sizes',
+                    'images' => function ($query) {
+                        $query->orderBy('sort_order');
+                    }
+                ])->paginate($this->items_per_page);
 
         return view('frontend.partials.productList', compact('categories', 'products'));
     }
@@ -52,11 +70,27 @@ class ProductController extends Controller
     public function productDetails(Request $request)
     {
         $slug = $request->slug;
-        $product = Product::where('slug', '=', $slug)->with('sizes')->firstOrFail();
+        $product = Product::where('slug', '=', $slug)
+            ->with([
+                'sizes',
+                'images' => function ($query) {
+                    $query->orderBy('sort_order');
+                },
+                'reviews' => function ($query) { // 🆕 REAL REVIEWS
+                    $query->where('status', 'approved')
+                        ->orderBy('is_featured', 'desc') // Featured first
+                        ->orderBy('created_at', 'desc');
+                }
+            ])
+            ->firstOrFail();
+
+        $primaryImagePath = $product->getPrimaryImage()?->image_path ?? 
+                        ($product->images->first()?->image_path ?? asset('images/default-product.jpg'));
+
         $clean_description = strip_tags($product->description);
         $meta_description = substr($clean_description, 0, strlen($clean_description) / 2);
         $meta_keywords = $product->name;
 
-        return view('frontend.partials.productDetail', compact('product', 'meta_description', 'meta_keywords'));
+        return view('frontend.partials.productDetail', compact('product', 'meta_description', 'meta_keywords', 'primaryImagePath'));
     }
 }

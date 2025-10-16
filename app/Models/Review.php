@@ -11,6 +11,7 @@ class Review extends Model
     use HasFactory;
 
     protected $fillable = [
+        'product_id',
         'name',
         'email',
         'product_name',
@@ -34,6 +35,12 @@ class Review extends Model
     public function approvedBy()
     {
         return $this->belongsTo(User::class, 'approved_by');
+    }
+
+    // 🆕 NEW RELATIONSHIPS
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 
     // Scopes
@@ -89,7 +96,7 @@ class Review extends Model
     public function getImageUrlAttribute()
     {
         if ($this->image) {
-            return asset('storage/reviews/' . $this->image);
+            return asset('uploads/reviews/' . $this->image);
         }
         return null;
     }

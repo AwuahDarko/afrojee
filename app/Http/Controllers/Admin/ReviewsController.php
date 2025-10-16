@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\Review;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
@@ -12,37 +14,34 @@ class ReviewsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Review::with('approvedBy')->latest();
+        $query = Review::with(['product', 'approvedBy'])->latest();
 
-        // Filter by status
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        // Filter by rating
         if ($request->filled('rating')) {
             $query->where('rating', $request->rating);
         }
 
-        // Filter by featured
         if ($request->filled('featured')) {
             $query->where('is_featured', $request->boolean('featured'));
         }
 
-        // Search
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('title', 'like', "%{$search}%")
                     ->orWhere('review', 'like', "%{$search}%")
-                    ->orWhere('product_name', 'like', "%{$search}%");
+                    ->orWhereHas('product', function($q) use ($search) {
+                        $q->where('name', 'like', "%{$search}%");
+                    });
             });
         }
 
         $reviews = $query->paginate(15)->appends($request->all());
 
-        // Stats for dashboard
         $stats = [
             'total' => Review::count(),
             'pending' => Review::pending()->count(),
@@ -57,7 +56,6 @@ class ReviewsController extends Controller
 
     public function create()
     {
-        // Get stats for the dashboard cards
         $stats = [
             'total' => Review::count(),
             'pending' => Review::pending()->count(),
@@ -66,8 +64,9 @@ class ReviewsController extends Controller
             'featured' => Review::featured()->count(),
             'average_rating' => Review::approved()->avg('rating') ?? 0
         ];
-        $reviews = Review::with('approvedBy')->latest()->paginate(15);
-        return view('backend.create-reviews', compact('stats', 'reviews'));
+        
+        $products = Product::where('status', 1)->orderBy('name')->get();
+        return view('backend.create-reviews', compact('stats', 'products'));
     }
 
     public function store(Request $request)
@@ -75,7 +74,7 @@ class ReviewsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'product_name' => 'nullable|string|max:255',
+            'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
             'title' => 'required|string|max:255',
             'review' => 'required|string',
@@ -85,8 +84,20 @@ class ReviewsController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('reviews', 'public');
-            $validated['image'] = basename($imagePath);
+            $file = $request->file('image');
+            $uploadDir = public_path('uploads/reviews');
+
+            // Create uploads/reviews directory if it doesn't exist
+            if (!File::isDirectory($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true, true);
+            }
+
+            // Generate a unique filename and move the file
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadDir, $filename);
+            
+            // Store just the filename in the database
+            $validated['image'] = $filename;
         }
 
         if ($validated['status'] === 'approved') {
@@ -102,13 +113,14 @@ class ReviewsController extends Controller
 
     public function show(Review $review)
     {
-        $review->load('approvedBy');
+        $review->load(['approvedBy', 'product']);
         return view('backend.reviews-show', compact('review'));
     }
 
     public function edit(Review $review)
     {
-        return view('backend.edit-reviews', compact('review'));
+        $products = Product::where('status', 1)->orderBy('name')->get();
+        return view('backend.edit-reviews', compact('review', 'products'));
     }
 
     public function update(Request $request, Review $review)
@@ -116,7 +128,7 @@ class ReviewsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'nullable|email|max:255',
-            'product_name' => 'nullable|string|max:255',
+            'product_id' => 'required|exists:products,id',
             'rating' => 'required|integer|min:1|max:5',
             'title' => 'required|string|max:255',
             'review' => 'required|string',
@@ -125,18 +137,39 @@ class ReviewsController extends Controller
             'is_featured' => 'boolean'
         ]);
 
-        // Handle image upload
         if ($request->hasFile('image')) {
-            // Delete old image
-            if ($review->image) {
-                Storage::disk('public')->delete('reviews/' . $review->image);
+            $file = $request->file('image');
+            $uploadDir = public_path('uploads/reviews');
+
+            // 1. Delete old image if it exists
+            if ($review->image && File::exists("{$uploadDir}/{$review->image}")) {
+                File::delete("{$uploadDir}/{$review->image}");
+            }
+            
+            // 2. Create uploads/reviews directory if it doesn't exist
+            if (!File::isDirectory($uploadDir)) {
+                File::makeDirectory($uploadDir, 0755, true, true);
             }
 
-            $imagePath = $request->file('image')->store('reviews', 'public');
-            $validated['image'] = basename($imagePath);
+            // 3. Generate a unique filename and move the file
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadDir, $filename);
+
+            // 4. Store the new filename in the database
+            $validated['image'] = $filename;
+
+        } elseif ($request->input('clear_image')) {
+            // Optional: Handle case where an existing image is explicitly cleared (e.g., via a checkbox)
+            if ($review->image && File::exists(public_path('uploads/reviews/' . $review->image))) {
+                File::delete(public_path('uploads/reviews/' . $review->image));
+            }
+            $validated['image'] = null;
+        } else {
+            // Ensure image field is not unintentionally cleared if no new file is uploaded
+            unset($validated['image']);
         }
 
-        // Handle status change
+        // Handle status change logic
         if ($validated['status'] === 'approved' && $review->status !== 'approved') {
             $validated['approved_at'] = now();
             $validated['approved_by'] = auth()->id();
@@ -153,9 +186,11 @@ class ReviewsController extends Controller
 
     public function destroy(Review $review)
     {
+        $uploadDir = public_path('uploads/reviews');
+
         // Delete image if exists
-        if ($review->image) {
-            Storage::disk('public')->delete('reviews/' . $review->image);
+        if ($review->image && File::exists("{$uploadDir}/{$review->image}")) {
+            File::delete("{$uploadDir}/{$review->image}");
         }
 
         $review->delete();
@@ -238,11 +273,12 @@ class ReviewsController extends Controller
                 break;
 
             case 'delete':
-                // Delete images
+                $uploadDir = public_path('uploads/reviews');
+                // Delete images using the new file path convention
                 $reviewsToDelete = $reviews->get();
                 foreach ($reviewsToDelete as $review) {
-                    if ($review->image) {
-                        Storage::disk('public')->delete('reviews/' . $review->image);
+                    if ($review->image && File::exists("{$uploadDir}/{$review->image}")) {
+                        File::delete("{$uploadDir}/{$review->image}");
                     }
                 }
                 $reviews->delete();

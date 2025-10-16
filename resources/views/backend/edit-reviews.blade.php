@@ -53,11 +53,18 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="input-group input-group-outline mb-3 {{ $review->product_name ? 'is-filled' : '' }} @error('product_name') is-invalid @enderror">
-                                                    <label class="form-label">Product/Service Name</label>
-                                                    <input type="text" name="product_name" class="form-control" value="{{ old('product_name', $review->product_name) }}">
+                                                <div class="input-group input-group-outline mb-3 @error('product_id') is-invalid @enderror">
+                                                    <label class="form-label">Product * <small class="text-muted">(Required for product-specific reviews)</small></label>
+                                                    <select name="product_id" class="form-select" required>
+                                                        <option value="">Select Product</option>
+                                                        @foreach($products as $product)
+                                                            <option value="{{ $product->id }}" {{ old('product_id', $review->product_id) == $product->id ? 'selected' : '' }}>
+                                                                {{ $product->name }} ({{ $product->getPrice() }})
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
-                                                @error('product_name')
+                                                @error('product_id')
                                                 <div class="text-danger text-sm">{{ $message }}</div>
                                                 @enderror
                                             </div>

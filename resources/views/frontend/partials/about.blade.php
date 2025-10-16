@@ -1,65 +1,65 @@
-@extends('frontend.layouts.app') @section('content')
+@extends('frontend.layouts.app')
+
+@section('content')
+
+    <!-- About Us Intro -->
     <section class="bg-[#F5F3E7] px-6 py-16 md:px-20">
         <div class="max-w-5xl mx-auto">
-        <div class="flex items-center mb-2">
-                <h2 class="text-4xl md:text-5xl lg:text-6xl font-light w-1/4 text-taupe mb-2">
-                    About <br><span class="font-bold"> Us</span>
+            <div class="flex items-center mb-2">
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-light w-1/4 text-[#ef380d] mb-2">
+                    About <br><span class="font-bold text-[#ef380d]">Us</span>
                 </h2>
-                <div class="bg-taupe h-1 backdrop-blur-sm  w-3/4 min-w-lg mt-4 mb-8"></div>
+                <div class="bg-[#ef380d]/60 h-1 w-3/4 min-w-lg mt-4 mb-8"></div>
             </div>
-            <p class="text-gray-800 text-lg leading-relaxed mb-4">
-                Welcome to <strong>Afro Jee</strong>, where simplicity meets quality in every product we
-                create.
+            <p class="text-[#2E2E2E] text-lg leading-relaxed mb-4">
+                Welcome to <strong class="text-[#ef380d]">Afro Jee</strong>, where simplicity meets quality in every product
+                we create.
                 Founded with a passion for natural beauty and self-care, our brand is dedicated to providing you with
-                essentials
-                that enhance your skin and hair, without the fuss.
+                essentials that enhance your skin and hair, without the fuss.
             </p>
-            <p class="text-gray-800 text-lg leading-relaxed">
-                At <strong>Afro Jee</strong>, we believe that less is more. That's why we focus on crafting a carefully
-                curated
+            <p class="text-[#2E2E2E] text-lg leading-relaxed">
+                At <strong class="text-[#ef380d]">Afro Jee</strong>, we believe that less is more. That's why we focus on
+                crafting a carefully curated
                 selection of products that are as effective as they are gentle. We source the finest natural ingredients,
-                ensuring
-                that each item in our collection is free from harmful chemicals and full of goodness for your body.
+                ensuring that each item in our collection is free from harmful chemicals and full of goodness for your body.
             </p>
         </div>
     </section>
 
-    <section class="bg-[#FAEFF8] px-6 py-16 md:px-20">
+    <!-- Mission Section -->
+    <section class="bg-[#FAEFF8] px-6 py-16 md:px-20 relative overflow-hidden">
         <div class="max-w-5xl mx-auto grid md:grid-cols-2 items-start gap-10">
             <div class="relative">
-                <!-- <div class=""></div> -->
-                <img src="/images/line.png" alt="Woman applying beauty products"
-                    class="absolute -top-7 -left-16 rounded-full z-10" />
-                    <img src="/images/p3.jpg" alt="Woman applying beauty products"
-                    class="rounded-xl relative z-0 object-cover w-full h-auto max-h-[400px]" />
+                <img src="/images/line.png" alt="Decorative line" class="absolute -top-7 -left-16 z-10 opacity-70" />
+                <img src="/images/p3.jpg" alt="Woman applying beauty products"
+                    class="rounded-xl relative z-0 object-cover w-full h-auto max-h-[400px] shadow-lg border-4 border-[#ef380d]/10" />
             </div>
             <div class="">
-                <h3 class="text-3xl md:text-4xl font-semibold text-[#8C2A4A] mb-20">Mission</h3>
-                <p class="text-gray-800 text-lg leading-relaxed">
+                <h3 class="text-3xl md:text-4xl font-semibold text-[#ef380d] mb-10">Our Mission</h3>
+                <p class="text-[#2E2E2E] text-lg leading-relaxed">
                     Our mission is simple: to help you feel confident and radiant in your own skin, using products you can
                     trust.
                     Whether you're nourishing your hair or pampering your skin, we're here to make your self-care routine a
-                    little
-                    easier and a lot more enjoyable.
+                    little easier and a lot more enjoyable.
                 </p>
-                <p></p>
             </div>
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto py-12">
+    <!-- Coverage Section -->
+    <section class="max-w-6xl mx-auto py-16 px-6 md:px-20 bg-[#fffaf6]">
         <div class="mb-12">
             <div class="flex items-center mb-2">
-                <h2 class="text-4xl md:text-5xl lg:text-6xl font-light w-1/4 text-taupe mb-2">
-                    Our <br><span class="font-bold"> Coverage</span>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-light w-1/4 text-[#ef380d] mb-2">
+                    Our <br><span class="font-bold text-[#ef380d]">Coverage</span>
                 </h2>
-                <div class="bg-taupe h-1 backdrop-blur-sm  w-3/4 min-w-lg mt-4 mb-8"></div>
+                <div class="bg-[#ef380d]/60 h-1 w-3/4 min-w-lg mt-4 mb-8"></div>
             </div>
         </div>
-        <p class="text-lg text-gray-700 leading-relaxed mb-6">
-            We currently operate exclusively in <span class="font-bold">all the states in the USA</span>, but we're
-            excited to expand our reach and bring
-            Afro Jee to more countries soon. Stay tuned!
+
+        <p class="text-lg text-[#2E2E2E] leading-relaxed mb-6">
+            We currently operate exclusively in <span class="font-bold text-[#ef380d]">all the states in the USA</span>,
+            but we're excited to expand our reach and bring Afro Jee to more countries soon. Stay tuned!
         </p>
 
         <div class="grid md:grid-cols-2 gap-10 items-center">
@@ -355,36 +355,37 @@
                 </svg>
             </div>
 
-            <div class="flex items-center md:justify-start">
-                <svg class="w-8 h-8 mr-3 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center md:justify-start bg-[#ef380d]/5 rounded-lg p-6 shadow-sm">
+                <svg class="w-8 h-8 mr-3 text-[#ef380d]" fill="currentColor" viewBox="0 0 24 24">
                     <path
                         d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                 </svg>
-                <p class="text-xl font-semibold text-gray-800">Our current domain of active operations</p>
+                <p class="text-xl font-semibold text-[#2E2E2E]">Our current domain of active operations</p>
             </div>
         </div>
     </section>
 
-    <!-- <section class="max-w-6xl mx-auto py-12">
-        <div class="mb-16">
+    <!-- Join Us Section -->
+    <section
+        class="max-w-6xl mx-auto py-20 px-6 md:px-20 bg-gradient-to-r from-[#ef380d] to-[#8C2A4A] text-white rounded-2xl shadow-lg my-12">
+        <div class="mb-10">
             <div class="flex items-center mb-2">
-                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold w-1/4 text-taupe mb-2">
-                    Join <br><span class="font-light"> Us</span>
+                <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold w-1/4">Join <br><span class="font-light">Us</span>
                 </h2>
-                <div class="bg-taupe h-1 backdrop-blur-sm  w-3/4 min-w-lg mt-4 mb-8"></div>
+                <div class="bg-white/50 h-1 w-3/4 min-w-lg mt-4 mb-8"></div>
             </div>
-            <p class="text-lg text-gray-700 leading-relaxed mb-8">
+            <p class="text-lg leading-relaxed mb-8">
                 Join us on our journey to celebrate natural beauty, one product at a time. At Afro Jee,
-                it's not just
-                about looking good—it's about feeling good too.
+                it's not just about looking good—it's about feeling good too.
             </p>
             <button
-                class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 transition duration-300 ease-in-out">
-                Sign Up to order
+                class="bg-white text-[#ef380d] hover:bg-[#fff5f0] px-6 py-3 rounded-full font-medium flex items-center gap-2 transition duration-300 ease-in-out shadow-md">
+                Sign Up to Order
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
             </button>
         </div>
-    </section> -->
+    </section>
+
 @endsection

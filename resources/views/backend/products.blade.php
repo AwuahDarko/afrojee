@@ -41,7 +41,8 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="{{ $product->image }}" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                                                    <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.jpg') }}" 
+                                                        class="avatar avatar-sm me-3 border-radius-lg" alt="{{ $product->name }}">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
                                                     <h6 class="mb-0 text-sm">{{ $product->name }}</h6>

@@ -1,4 +1,4 @@
-{{-- reviews/show.blade.php --}}
+{{-- reviews-show.blade.php --}}
 @extends('backend.layouts.app')
 
 @section('title', 'Review Details')
@@ -108,10 +108,10 @@
                                     </div>
                                     @endif
 
-                                    @if($review->product_name)
+                                    @if($review->product)
                                     <div class="info-item mb-3">
-                                        <label class="text-sm text-secondary">Product/Service</label>
-                                        <p class="text-sm mb-0">{{ $review->product_name }}</p>
+                                        <label class="text-sm text-secondary">Product</label>
+                                        <p class="text-sm mb-0">{{ $review->product->name }}</p>
                                     </div>
                                     @endif
 
@@ -159,6 +159,7 @@ function quickAction(reviewId, action) {
         headers: {
             'X-CSRF-TOKEN': '{{ csrf_token() }}',
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         }
     })
     .then(response => response.json())
