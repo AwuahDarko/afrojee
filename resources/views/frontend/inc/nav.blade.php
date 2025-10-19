@@ -29,7 +29,7 @@
                 </button>
 
                 <div
-                    class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
+                    class="absolute left-0 mt-0 w-48 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
                     <div class="py-2 px-4">
                         <a href="/products" class="block py-2 text-gray-700 hover:text-[#ef380d]">All Products</a>
                         @foreach($categories as $category)

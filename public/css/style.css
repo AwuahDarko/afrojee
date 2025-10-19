@@ -7,14 +7,16 @@
     --color-gold: #c8a655;
     --color-cream: #f8f6f1;
     --color-rosegold: #e0c3b6;
-    --color-footergold: #a67c24;
+    --color-footergold: #f06243ff;
     --color-burgundy: #9d3f5b;
     --color-taupe: #806d48;
     --color-strip: #766455;
     --color-clifford: #da373d;
 }
 :root {
-    --color-primary: #8a3641;
+    --color-primary:#ef380d;
+    --color-primary-dark:#c32e0a;
+    --color-primary-light:#f06243ff;
     --color-secondary: #f0ead6;
     --color-text-dark: #333;
     --color-text-light: #fff;

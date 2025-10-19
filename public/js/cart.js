@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cartItemElement = document.createElement('div');
                 cartItemElement.className = 'flex items-center gap-4 p-2 border rounded-lg shadow-sm bg-gray-50';
                 cartItemElement.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
+                    <img ddddddddddd src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-md">
                     <div class="flex-grow">
                         <h3 class="font-semibold text-gray-800">${item.name}</h3>
                         ${item.sizeName ? `<p class="text-sm text-gray-500">Size: ${item.sizeName}</p>` : ''}
@@ -121,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners ---
     document.querySelectorAll('.cart-item-btn').forEach(button => {
         button.addEventListener('click', (event) => {
+            console.log('button ---------->', button)
             const productId = button.dataset.productId;
             const productName = button.dataset.productName;
             const productPrice = parseFloat(button.dataset.productPrice.replace(',', ''));

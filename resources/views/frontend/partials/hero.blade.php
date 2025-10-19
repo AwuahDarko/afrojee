@@ -6,7 +6,7 @@
         <div class="swiper-slide relative w-full h-screen" data-transition="circle">
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
-                <img src="{{ asset('images/p4.jpg') }}" alt="Beauty product with rose petals"
+                <img src="{{ asset('images/p1.jpeg') }}" alt="Beauty product with rose petals"
                     class="w-full h-full object-cover transition-all duration-3000 ease-out" />
             </div>
             <div class="absolute inset-0 bg-black/30 z-10"></div>
@@ -14,7 +14,7 @@
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
                         Beauty creams, oils, balms & more
                     </div>
                     <h1
@@ -23,7 +23,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">unique lifestyle</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
+                    <div class="hidden hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             View Products
@@ -48,7 +48,7 @@
                 </div>
 
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Tamara Odoom"
@@ -88,14 +88,14 @@
             <div class="tile-overlay"></div>
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
-                <img src="{{ asset('images/p5.png') }}" alt="Beauty product with lavender"
+                <img src="{{ asset('images/p2.jpeg') }}" alt="Beauty product with lavender"
                     class="w-full h-full object-cover transition-all duration-3000 ease-out" />
             </div>
             <div class="absolute inset-0 bg-black/30 z-10"></div>
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
                         Natural ingredients for glowing skin
                     </div>
                     <h1
@@ -104,7 +104,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">radiant glow</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
+                    <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             Shop Now
@@ -128,7 +128,7 @@
                     </div>
                 </div>
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Sarah Johnson"
@@ -167,14 +167,14 @@
         <div class="swiper-slide relative w-full h-screen" data-transition="ball-drop">
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
-                <img src="{{ asset('images/p5.png') }}" alt="Beauty product with aloe vera"
+                <img src="{{ asset('images/p3.jpeg') }}" alt="Beauty product with aloe vera"
                     class="w-full h-full object-cover transition-all duration-3000 ease-out" />
             </div>
             <div class="absolute inset-0 bg-black/30 z-10"></div>
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up-fast delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up-fast delay-100">
                         Hydrate & nourish with aloe vera
                     </div>
                     <h1
@@ -183,7 +183,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">vibrant skin</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
+                    <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             Explore Now
@@ -207,7 +207,7 @@
                     </div>
                 </div>
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Emily Chen"
@@ -246,14 +246,14 @@
         <div class="swiper-slide relative w-full h-screen" data-transition="sidebar">
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
-                <img src="{{ asset('images/p5.png') }}" alt="Beauty product with chamomile"
+                <img src="{{ asset('images/p5.jpeg') }}" alt="Beauty product with chamomile"
                     class="w-full h-full object-cover transition-all duration-3000 ease-out" />
             </div>
             <div class="absolute inset-0 bg-black/30 z-10"></div>
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
                         Soothing chamomile for calm skin
                     </div>
                     <h1
@@ -262,7 +262,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">daily ritual</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
+                    <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             Discover Now
@@ -286,7 +286,7 @@
                     </div>
                 </div>
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Lila Patel"
@@ -326,14 +326,14 @@
             <div class="slice-overlay"></div>
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
-                <img src="{{ asset('images/p5.png') }}" alt="Beauty product with essential oils"
+                <img src="{{ asset('images/p4.jpeg') }}" alt="Beauty product with essential oils"
                     class="w-full h-full object-cover transition-all duration-3000 ease-out" />
             </div>
             <div class="absolute inset-0 bg-black/30 z-10"></div>
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
                         Essential oils for ultimate relaxation
                     </div>
                     <h1
@@ -342,7 +342,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">daily wellness</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
+                    <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             Shop Oils
@@ -366,7 +366,7 @@
                     </div>
                 </div>
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-left delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Mia Rodriguez"
@@ -401,7 +401,7 @@
         </div>
 
         <!-- Slide 6: New - Spin Reveal -->
-        <div class="swiper-slide relative w-full h-screen" data-transition="spin">
+        <!-- <div class="swiper-slide relative w-full h-screen" data-transition="spin">
             <div class="absolute inset-0 w-full h-full bg-cover bg-center z-0" data-swiper-parallax-opacity="0.5"
                 data-swiper-parallax="50%">
                 <img src="{{ asset('images/p5.png') }}" alt="Beauty product with herbs"
@@ -411,7 +411,7 @@
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
                     <div
-                        class="hero-label inline-block px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
+                        class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
                         Herbal remedies for natural beauty
                     </div>
                     <h1
@@ -420,7 +420,7 @@
                             class="hidden sm:block">
                         <span class="font-bold">beauty</span>
                     </h1>
-                    <div class="hero-cta flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
+                    <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
                             Browse Herbs
@@ -444,7 +444,7 @@
                     </div>
                 </div>
                 <div
-                    class="hero-testimonial absolute bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
+                    class="hero-testimonial absolute hidden bottom-4 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-8 md:right-16 bg-gray-800/80 backdrop-blur-sm rounded-lg p-4 sm:p-6 max-w-xl text-white animate-slide-right delay-500">
                     <div class="flex items-center space-x-3 sm:space-x-4 mb-2">
                         <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden flex-shrink-0">
                             <img src="{{ asset('images/profile.png') }}" alt="Sophia Lee"
@@ -476,12 +476,12 @@
                     </a>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="transition-overlay"></div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev hidden sm:block"></div>
-    <div class="swiper-button-next hidden sm:block"></div>
+    <!-- <div class="swiper-pagination"></div> -->
+    <!-- <div class="swiper-button-prev text-primary hidden sm:block"></div> -->
+    <!-- <div class="swiper-button-next text-primary hidden sm:block"></div> -->
 </section>
 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -807,14 +807,14 @@
 }
 
 /* ===== Text + CTA Entrance Animations ===== */
-.animate-text .hero-label,
+.animate-text .hero-label hidden,
 .animate-text .hero-heading,
 .animate-text .hero-cta,
 .animate-text .hero-testimonial {
   opacity: 0;
   transform: translateY(20px);
 }
-.animate-text.show .hero-label {
+.animate-text.show .hero-label hidden {
   animation: fadeUp 0.6s ease-out forwards 0.1s;
 }
 .animate-text.show .hero-heading {

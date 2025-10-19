@@ -52,8 +52,18 @@ Route::get('/reviews/create', [ReviewController::class, 'create'])->name('review
 
 // New route for storing a new review (form submission)
 Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store');
-
+Route::post('/products/{product}/review', [ProductController::class, 'storeReview'])->name('product.review.store');
 Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
+
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsletterController;
+
+// Contact Form Routes
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Newsletter Routes
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/newsletter/unsubscribe', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 // Original GET route
 // Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
 

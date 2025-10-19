@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
@@ -81,16 +82,52 @@ class ProductController extends Controller
                         ->orderBy('is_featured', 'desc') // Featured first
                         ->orderBy('created_at', 'desc');
                 }
-            ])
+            ])->withCount('reviews')->withAvg('reviews', 'rating')
             ->firstOrFail();
 
         $primaryImagePath = $product->getPrimaryImage()?->image_path ?? 
-                        ($product->images->first()?->image_path ?? asset('images/default-product.jpg'));
+                        ($product->images->first()?->image_path ?? asset('images/default-product.png'));
 
         $clean_description = strip_tags($product->description);
         $meta_description = substr($clean_description, 0, strlen($clean_description) / 2);
         $meta_keywords = $product->name;
 
         return view('frontend.partials.productDetail', compact('product', 'meta_description', 'meta_keywords', 'primaryImagePath'));
+    }
+
+    public function storeReview(Request $request, Product $product)
+    {
+
+        // 1. Validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+            'title' => 'required|string|max:255',
+            'review' => 'required|string|max:2000',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2MB
+        ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image_file')) {
+            $imageName = uniqid() . '.' . $request->file('image_file')->getClientOriginalExtension();
+            // Store image in public/uploads/reviews folder
+            $request->file('image_file')->move(public_path('uploads/reviews'), $imageName);
+            $imagePath = $imageName;
+        }
+
+        // 2. Create Review
+        Review::create([
+            'product_id' => $product->id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'rating' => $request->rating,
+            'title' => $request->title,
+            'review' => $request->review,
+            'image' => $imagePath,
+            'status' => 'pending', // Reviews should be manually approved
+        ]);
+        // 3. Redirect with success message
+        return back()->with('success', 'Your review has been submitted for approval. Thank you!');
     }
 }

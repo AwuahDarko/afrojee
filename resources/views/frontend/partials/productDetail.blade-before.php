@@ -176,7 +176,7 @@ $checkoutUrl = route('web.checkoutDetails.single', [
                         data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : null }}"
                         class="cart-item-btn relative bg-white border border-pink-800 p-2 rounded-full text-pink-800 hover:bg-pink-100 w-10 h-10 flex items-center justify-center transition-all duration-300 ease-in-out hover:scale-105">
                         <svg width="20" height="20" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#a)" fill="#99395C">
+                            <g clip-path="url(#a)" fill="#ef380d">
                                 <path
                                     d="M21.377 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.087L6.64 5h18.488a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313l-1.125 2.038-.038.15a.313.313 0 0 0 .313.312h14.475v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.877 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5m11.25-8.75 3.475-6.25h-15.8l2.95 6.25z" />
                                 <path d="M25.127 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="#FCF4F7" stroke-width="2" />

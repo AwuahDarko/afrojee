@@ -49,9 +49,13 @@
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script type="module" src="{{ asset('js/app.js') }}"></script>
     <!-- Favicon -->
-
+<script>
+    const appCurrency = @json(app_currency());
+</script>
 
     <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -71,7 +75,7 @@
             --color-gold: #c8a655;
             --color-cream: #f8f6f1;
             --color-rosegold: #e0c3b6;
-            --color-footergold: #a67c24;
+            --color-footergold: #f06243ff;
             --color-burgundy: #9d3f5b;
             --color-taupe: #806d48;
             --color-strip: #766455;

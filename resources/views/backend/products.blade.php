@@ -41,7 +41,7 @@
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.jpg') }}" 
+                                                    <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}" 
                                                         class="avatar avatar-sm me-3 border-radius-lg" alt="{{ $product->name }}">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
