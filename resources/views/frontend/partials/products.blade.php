@@ -324,7 +324,7 @@
 
                     <!-- Product Image -->
                     <div class="relative h-72 md:h-80 overflow-hidden">
-                        <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                        <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}" alt="{{ $product->name }}"
                             class="product-image w-full h-full object-cover"
                             onerror="this.src='https://placehold.co/300x300/F3BF45/ffffff?text=Product+Image'">
 

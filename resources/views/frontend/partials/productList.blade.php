@@ -341,7 +341,7 @@
 
             <!-- Products Grid -->
             <div class="grid-container" id="productGrid">
-                @foreach ($products as $product)
+                @forelse ($products as $product)
                     <div class="group relative product-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
                          data-product-id="{{ $product->id }}"
                          data-category="{{ strtolower(str_replace(' ', '-', $product->category->name)) }}">
@@ -477,7 +477,7 @@
                         <!-- Product Image -->
                         <div class="relative h-72 md:h-80 overflow-hidden">
                             <a href="{{route('web.products.details', ['slug' => $product->slug])}}">
-                                <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                                <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}" alt="{{ $product->name }}"
                                     class="product-image w-full h-full object-cover"
                                     onerror="this.src='https://images.unsplash.com/photo-1556228720-195a672e8a03?w=400&h=400&fit=crop'">
                             </a>
@@ -582,7 +582,33 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <!-- No Products Found Card -->
+                    <div class="col-span-full flex flex-col items-center justify-center text-center py-20 bg-white rounded-3xl shadow-lg border border-gray-100">
+                        <div class="relative mb-6">
+                            <div class="absolute inset-0 blur-3xl bg-gradient-to-tr from-primary/30 to-accent/30 rounded-full opacity-70"></div>
+                            <svg class="w-24 h-24 text-primary relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                                    d="M3 3h18M9 8v13m6-13v13M4 21h16" />
+                            </svg>
+                        </div>
+
+                        <h2 class="text-2xl font-bold text-gray-800 mb-3">No Products Found</h2>
+                        <p class="text-gray-500 max-w-md mb-6">
+                            We couldn’t find any products matching your filters or category.
+                            Try adjusting your filters or check back later for new arrivals.
+                        </p>
+
+                        <a href="{{ route('web.products') }}"
+                        class="bg-primary text-white px-6 py-3 rounded-2xl hover:bg-primary-dark transition-all duration-300 font-semibold shadow-md hover:shadow-lg flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 12l2-2m0 0l7-7 7 7M13 5v14" />
+                            </svg>
+                            Back to All Products
+                        </a>
+                    </div>
+                @endforelse
             </div>
 
             <!-- Pagination -->

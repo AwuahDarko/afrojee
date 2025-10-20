@@ -15,6 +15,8 @@ use App\Http\Controllers\Web\SignUpController;
 use App\Http\Controllers\Web\ReviewController;
 use App\Http\Controllers\Web\QuestionsController;
 use App\Http\Controllers\Web\CartController;
+use App\Http\Controllers\Web\ContactController;
+use App\Http\Controllers\Web\NewsletterController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -55,8 +57,6 @@ Route::post('/reviews', [ReviewController::class, 'store'])->name('reviews.store
 Route::post('/products/{product}/review', [ProductController::class, 'storeReview'])->name('product.review.store');
 Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
 
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\NewsletterController;
 
 // Contact Form Routes
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');

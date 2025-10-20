@@ -158,24 +158,26 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   // 🆕 EVENT LISTENERS
-  prevPageBtn.addEventListener('click', () => {
-      if (currentPage > 1) {
-          currentPage--;
-          renderReviews();
-          updatePaginationButtons();
-      }
-  });
-
-  nextPageBtn.addEventListener('click', () => {
-      const sortedReviews = sortReviewsData(reviewsData, sortBy);
-      const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
-      if (currentPage < totalPages) {
-          currentPage++;
-          renderReviews();
-          updatePaginationButtons();
-      }
-  });
-
+  if (prevPageBtn) {
+    prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            renderReviews();
+            updatePaginationButtons();
+        }
+    });
+  }
+  if (nextPageBtn) {
+    nextPageBtn.addEventListener('click', () => {
+        const sortedReviews = sortReviewsData(reviewsData, sortBy);
+        const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            renderReviews();
+            updatePaginationButtons();
+        }
+    });
+  }
   // 🆕 INITIALIZE
   if (reviewsList) {
       renderReviews();
@@ -193,32 +195,39 @@ window.addEventListener("DOMContentLoaded", () => {
   updateSlide();
 
   // Event listeners
-  prevBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-    updateSlide();
-  });
-
-  nextBtn.addEventListener('click', () => {
-    currentIndex = (currentIndex + 1) % totalSlides;
-    updateSlide();
-  });
-
-  clientNavs.forEach(nav => {
-    nav.addEventListener('click', () => {
-      currentIndex = parseInt(nav.getAttribute('data-index-client'));
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
       updateSlide();
     });
-  });
+  }
 
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateSlide();
+    });
+  }
+
+  if (clientNavs) {
+    clientNavs.forEach(nav => {
+      nav.addEventListener('click', () => {
+        currentIndex = parseInt(nav.getAttribute('data-index-client'));
+        updateSlide();
+      });
+    });
+  }
   // Functions
   function updateSlide() {
     // Update slides
+    if (!slides || slides.length === 0) return;
     slides.forEach(slide => {
       slide.classList.remove('active');
     });
     slides[currentIndex].classList.add('active');
 
     // Update client navs
+    if (!clientNavs || clientNavs.length === 0) return;
     clientNavs.forEach(nav => {
       console.log(nav.getAttribute('data-index-client'), currentIndex);
       const navIndex = parseInt(nav.getAttribute('data-index-client'));

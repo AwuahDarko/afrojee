@@ -17,7 +17,6 @@ $checkoutUrl = route('web.checkoutDetails.single', [
 ]);
 @endphp
 <script>
-    const appCurrency = @json(app_currency());
     const checkoutRoute = @json($checkoutUrl);
 </script>
 <script src="{{ asset('js/productDetail.js') }}"></script>
@@ -689,21 +688,25 @@ $checkoutUrl = route('web.checkoutDetails.single', [
     };
 
     // Event Listeners for Previous/Next buttons
-    prevPageBtn.addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderReviews();
-            updatePaginationButtons();
-        }
-    });
+    if (prevPageBtn) {
+        prevPageBtn.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderReviews();
+                updatePaginationButtons();
+            }
+        });
+    }
 
-    nextPageBtn.addEventListener('click', () => {
-        if (currentPage < totalPages) {
-            currentPage++;
-            renderReviews();
-            updatePaginationButtons();
-        }
-    });
+    if (nextPageBtn) {
+        nextPageBtn.addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderReviews();
+                updatePaginationButtons();
+            }
+        });
+    }
 
     // Initial render
     renderReviews();

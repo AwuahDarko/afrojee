@@ -48,7 +48,7 @@
                 </div>
                 
                 <div class="relative">
-                    <img src="{{ asset('images/founder-jennifer.jpEg') }}" alt="Jennifer Pokuaa Effah - Founder of Afro Jee" 
+                    <img src="{{ asset('images/founder-jennifer.jpeg') }}" alt="Jennifer Pokuaa Effah - Founder of Afro Jee" 
                          class="rounded-2xl shadow-2xl border-4 border-[#ef380d]/20 w-full h-auto">
                     <div class="absolute -bottom-4 -right-4 bg-[#ef380d] text-white px-4 py-2 rounded-lg">
                         <p class="text-sm font-semibold">Jennifer Pokuaa Effah</p>

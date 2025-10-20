@@ -85,7 +85,7 @@ class ReviewsController extends Controller
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $uploadDir = public_path('uploads/reviews');
+            $uploadDir = base_path('../uploads/reviews');
 
             // Create uploads/reviews directory if it doesn't exist
             if (!File::isDirectory($uploadDir)) {
@@ -139,7 +139,7 @@ class ReviewsController extends Controller
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $uploadDir = public_path('uploads/reviews');
+            $uploadDir = base_path('../uploads/reviews');
 
             // 1. Delete old image if it exists
             if ($review->image && File::exists("{$uploadDir}/{$review->image}")) {
@@ -186,7 +186,7 @@ class ReviewsController extends Controller
 
     public function destroy(Review $review)
     {
-        $uploadDir = public_path('uploads/reviews');
+        $uploadDir = base_path('../uploads/reviews');
 
         // Delete image if exists
         if ($review->image && File::exists("{$uploadDir}/{$review->image}")) {
@@ -273,7 +273,7 @@ class ReviewsController extends Controller
                 break;
 
             case 'delete':
-                $uploadDir = public_path('uploads/reviews');
+                $uploadDir = base_path('../uploads/reviews');
                 // Delete images using the new file path convention
                 $reviewsToDelete = $reviews->get();
                 foreach ($reviewsToDelete as $review) {

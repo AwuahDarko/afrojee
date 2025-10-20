@@ -335,7 +335,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderCart = document.getElementById('order-cart');
     const cartItemsContainer = document.getElementById('checkout-cart-items');
     const subtotalElement = document.getElementById('checkout-subtotal');
-    const appCurrency = @json(app_currency());
     const global_zone_id = {{ $userAddress?->zone->id ?? 0 }};
     const regionPriceUrl = "{{ route('web.checkoutDetails.info.getprice') }}";
     const regionUrl = "{{ route('web.checkoutDetails.info.region') }}";

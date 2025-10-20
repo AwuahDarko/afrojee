@@ -45,7 +45,7 @@
         <!-- Logo -->
         <div class="flex items-center">
             <a href="/" class="flex flex-row items-center text-center space-x-2">
-                <img src="{{ asset('images/afro_logo.jpeg') }}" alt="Afro Jee Logo"
+                <img src="{{ asset('/images/afro_logo.jpeg') }}" alt="Afro Jee Logo"
                     class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
                 <div class="flex flex-col items-start leading-tight">
                     <h1 class="text-2xl md:text-3xl font-serif text-[#ef380d] italic">Afro Jee</h1>

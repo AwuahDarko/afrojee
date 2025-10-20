@@ -1,4 +1,5 @@
 console.log('admin.js loaded...........')
+document.addEventListener('DOMContentLoaded', function() {
 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 // Select All Checkbox
@@ -241,3 +242,4 @@ if (bulkActionForm) {
             e.target.closest('tr').remove();
         }
     });
+});

@@ -171,29 +171,29 @@ class ProductController extends Controller
 
                     try {
                         // Create uploads directory if it doesn't exist
-                        $uploadDir = public_path('uploads/products');
+                        $uploadDir = base_path('../uploads/products');
                         if (!file_exists($uploadDir)) {
                             mkdir($uploadDir, 0755, true);
                         }
 
                         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                         $file->move($uploadDir, $filename);
-                        $filePath = asset('uploads/products/' . $filename);
+
+                        // Correct public URL path
+                        $filePath = asset('../uploads/products/' . $filename);
 
                         $isPrimary = ($request->primary_image == $index) ? 1 : 0;
                         $sortOrder = $request->input("images.{$index}.sort_order", $imageCount);
 
-                        // 🆕 SAVE TO DB
+                        // Save to DB
                         $image = ProductImage::create([
                             'product_id' => $product->id,
                             'image_path' => $filePath,
                             'is_primary' => $isPrimary,
-                            'sort_order' => $sortOrder
+                            'sort_order' => $sortOrder,
                         ]);
 
-                        // \Log::info("✅ Image saved", ['image_id' => $image->id, 'path' => $filePath]);
                         $imageCount++;
-
                     } catch (\Exception $e) {
                         \Log::error("❌ Image upload failed for {$index}", [
                             'error' => $e->getMessage(),
@@ -322,14 +322,15 @@ class ProductController extends Controller
 
                     try {
                         // Create uploads directory if it doesn't exist
-                        $uploadDir = public_path('uploads/products');
+                        $uploadDir = base_path('../uploads/products');
+                        
                         if (!file_exists($uploadDir)) {
                             mkdir($uploadDir, 0755, true);
                         }
 
                         $filename = uniqid() . '.' . $file->getClientOriginalExtension();
                         $file->move($uploadDir, $filename);
-                        $filePath = asset('uploads/products/' . $filename);
+                        $filePath = asset('../uploads/products/' . $filename);
 
                         $isPrimary = ($request->primary_image == $index) ? 1 : 0;
                         $sortOrder = $request->input("images.{$index}.sort_order", $index);

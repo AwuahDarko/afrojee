@@ -123,7 +123,7 @@
                 View Full Cart
             </a>
             {{-- Updated: Proceed to Checkout button now triggers JS --}}
-            <button id="proceed-to-checkout-btn" class="block w-full bg-pink-800 text-white text-center py-3 rounded-md hover:bg-pink-900 transition duration-200">
+            <button id="proceed-to-checkout-btn" class="block w-full bg-[#ef380d] text-white text-center py-3 rounded-md hover:bg-[#f06243ff] transition duration-200">
                 Proceed to Checkout
             </button>
             

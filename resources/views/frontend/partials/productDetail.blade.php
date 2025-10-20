@@ -17,7 +17,6 @@
     ]);
 @endphp
 <script>
-    const appCurrency = @json(app_currency());
     const checkoutRoute = @json($checkoutUrl);
 
     const productReviews = @json($product->reviews);
@@ -258,7 +257,10 @@
                 </a>
 
                 <!-- Add to Cart Button -->
-                <button data-product-id="1"
+                <button data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
+                        data-product-price="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->price : $product->price }}"
+                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                        data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : null }}"
                     class="cart-item-btn relative bg-white border-2 border-[#ef380d] p-3 rounded-2xl text-[#ef380d] hover:bg-[#ef380d]/5 w-14 h-14 flex items-center justify-center transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105 active:scale-95 shadow-sm flex-shrink-0">
                     <svg width="22" height="22" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#a)" fill="#ef380d">
