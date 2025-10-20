@@ -64,8 +64,9 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="input-group input-group-outline mb-3 @error('product_id') is-invalid @enderror">
-                                                    <label class="form-label">Product * <small class="text-muted">(Required for product-specific reviews)</small></label>
-                                                    <select name="product_id" class="form-select" required>
+                                                    <label class="form-label" for="product_id">Product *</label>
+                                                    <small class="text-muted d-block mb-1" style="font-size: xx-small;">(Required for product-specific reviews)</small>
+                                                    <select id="product_id" name="product_id" class="form-select" required>
                                                         <option value="">Select Product</option>
                                                         @foreach(\App\Models\Product::where('status', 1)->orderBy('name')->get() as $product)
                                                             <option value="{{ $product->id }}" {{ old('product_id') == $product->id ? 'selected' : '' }}>
@@ -73,6 +74,9 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+                                                    @error('product_id')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
                                                 </div>
                                                 @error('product_id')
                                                 <div class="text-danger text-sm">{{ $message }}</div>
