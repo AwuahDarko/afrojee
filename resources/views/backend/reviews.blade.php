@@ -175,7 +175,7 @@
                                         <th>Status</th>
                                         <th>Featured</th>
                                         <th>Date</th>
-                                        <th>Actions</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -212,7 +212,7 @@
                                         <td>
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" 
-                                                       onclick="toggleFeatured({{ $review->id }})"
+                                                       onclick="window.toggleFeatured({{ $review->id }})"
                                                        {{ $review->is_featured ? 'checked' : '' }}>
                                             </div>
                                         </td>
@@ -220,27 +220,57 @@
                                             <span class="text-xs text-secondary">{{ $review->created_at->format('M d, Y') }}</span>
                                         </td>
                                         <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-link text-secondary mb-0" data-bs-toggle="dropdown">
-                                                    <i class="material-symbols-rounded">more_vert</i>
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <!-- View Button -->
+                                                <a href="{{ route('admin.reviews.show', $review) }}" 
+                                                   class="btn btn-link text-info px-2 mb-0" 
+                                                   data-bs-toggle="tooltip" 
+                                                   title="View Details">
+                                                    <i class="material-symbols-rounded text-sm">visibility</i>
+                                                </a>
+                                                
+                                                <!-- Edit Button -->
+                                                <a href="{{ route('admin.reviews.edit', $review) }}" 
+                                                   class="btn btn-link text-dark px-2 mb-0" 
+                                                   data-bs-toggle="tooltip" 
+                                                   title="Edit">
+                                                    <i class="material-symbols-rounded text-sm">edit</i>
+                                                </a>
+                                                
+                                                <!-- Approve Button (only for pending) -->
+                                                @if($review->status === 'pending')
+                                                <button type="button" 
+                                                        onclick="window.quickAction({{ $review->id }}, 'approve')" 
+                                                        class="btn btn-link text-success px-2 mb-0" 
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Approve">
+                                                    <i class="material-symbols-rounded text-sm">check_circle</i>
                                                 </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="{{ route('admin.reviews.show', $review) }}">View</a></li>
-                                                    <li><a class="dropdown-item" href="{{ route('admin.reviews.edit', $review) }}">Edit</a></li>
-                                                    @if($review->status === 'pending')
-                                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="quickAction({{ $review->id }}, 'approve')">Approve</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:void(0)" onclick="quickAction({{ $review->id }}, 'reject')">Reject</a></li>
-                                                    @endif
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li>
-                                                        <form action="{{ route('admin.reviews.destroy', $review) }}" method="POST" 
-                                                              onsubmit="return confirm('Are you sure you want to delete this review?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger">Delete</button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                                
+                                                <!-- Reject Button (only for pending) -->
+                                                <button type="button" 
+                                                        onclick="window.quickAction({{ $review->id }}, 'reject')" 
+                                                        class="btn btn-link text-warning px-2 mb-0" 
+                                                        data-bs-toggle="tooltip" 
+                                                        title="Reject">
+                                                    <i class="material-symbols-rounded text-sm">cancel</i>
+                                                </button>
+                                                @endif
+                                                
+                                                <!-- Delete Button -->
+                                                <form action="{{ route('admin.reviews.destroy', $review) }}" 
+                                                      method="POST" 
+                                                      class="d-inline"
+                                                      onsubmit="return confirm('Are you sure you want to delete this review?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" 
+                                                            class="btn btn-link text-danger px-2 mb-0" 
+                                                            data-bs-toggle="tooltip" 
+                                                            title="Delete">
+                                                        <i class="material-symbols-rounded text-sm">delete</i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>
@@ -271,6 +301,130 @@
     </div>
 </div>
 
+<script>
+// Define functions in global scope
+window.quickAction = function(reviewId, action) {
+    const url = `/admin/reviews/${reviewId}/${action}`;
+    
+    if (action === 'reject' && !confirm('Are you sure you want to reject this review?')) {
+        return;
+    }
+    
+    fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message, 'success');
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        } else {
+            showNotification(data.message || 'An error occurred', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred. Please try again.', 'error');
+    });
+};
 
+window.toggleFeatured = function(reviewId) {
+    const url = `/admin/reviews/${reviewId}/toggle-featured`;
+    
+    fetch(url, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification(data.message, 'success');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('An error occurred. Please try again.', 'error');
+    });
+};
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show position-fixed`;
+    notification.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.parentNode.removeChild(notification);
+        }
+    }, 5000);
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Select All Checkbox
+    const selectAll = document.getElementById('select-all');
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.review-checkbox');
+            checkboxes.forEach(checkbox => checkbox.checked = this.checked);
+        });
+    }
+    
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+    
+    // Bulk action form validation
+    const bulkForm = document.getElementById('bulk-action-form');
+    if (bulkForm) {
+        bulkForm.addEventListener('submit', function(e) {
+            const action = this.querySelector('select[name="action"]').value;
+            const checkedBoxes = document.querySelectorAll('.review-checkbox:checked');
+            
+            if (!action) {
+                e.preventDefault();
+                showNotification('Please select an action', 'error');
+                return false;
+            }
+            
+            if (checkedBoxes.length === 0) {
+                e.preventDefault();
+                showNotification('Please select at least one review', 'error');
+                return false;
+            }
+            
+            if (action === 'delete') {
+                if (!confirm(`Are you sure you want to delete ${checkedBoxes.length} review(s)?`)) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        });
+    }
+});
+</script>
 @endsection
-
