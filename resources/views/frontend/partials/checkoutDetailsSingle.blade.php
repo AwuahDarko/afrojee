@@ -217,7 +217,7 @@
                 <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4">
                     <!-- Product Image -->
                     <div class="relative group">
-                        <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}" alt="{{ $product->name }}"
+                        <img src="{{ $product->getPrimaryImage()?->image_path ?? $product->image ?? asset('images/default-product.png') }}" alt="{{ $product->name }}"
                             class="w-28 h-28 rounded-xl object-cover shadow-md ring-2 ring-gray-100 group-hover:ring-pink-200 transition-all duration-300" />
                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
