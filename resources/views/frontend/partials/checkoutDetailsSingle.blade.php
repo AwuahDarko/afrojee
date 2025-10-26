@@ -487,7 +487,13 @@
                     }).catch(error => console.log(error))
             }
 
-
+            @if(!$userAddress)
+                const currentUrl = new URL(window.location.href);
+                if (!currentUrl.searchParams.has('edit_address')) {
+                    currentUrl.searchParams.set('edit_address', 'true');
+                    window.location.replace(currentUrl.toString());
+                }
+            @endif
 
         });
     </script>

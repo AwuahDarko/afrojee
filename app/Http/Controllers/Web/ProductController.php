@@ -12,20 +12,30 @@ class ProductController extends Controller
 {
     private int $items_per_page = 15;
 
+    // public function index(Request $request)
+    // {
+    //     $categories = Category::where('status', '=', 1)->get();
+    //     $products = Product::where('status', '=', 1)->with([
+    //         'category',
+    //         'sizes',
+    //         'images' => function ($query) {
+    //             $query->orderBy('sort_order');
+    //         }
+    //     ])->paginate($this->items_per_page);
+
+    //     return view('frontend.partials.productList', compact('categories', 'products'));
+    // }
     public function index(Request $request)
     {
-        $categories = Category::where('status', '=', 1)->get();
-        $products = Product::where('status', '=', 1)->with([
-            'category',
-            'sizes',
-            'images' => function ($query) {
-                $query->orderBy('sort_order');
-            }
-        ])->paginate($this->items_per_page);
+        $products = Product::with(['category', 'images' => function ($query) {
+            $query->orderBy('sort_order')->take(2); // Load primary and secondary images
+        }])
+            ->where('status', 1)
+            ->orderBy('name', 'asc')
+            ->paginate(12); // Adjust per page as needed
 
-        return view('frontend.partials.productList', compact('categories', 'products'));
+        return view('frontend.partials.productList', compact('products'));
     }
-
     public function filterByCategory(Request $request)
     {
         $slug = $request->slug;
@@ -68,7 +78,30 @@ class ProductController extends Controller
         return view('frontend.partials.productList', compact('categories', 'products'));
     }
 
-    public function productDetails(Request $request)
+    public function search2(Request $request)
+    {
+        $query = $request->input('q');
+        $products = Product::with(['images' => function ($query) {
+            $query->orderBy('sort_order')->first();
+        }])
+            ->where('name', 'like', "%{$query}%")
+            ->where('status', 1)
+            ->take(5) // Limit to 5 results like Shopify
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'name' => $product->name,
+                    'slug' => $product->slug,
+                    'price' => number_format($product->price, 2),
+                    'compare_at_price' => $product->compare_at_price ? number_format($product->compare_at_price, 2) : null,
+                    'image' => $product->images->first() ? asset('storage/' . $product->images->first()->path) : null,
+                ];
+            });
+
+        return response()->json($products);
+    }
+
+    public function productDetails2(Request $request)
     {
         $slug = $request->slug;
         $product = Product::where('slug', '=', $slug)
@@ -91,8 +124,79 @@ class ProductController extends Controller
         $clean_description = strip_tags($product->description);
         $meta_description = substr($clean_description, 0, strlen($clean_description) / 2);
         $meta_keywords = $product->name;
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('status', 1)
+            ->with(['images' => function ($query) {
+                $query->orderBy('sort_order')->take(1); // Load primary image
+            }])
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
 
-        return view('frontend.partials.productDetail', compact('product', 'meta_description', 'meta_keywords', 'primaryImagePath'));
+
+        return view('frontend.partials.productDetail', compact('product', 'meta_description', 'meta_keywords', 'primaryImagePath', 'relatedProducts'));
+    }
+
+    public function productDetails(Request $request)
+    {
+        $slug = $request->slug;
+
+        // Load product with sizes, ordered images, and only approved reviews
+        $product = Product::where('slug', '=', $slug)
+            ->with([
+                'sizes',
+                'images' => function ($query) {
+                    $query->orderBy('sort_order');
+                },
+                'reviews' => function ($query) { // 🆕 REAL REVIEWS
+                    $query->where('status', 'approved')
+                        ->orderBy('is_featured', 'desc') // Featured first
+                        ->orderBy('created_at', 'desc');
+                }
+            ])->withCount('reviews')->withAvg('reviews', 'rating')
+            ->firstOrFail();
+
+        // primary image fallback
+        $primaryImagePath = $product->getPrimaryImage()?->image_path
+                            ?? ($product->images->first()?->image_path ?? asset('images/default-product.png'));
+
+        // meta
+        $clean_description = strip_tags($product->description ?: '');
+        $meta_description = substr($clean_description, 0, max(100, min(250, strlen($clean_description) / 2)));
+        $meta_keywords = $product->name;
+
+        // related products (small set)
+        $relatedProducts = Product::where('category_id', $product->category_id)
+            ->where('id', '!=', $product->id)
+            ->where('status', 1)
+            ->with(['images' => function ($q) {
+                $q->orderBy('sort_order')->take(1);
+            }])
+            ->inRandomOrder()
+            ->take(4)
+            ->get();
+
+        // Pass product reviews JSON too (useful for your productDetail.js)
+        $productReviews = $product->reviews->map(fn($r) => [
+            'id' => $r->id,
+            'name' => $r->name,
+            'rating' => $r->rating,
+            'title' => $r->title,
+            'review' => $r->review,
+            'image' => $r->image ? asset('uploads/reviews/'.$r->image) : null,
+            'is_featured' => (bool)$r->is_featured,
+            'created_at' => $r->created_at->toDateTimeString(),
+        ]);
+
+        return view('frontend.partials.productDetail', compact(
+            'product',
+            'meta_description',
+            'meta_keywords',
+            'primaryImagePath',
+            'relatedProducts',
+            'productReviews'
+        ));
     }
 
     public function storeReview(Request $request, Product $product)

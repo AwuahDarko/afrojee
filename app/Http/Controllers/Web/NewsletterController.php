@@ -41,26 +41,29 @@ class NewsletterController extends Controller
         ]);
 
         // Optional: Send welcome email
-        // Mail::to($validated['newsletter_email'])->send(new WelcomeNewsletterMail());
+        Mail::to($validated['newsletter_email'])->send(new WelcomeNewsletterMail($validated['newsletter_email']));
 
         return back()->with('newsletter_success', 'Thank you for subscribing! Check your inbox for a welcome email.');
     }
 
     public function unsubscribe(Request $request)
     {
+        if (!$request->hasValidSignature()) {
+            abort(403, 'Invalid unsubscribe link.');
+        }
         $email = $request->query('email');
-        
+
         $subscriber = NewsletterSubscriber::where('email', $email)->first();
-        
+
         if ($subscriber) {
             $subscriber->update([
                 'is_active' => false,
                 'unsubscribed_at' => now(),
             ]);
-            
+
             return view('newsletter.unsubscribed')->with('success', 'You have been unsubscribed from our newsletter.');
         }
-        
+
         return view('newsletter.unsubscribed')->with('error', 'Email not found in our subscriber list.');
     }
 }

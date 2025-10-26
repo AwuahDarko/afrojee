@@ -235,7 +235,7 @@
             </div>
         </div>
 
-        <div class="mb-16 max-w-3xl">
+        <div class="mb-10 max-w-3xl">
             <p class="text-stone-700 text-lg">
                 Discover our exclusive range of premium skincare essentials, crafted to keep your routine simple and
                 effective
@@ -259,165 +259,122 @@
         @endif
 
         <!-- Products Grid -->
-        <div class="grid-container" id="productsGrid">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productsGrid">
             @forelse($featured_products as $product)
-                <div class="group relative product-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
-                    data-product-id="{{ $product->id }}">
-
-                    <!-- Main Card Link (z-30) -->
-                    <a href="{{ route('web.products.details', $product->slug) }}"
-                        class="absolute inset-0 z-30 pointer-events-auto"
-                        aria-label="View {{ $product->name }} details"></a>
-
-                    <!-- Animated Background Accent -->
-                    <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-primary/5 to-accent/5 blur-lg"></div>
-                    </div>
-
-                    <!-- Decorative Accent -->
-                    <div class="hover-accent absolute -top-6 -right-6 z-10">
-                        <svg width="140" height="140" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="70" cy="70" r="60" stroke="url(#gradient)" stroke-width="2" stroke-dasharray="8 8"
-                                fill="none" />
-                            <defs>
-                                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" stop-color="#ef380d" stop-opacity="0.6" />
-                                    <stop offset="100%" stop-color="#F3BF45" stop-opacity="0.4" />
-                                </linearGradient>
-                            </defs>
-                        </svg>
-                    </div>
-
-                    <!-- Badges -->
-                    <div class="absolute top-6 left-6 z-40 flex flex-col gap-3">
-                        @if($product->created_at->diffInDays(now()) <= 10)
-                            <span class="new-badge text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">
-                                ✨ NEW
-                            </span>
-                        @endif
-                        <span class="quantity-badge text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg">
-                            🏷️ {{ $product->quantity }} left
-                        </span>
-                    </div>
-
-                    <!-- Stock Status -->
-                    <div class="absolute top-6 right-6 z-40">
-                        <div class="stock-indicator glass-effect rounded-2xl px-4 py-2 shadow-lg">
-                            @if($product->quantity <= 5)
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-red-500 animate-pulse"></div>
-                                    <span class="text-xs font-semibold text-gray-700">Almost Out!</span>
-                                </div>
-                            @elseif($product->quantity <= 20)
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                    <span class="text-xs font-semibold text-gray-700">Low Stock</span>
-                                </div>
-                            @else
-                                <div class="flex items-center gap-2">
-                                    <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                                    <span class="text-xs font-semibold text-gray-700">In Stock</span>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Product Image -->
-                    <div class="relative h-72 md:h-80 overflow-hidden">
-                        <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}" alt="{{ $product->name }}"
-                            class="product-image w-full h-full object-cover"
-                            onerror="this.src='https://placehold.co/300x300/F3BF45/ffffff?text=Product+Image'">
-
-                        <!-- Gradient Overlay -->
-                        <div
-                            class="absolute inset-0 image-overlay opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        </div>
-
-                        <!-- Quick Action Overlay -->
-                        <div
-                            class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <span
-                                class="text-white font-semibold text-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                View Product
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Product Info (Changed to z-40) -->
-                    <div class="p-6 relative z-40 bg-white">
-                        <div class="flex items-start justify-between mb-3">
-                            <h3
-                                class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors duration-300 flex-1 pr-4">
-                                {{ $product->name }}
-                            </h3>
-                            @if($product->category)
-                                <span class="category-badge text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                                    {{ $product->category->name }}
-                                </span>
-                            @endif
-                        </div>
-
-                        {{-- <p class="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
-                            {!! Str::limit($product->description, 100) !!}
-                        </p> --}}
-
-                        <!-- Weight Display -->
-                        @if($product->weight > 0)
-                            <div class="flex items-center text-sm text-gray-500 mb-4">
-                                {{-- <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-                                </svg>
-                                Weight: {{ $product->weight }}kg --}}
-                            </div>
-                        @endif
-
-                        <!-- Price and Actions -->
-                        <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                            <div class="price-tag text-white font-bold text-lg px-5 py-2 rounded-xl shadow-lg">
-                                {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
-                            </div>
-
-                            <!-- Action Buttons (Changed to z-50) -->
-                            <div class="flex gap-3 relative z-50">
-                                @if($product->quantity > 0)
-                                    <button
-                                        class="cart-button cart-item-btn bg-white text-primary p-3 rounded-xl hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110 shadow-lg border border-primary/20"
-                                        data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
-                                        data-product-price="{{ number_format($product->getPrice(), 2) }}"
-                                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png')  }}" title="Add to Cart">
-                                        <div class="loading-spinner hidden"></div>
-                                        <svg class="w-5 h-5 cart-icon" fill="currentColor" viewBox="0 0 24 24">
-                                            <path
-                                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                                        </svg>
-                                    </button>
-                                @else
-                                    <button
-                                        class="cart-button bg-gray-300 text-gray-500 p-3 rounded-xl cursor-not-allowed shadow-lg"
-                                        disabled title="Out of Stock">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M6 18L18 6M6 6l12 12"></path>
-                                        </svg>
-                                    </button>
-                                @endif
-
+                    <div class="gsp-search-recommend-collection-item group">
+                        <div class="card bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
+                            <!-- Image Section -->
+                            <figure class="gsp-product-card-image relative overflow-hidden mb-0"
+                                style="--aspect-ratio: 1/1;">
                                 <a href="{{ route('web.products.details', $product->slug) }}"
-                                    class="cart-button bg-white text-gray-600 p-3 rounded-xl hover:bg-primary hover:text-white transition-all duration-300 hover:scale-110 shadow-lg border border-gray-200"
-                                    title="View Details">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                        </path>
-                                    </svg>
+                                    class="gsp-product-featured block text-inherit img-hover-zoom-in {{ $product->images->count() > 1 ? 'has_second_image' : '' }}"
+                                    title="{{ $product->name }}">
+                                    <div class="gsp-image gsp-product-thumb-primary">
+                                        <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                            alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover"
+                                            width="540" height="720" />
+                                    </div>
+                                    @if ($product->images->count() > 1)
+                                        <div class="gsp-image gsp-product-thumb-secondary absolute top-0 left-0 opacity-0">
+                                            <img src="{{ asset($product->images[1]->image_path) }}"
+                                                alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover"
+                                                width="540" height="720" />
+                                        </div>
+                                    @endif
                                 </a>
+
+                                <!-- Quick Action Buttons - Shown on Hover -->
+                                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <!-- Add to Cart Button -->
+                                    <button type="button"
+                                        class="cart-item-btn bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        data-product-id="{{ $product->id }}"
+                                        data-product-name="{{ $product->name }}"
+                                        data-product-price="{{ $product->price }}"
+                                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                        data-size-id="0"
+                                        title="Add to Cart">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                        </svg>
+                                    </button>
+
+                                    <!-- Quick View Button -->
+                                    <a href="{{ route('web.products.details', $product->slug) }}"
+                                        class="bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        title="Quick View">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </a>
+
+                                    <!-- Wishlist Button -->
+                                    <button type="button"
+                                        class="bg-white hover:bg-red-500 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        title="Add to Wishlist">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </figure>
+
+                            <!-- Card Body -->
+                            <div class="card-body p-4">
+                                <!-- Price -->
+                                <div class="gsp-product-price gsp-product-card-price flex items-center text-sm mb-2 {{ $product->compare_at_price ? 'gsp-price-on-sale' : '' }}">
+                                    @if ($product->compare_at_price)
+                                        <div class="gsp-product__price-sale">
+                                            <span class="gsp-price-item-regular line-through text-stone-500 mr-2">
+                                                {{ app_currency() }}{{ number_format($product->compare_at_price, 2) }}
+                                            </span>
+                                            <span class="gsp-price-item-sale font-semibold text-rose-500">
+                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="gsp-product__price-regular">
+                                            <span class="gsp-price-item-regular font-semibold text-stone-700">
+                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Product Name -->
+                                <h3 class="gsp-product-card-title card-title mb-3 text-base font-medium relative">
+                                    <a href="{{ route('web.products.details', $product->slug) }}"
+                                        class="text-decoration-none text-stone-700 hover:text-rose-500 line-clamp-2">
+                                        {{ $product->name }}
+                                    </a>
+                                </h3>
+
+                                <!-- Action Buttons Row (Always Visible on Mobile) -->
+                                <div class="flex gap-2 mt-4 sm:hidden">
+                                    <!-- Add to Cart -->
+                                    <button type="button"
+                                        class="cart-item-btn flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                        data-product-id="{{ $product->id }}"
+                                        data-product-name="{{ $product->name }}"
+                                        data-product-price="{{ $product->price }}"
+                                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                        data-size-id="0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                        </svg>
+                                        Cart
+                                    </button>
+
+                                    <!-- Buy Now -->
+                                    <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => 0]) }}"
+                                        class="flex-1 bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 py-2 px-3 rounded-lg text-sm font-medium transition-colors text-center">
+                                        Buy
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
             @empty
                 <div class="col-span-full text-center py-16">
                     <div class="text-gray-300 mb-6">

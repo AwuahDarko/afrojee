@@ -23,6 +23,15 @@ document.addEventListener('DOMContentLoaded', function() {
   //         document.body.style.overflow = '';
   //     }
   // });
+  // Optional: Add any additional hover interactions if needed
+  document.querySelectorAll('.gsp-product-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+          card.classList.add('hover');
+      });
+      card.addEventListener('mouseleave', () => {
+          card.classList.remove('hover');
+      });
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -42,102 +51,102 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-document.addEventListener('DOMContentLoaded', () => {
-  gsap.from(".hero-label", {
-    opacity: 0,
-    y: -30,
-    duration: 1,
-    delay: 0.3
-  });
+// document.addEventListener('DOMContentLoaded', () => {
+//   gsap.from(".hero-label", {
+//     opacity: 0,
+//     y: -30,
+//     duration: 1,
+//     delay: 0.3
+//   });
 
-  gsap.from(".hero-heading span", {
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    stagger: 0.2,
-    delay: 0.6
-  });
+//   gsap.from(".hero-heading span", {
+//     opacity: 0,
+//     y: 50,
+//     duration: 1,
+//     stagger: 0.2,
+//     delay: 0.6
+//   });
 
-  gsap.from(".hero-cta", {
-    opacity: 0,
-    y: 30,
-    duration: 1,
-    delay: 1.2
-  });
+//   gsap.from(".hero-cta", {
+//     opacity: 0,
+//     y: 30,
+//     duration: 1,
+//     delay: 1.2
+//   });
 
-  gsap.from(".hero-testimonial", {
-    opacity: 0,
-    x: 50,
-    duration: 1,
-    delay: 1.5
-  });
+//   gsap.from(".hero-testimonial", {
+//     opacity: 0,
+//     x: 50,
+//     duration: 1,
+//     delay: 1.5
+//   });
 
-  // document.querySelector('a[href="#who-section"]').addEventListener('click', function(e) {
-  //   e.preventDefault();
-  //   gsap.to(window, {
-  //     duration: 1.2,
-  //     scrollTo: {
-  //       y: "#who-section",
-  //       offsetY: 80 // Adjust for fixed headers
-  //     },
-  //     ease: "power3.inOut"
-  //   });
-  // });
+//   // document.querySelector('a[href="#who-section"]').addEventListener('click', function(e) {
+//   //   e.preventDefault();
+//   //   gsap.to(window, {
+//   //     duration: 1.2,
+//   //     scrollTo: {
+//   //       y: "#who-section",
+//   //       offsetY: 80 // Adjust for fixed headers
+//   //     },
+//   //     ease: "power3.inOut"
+//   //   });
+//   // });
 
-  const whoLink = document.querySelector('a[href="#who-section"]');
-  if(whoLink){
-    whoLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = document.querySelector(this.getAttribute('href'));
+//   const whoLink = document.querySelector('a[href="#who-section"]');
+//   if(whoLink){
+//     whoLink.addEventListener('click', function(e) {
+//       e.preventDefault();
+//       const target = document.querySelector(this.getAttribute('href'));
       
-      window.scrollTo({
-        top: target.offsetTop,
-        behavior: 'smooth' // This enables smooth scrolling
-      });
-    });
+//       window.scrollTo({
+//         top: target.offsetTop,
+//         behavior: 'smooth' // This enables smooth scrolling
+//       });
+//     });
     
-  }
+//   }
 
-  // Tab Switching Logic
-  const tabButtons = document.querySelectorAll('.tab-button');
-  const tabContents = document.querySelectorAll('.tab-content');
+//   // Tab Switching Logic
+//   const tabButtons = document.querySelectorAll('.tab-button');
+//   const tabContents = document.querySelectorAll('.tab-content');
 
-  tabButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      // Remove active class from all buttons and hide all content
-      tabButtons.forEach(btn => btn.classList.remove('active'));
-      tabContents.forEach(content => content.classList.add('hidden'));
+//   tabButtons.forEach(button => {
+//     button.addEventListener('click', () => {
+//       // Remove active class from all buttons and hide all content
+//       tabButtons.forEach(btn => btn.classList.remove('active'));
+//       tabContents.forEach(content => content.classList.add('hidden'));
       
-      // Add active class to the clicked button
-      button.classList.add('active');
+//       // Add active class to the clicked button
+//       button.classList.add('active');
       
-      // Show the corresponding content
-      const targetTab = button.dataset.tab;
-      console.log("================> ",targetTab, document.getElementById(`${targetTab}-content`).classList);
-      document.getElementById(`${targetTab}-content`).classList.remove('hidden');
-    });
-  });
-  // // Tab Switching Logic
-  // const tabButtons = document.querySelectorAll('.tab-button');
-  // const tabContents = document.querySelectorAll('.tab-content');
+//       // Show the corresponding content
+//       const targetTab = button.dataset.tab;
+//       console.log("================> ",targetTab, document.getElementById(`${targetTab}-content`).classList);
+//       document.getElementById(`${targetTab}-content`).classList.remove('hidden');
+//     });
+//   });
+//   // // Tab Switching Logic
+//   // const tabButtons = document.querySelectorAll('.tab-button');
+//   // const tabContents = document.querySelectorAll('.tab-content');
 
-  // tabButtons.forEach(button => {
-  //   button.addEventListener('click', () => {
-  //     // Remove active class from all buttons and hide all content
-  //     tabButtons.forEach(btn => btn.classList.remove('active'));
-  //     tabContents.forEach(content => content.classList.add('hidden'));
+//   // tabButtons.forEach(button => {
+//   //   button.addEventListener('click', () => {
+//   //     // Remove active class from all buttons and hide all content
+//   //     tabButtons.forEach(btn => btn.classList.remove('active'));
+//   //     tabContents.forEach(content => content.classList.add('hidden'));
 
-  //     // Add active class to the clicked button
-  //     button.classList.add('active');
+//   //     // Add active class to the clicked button
+//   //     button.classList.add('active');
 
-  //     // Show the corresponding content
-  //     const targetTab = button.dataset.tab;
-  //     document.getElementById(`${targetTab}-content`).classList.remove('hidden');
-  //   });
-  // });
-
-
+//   //     // Show the corresponding content
+//   //     const targetTab = button.dataset.tab;
+//   //     document.getElementById(`${targetTab}-content`).classList.remove('hidden');
+//   //   });
+//   // });
 
 
 
-});
+
+
+// });

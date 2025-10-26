@@ -64,7 +64,7 @@
       </div>
     </div>
 
-    <div class="mb-16 max-w-3xl">
+    <div class="mb-10 max-w-3xl">
       <p class="text-stone-700 text-lg">
         Check out our FAQ section where we've answered some of the most common queries to help you get the most out of
         our products

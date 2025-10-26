@@ -123,7 +123,7 @@ const renderReviews = () => {
 
 
 // Function to render pagination numbers
-const renderPaginationNumbers = () => {
+function renderPaginationNumbers() {
   paginationNumbers.innerHTML = '';
   for (let i = 1; i <= totalPages; i++) {
     const pageButton = document.createElement('button');

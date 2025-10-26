@@ -64,6 +64,11 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 
+    <!-- <link rel="stylesheet" href="{{ asset('css/theme.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('css/slick.css') }}"> -->
+
+
+    
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -93,7 +98,7 @@
         @include('frontend.inc.nav')
 
         @yield('content')
-
+        @include('frontend.partials.search-modal')
         @include('frontend.inc.footer')
     </div>
     {{-- Cart Sidebar HTML --}}
@@ -137,8 +142,12 @@
     </form>
     @yield('script')
 
+    <script src="{{ asset('js/plugins/jquery.js') }}"></script>
     <script src="{{ asset('js/index.js') }}"></script>
+    <script src="{{ asset('js/plugins/slick.js') }}"></script>
+    <!-- <script src="{{ asset('js/plugins/theme.js') }}"></script> -->
     <script src="{{ asset('js/cart.js') }}"></script>
+    <script src="{{ asset('js/tooltip.js') }}"></script>
 </body>
 
 </html>

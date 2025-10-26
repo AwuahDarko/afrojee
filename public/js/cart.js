@@ -99,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const updateCartCount = () => {
         const cart = getCart();
-        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0) || 0;
+        if(!cartCountElement) return;
         cartCountElement.textContent = totalItems;
         cartCountElement.classList.toggle('hidden', totalItems === 0);
     };
@@ -183,9 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Sidebar toggles
-    openCartSidebarBtn.addEventListener('click', openCartSidebar);
-    closeCartSidebarBtn.addEventListener('click', closeCartSidebar);
-    cartSidebarOverlay.addEventListener('click', closeCartSidebar);
+    if(openCartSidebarBtn){
+        openCartSidebarBtn.addEventListener('click', openCartSidebar);
+    }
+    if(closeCartSidebarBtn){
+        closeCartSidebarBtn.addEventListener('click', closeCartSidebar);
+    }
+    if(cartSidebarOverlay){
+        cartSidebarOverlay.addEventListener('click', closeCartSidebar);
+    }
 
     // Init
     renderCart();

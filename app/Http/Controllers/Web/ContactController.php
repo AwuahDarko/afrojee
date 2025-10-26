@@ -11,6 +11,11 @@ use App\Mail\ContactFormMail;
 
 class ContactController extends Controller
 {
+    public function index()
+    {
+        return view('frontend.partials.contact-us');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -23,7 +28,7 @@ class ContactController extends Controller
         Contact::create($validated);
 
         // Optional: Send email notification to admin
-        // Mail::to('admin@afrojee.store')->send(new ContactFormMail($validated));
+        Mail::to('admin@afrojee.store')->send(new ContactFormMail($validated));
 
         return back()->with('contact_success', 'Thank you for your message! We\'ll get back to you within 24 hours.');
     }

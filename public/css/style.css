@@ -283,3 +283,110 @@ html.is-scrolling a[href="#amber-section"] svg {
 .quantity-plus {
     @apply px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200;
 }
+
+.sticky-header {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Matches Shopify shadow */
+}
+
+.group-hover\:block {
+    display: none; /* Tailwind handles this, but for clarity */
+}
+
+@media (max-width: 1024px) {
+    /* Mobile adjustments */
+}
+/*
+.modal-backdrop {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.modal-backdrop.show {
+    opacity: 1;
+}
+
+.modal {
+    transform: translateY(-50px);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+.modal.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.gsp-search-form input {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.gsp-search-form input:focus {
+    box-shadow: 0 0 0 3px rgba(244, 113, 116, 0.3);
+}
+
+
+.gsp-search-recommend-collection {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background: white;
+}
+*/
+
+/* Product Card */
+.gsp-product-card {
+    transition: transform 0.2s ease;
+}
+.gsp-product-card:hover {
+    transform: translateY(-4px); /* Subtle lift effect */
+}
+
+/* Image Container */
+.gsp-product-card-image {
+    aspect-ratio: var(--aspect-ratio, 1/1);
+}
+.gsp-product-card-image img {
+    transition: transform 0.3s ease;
+}
+
+/* Hover Zoom Effect */
+.img-hover-zoom-in:hover img {
+    transform: scale(1.05);
+}
+
+/* Secondary Image Hover */
+.has_second_image:hover .gsp-product-thumb-primary {
+    opacity: 0;
+}
+.has_second_image:hover .gsp-product-thumb-secondary {
+    opacity: 1;
+}
+.gsp-product-thumb-secondary {
+    transition: opacity 0.3s ease;
+}
+
+/* Price Styling */
+.gsp-price-on-sale .gsp-price-item-sale {
+    color: #f47174; /* Matches rose-500 */
+}
+.gsp-price-item-regular {
+    font-weight: 600;
+}
+
+/* Tooltip */
+.tooltip {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.tooltip.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+.tooltip-arrow {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -1px;
+}
+[data-tooltip-target]:hover + .tooltip {
+    opacity: 1;
+    transform: translateY(0);
+}

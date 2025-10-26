@@ -23,8 +23,8 @@ window.addEventListener("DOMContentLoaded", () => {
   // Function to update counters
   const updateCounters = () => {
     const currentValue = parseInt(quantityInput.value);
-    buyNowCounter.textContent = currentValue;
-    addToCartCounter.textContent = currentValue;
+    // buyNowCounter.textContent = currentValue;
+    // addToCartCounter.textContent = currentValue;
     const nav = document.getElementById('buy-now-link')
     const link = nav.getAttribute('href')
     const arr = link.split('/')
@@ -34,19 +34,19 @@ window.addEventListener("DOMContentLoaded", () => {
     nav.setAttribute('href', newlink)
   };
 
-  decrementButton.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value);
-    if (currentValue > 1) {
-      quantityInput.value = currentValue - 1;
-      updateCounters();
-    }
-  });
+  // decrementButton.addEventListener('click', () => {
+  //   let currentValue = parseInt(quantityInput.value);
+  //   if (currentValue > 1) {
+  //     quantityInput.value = currentValue - 1;
+  //     updateCounters();
+  //   }
+  // });
 
-  incrementButton.addEventListener('click', () => {
-    let currentValue = parseInt(quantityInput.value);
-    quantityInput.value = currentValue + 1;
-    updateCounters();
-  });
+  // incrementButton.addEventListener('click', () => {
+  //   let currentValue = parseInt(quantityInput.value);
+  //   quantityInput.value = currentValue + 1;
+  //   updateCounters();
+  // });
 
   // Initialize counters on page load
   updateCounters();
@@ -306,5 +306,112 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     // Initialize price display
-    updatePriceDisplay();
+    // updatePriceDisplay();
+});
+  console.log("DOMContentLoaded - productDetail.js");
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  // --- Tabs ---
+  const tabButtons = document.querySelectorAll(".tab-button");
+  const tabContents = document.querySelectorAll(".tab-content");
+
+  tabButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.getAttribute("data-tab");
+      // hide all
+      tabContents.forEach((c) => c.classList.add("hidden"));
+      tabButtons.forEach((b) =>
+        b.classList.remove("bg-[#ef380d]", "text-white")
+      );
+      // show target
+      document.getElementById(`${target}-content`)?.classList.remove("hidden");
+      btn.classList.add("bg-[#ef380d]", "text-white");
+      if (target === "reviews") window.scrollTo({ top: btn.offsetTop, behavior: "smooth" });
+    });
+  });
+
+  // --- Thumbnails ---
+  const mainImg = document.querySelector(".lg\\:col-span-6 img");
+  document.querySelectorAll(".thumbnail-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const src = btn.getAttribute("data-img");
+      if (mainImg && src) mainImg.src = src;
+    });
+  });
+
+  // --- Sizes ---
+  const sizeButtons = document.querySelectorAll(".size-option");
+  const hiddenSizeInput = document.getElementById("selected-size-id");
+  sizeButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sizeButtons.forEach((b) =>
+        b.classList.remove("bg-[#ef380d]", "text-white", "border-[#ef380d]")
+      );
+      btn.classList.add("bg-[#ef380d]", "text-white", "border-[#ef380d]");
+      hiddenSizeInput.value = btn.dataset.sizeId;
+    });
+  });
+
+  // --- Quantity ---
+  const qtyInput = document.getElementById("product-qty");
+  document.getElementById("qty-increment")?.addEventListener("click", () => {
+    qtyInput.value = parseInt(qtyInput.value || "1") + 1;
+  });
+  document.getElementById("qty-decrement")?.addEventListener("click", () => {
+    const val = parseInt(qtyInput.value || "1");
+    if (val > 1) qtyInput.value = val - 1;
+  });
+
+  // --- Featured Review Carousel ---
+  const slides = document.querySelectorAll(".testimonial-slide");
+  const clientNavs = document.querySelectorAll(".client-nav");
+  let activeIndex = 0;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      if (i === index) s.classList.remove("hidden");
+      else s.classList.add("hidden");
+    });
+    clientNavs.forEach((b, i) => {
+      b.classList.toggle("border-[#ef380d]", i === index);
+      b.classList.toggle("bg-[#ef380d]/5", i === index);
+    });
+    activeIndex = index;
+  }
+
+  clientNavs.forEach((btn, i) => {
+    btn.addEventListener("click", () => showSlide(i));
+  });
+
+  // auto cycle every 8s if >1 slide
+  if (slides.length > 1) {
+    setInterval(() => {
+      activeIndex = (activeIndex + 1) % slides.length;
+      showSlide(activeIndex);
+    }, 8000);
+  }
+
+  // --- "View All Reviews" link ---
+  const reviewsTab = document.querySelector("[data-tab='reviews']");
+  const viewAllReviewsLink = document.getElementById("view-all-reviews-link");
+  viewAllReviewsLink?.addEventListener("click", (e) => {
+    e.preventDefault();
+    reviewsTab?.click();
+    const reviewsSection = document.getElementById("reviews-content");
+    if (reviewsSection)
+      reviewsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  // --- "Leave A Review" button scroll ---
+  const showReviewFormBtn = document.getElementById("show-review-form-btn");
+  showReviewFormBtn?.addEventListener("click", () => {
+    reviewsTab?.click();
+    const form = document.getElementById("review-form");
+    if (form)
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+
+  // initial highlight for first tab
+  document.getElementById("description-tab")?.click();
 });

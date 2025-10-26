@@ -28,6 +28,8 @@ Route::get('/about', [AboutUsController::class, 'index'])->name('web.about');
 Route::get('/faq', [QuestionsController::class, 'index'])->name('web.questions');
 Route::get('/products', [ProductController::class, 'index'])->name('web.products');
 Route::get('/products/search', [ProductController::class, 'search'])->name('web.product.search');
+Route::get('/products/search2', [ProductController::class, 'search2'])->name('web.product.search2');
+
 Route::get('/products/{slug}', [ProductController::class, 'filterByCategory'])->name('web.products.filterByCategory');
 Route::get('/products/details/{slug}', [ProductController::class, 'productDetails'])->name('web.products.details');
 Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
@@ -60,6 +62,7 @@ Route::get('/cart', [CartController::class, 'index'])->name('web.cart');
 
 // Contact Form Routes
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/contact-us', [ContactController::class, 'index'])->name('web.contact');
 
 // Newsletter Routes
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');

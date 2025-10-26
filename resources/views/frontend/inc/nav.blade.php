@@ -1,133 +1,115 @@
-<nav class="bg-cream border-b border-[#ef380d]/20 py-4 px-4 md:px-8 lg:px-16">
-    <div class="max-w-7xl mx-auto flex items-center justify-between">
+<nav class="header-section sticky-header bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex items-center justify-between py-4">
+            <!-- Logo (left) -->
+            <div class="logo flex items-center">
+                <a href="{{ route('home') }}" class="text-inherit">
+                    <img src="{{ asset('/images/afro_logo.jpeg') }}" alt="Afro Jee Logo" class="h-10 w-auto">
+                </a>
+            </div>
 
-        <!-- Mobile menu button -->
-        <div class="block lg:hidden">
-            <button id="mobile-menu-button" class="text-[#ef380d] focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
-        </div>
+            <!-- Desktop Nav Links (center) -->
+            <ul class="hidden lg:flex items-center space-x-8 text-stone-700 font-medium">
+                <li>
+                    <a href="{{ route('home') }}" class="hover:text-rose-500 transition">Home</a>
+                </li>
 
-        <!-- Left navigation -->
-        <div class="hidden lg:flex items-center space-x-8">
-            <a href="/"
-                class="text-[#ef380d] font-medium hover:text-[#ef380d]/80 transition relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
-                Home
-            </a>
+                <!-- Products Dropdown -->
+                <li class="relative group">
+                    <a href="{{ route('web.products') }}" class="hover:text-rose-500 transition flex items-center">
+                        Products
+                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </a>
 
-            <div class="relative group">
-                <button
-                    class="text-[#ef380d] font-medium hover:text-[#ef380d]/80 transition flex items-center relative {{ request()->is('products*') ? 'active-nav-link' : '' }}">
-                    Products
-                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    <!-- Categories Dropdown -->
+                    @if(isset($categories) && count($categories) > 0)
+                        <ul class="absolute hidden group-hover:block bg-white shadow-lg rounded-md py-2 mt-2 w-48 z-10">
+                            @foreach($categories as $category)
+                                <li>
+                                    <a href="/products/{{ $category->slug }}" class="block py-2 text-gray-700 hover:text-[#ef380d]">
+                                        {{ $category->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </li>
+
+                <li>
+                    <a href="{{ route('web.about') }}" class="hover:text-rose-500 transition">About</a>
+                </li>
+                <li>
+                    <a href="/contact-us" class="hover:text-rose-500 transition">Contact</a>
+                </li>
+            </ul>
+
+            <!-- Icons (right) -->
+            <div class="flex items-center space-x-6">
+                <!-- Search Icon -->
+                <button class="text-stone-700 hover:text-rose-500" id="search-toggle" type="button">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                        </path>
                     </svg>
                 </button>
 
-                <div
-                    class="absolute left-0 mt-0 w-48 bg-white shadow-lg rounded-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-300 z-50">
-                    <div class="py-2 px-4">
-                        <a href="/products" class="block py-2 text-gray-700 hover:text-[#ef380d]">All Products</a>
-                        @foreach($categories as $category)
+                <!-- User Account -->
+                <a href="{{ route('web.profile.management') }}" class="hidden text-stone-700 hover:text-rose-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                        </path>
+                    </svg>
+                </a>
+
+                <!-- Cart with Badge -->
+                <a href="{{ route('web.cart') }}" class="relative text-stone-700 hover:text-rose-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
+                    </svg>
+                    @if (session('cart') && count(session('cart')) > 0)
+                        <span class="absolute -top-2 -right-2 bg-rose-500 text-white text-xs rounded-full px-2 py-1">
+                            {{ count(session('cart')) }}
+                        </span>
+                    @endif
+                </a>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="lg:hidden text-stone-700" id="mobile-menu-toggle">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Nav -->
+        <div class="lg:hidden hidden" id="mobile-nav">
+            <ul class="space-y-4 py-4 text-center text-stone-700 font-medium">
+                <li><a href="{{ route('web.products') }}" class="block hover:text-rose-500">Shop</a></li>
+
+                <!-- Mobile Categories -->
+                @if(isset($categories) && count($categories) > 0)
+                    @foreach($categories as $category)
+                        <li>
                             <a href="/products/{{ $category->slug }}" class="block py-2 text-gray-700 hover:text-[#ef380d]">
                                 {{ $category->name }}
                             </a>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </li>
+                    @endforeach
+                @endif
 
-        <!-- Logo -->
-        <div class="flex items-center">
-            <a href="/" class="flex flex-row items-center text-center space-x-2">
-                <img src="{{ asset('/images/afro_logo.jpeg') }}" alt="Afro Jee Logo"
-                    class="w-12 h-12 sm:w-14 sm:h-14 object-contain">
-                <div class="flex flex-col items-start leading-tight">
-                    <h1 class="text-2xl md:text-3xl font-serif text-[#ef380d] italic">Afro Jee</h1>
-                </div>
-            </a>
+                <li><a href="{{ route('web.about') }}" class="block hover:text-rose-500">About</a></li>
+                <li><a href="/contact-us" class="block hover:text-rose-500">Contact</a></li>
+            </ul>
         </div>
-
-        <!-- Right navigation -->
-        <div class="hidden lg:flex items-center space-x-8">
-            <a href="/about"
-                class="text-[#ef380d] font-medium hover:text-[#ef380d]/80 transition relative {{ request()->is('about') ? 'active-nav-link' : '' }}">
-                About Us
-            </a>
-            <a href="/faq"
-                class="text-[#ef380d] font-medium hover:text-[#ef380d]/80 transition relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
-                FAQs
-            </a>
-        </div>
-
-        <!-- Cart -->
-        <div class="flex items-center space-x-4">
-            <button id="open-cart-sidebar"
-                class="relative bg-white text-[#ef380d] w-10 h-10 rounded-full flex items-center justify-center border border-[#ef380d] hover:bg-[#ef380d]/10 transition-colors duration-200">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z"
-                        stroke="#ef380d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                    <path d="M3 6H21" stroke="#ef380d" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round" />
-                    <path
-                        d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10"
-                        stroke="#ef380d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-                <span id="cart-count"
-                    class="absolute -top-1 -right-1 bg-[#ef380d] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- Mobile menu -->
-    <div id="mobile-menu" class="lg:hidden hidden mt-4 pb-4">
-        <a href="/"
-            class="block py-2 text-[#ef380d] hover:text-[#ef380d]/80 relative {{ request()->is('/') ? 'active-nav-link' : '' }}">
-            Home
-        </a>
-        <div class="relative">
-            <button id="mobile-products-button"
-                class="w-full text-left py-2 text-[#ef380d] hover:text-[#ef380d]/80 flex items-center justify-between relative {{ request()->is('products*') ? 'active-nav-link' : '' }}">
-                Products
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </svg>
-            </button>
-            <div id="mobile-products-dropdown" class="hidden pl-4 pt-2">
-                <a href="/products" class="block py-2 text-[#ef380d]/80 hover:text-[#ef380d]">All Products</a>
-                @foreach($categories as $category)
-                    <a href="/products/{{ $category->slug }}" class="block py-2 text-[#ef380d]/80 hover:text-[#ef380d]">
-                        {{ $category->name }}
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        <a href="/about"
-            class="block py-2 text-[#ef380d] hover:text-[#ef380d]/80 relative {{ request()->is('about') ? 'active-nav-link' : '' }}">
-            About Us
-        </a>
-        <a href="/faq"
-            class="block py-2 text-[#ef380d] hover:text-[#ef380d]/80 relative {{ request()->is('faqs') ? 'active-nav-link' : '' }}">
-            FAQs
-        </a>
     </div>
 </nav>
-
-<style>
-    .active-nav-link::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        bottom: -2px;
-        width: 100%;
-        height: 2px;
-        background-color: #ef380d;
-    }
-</style>

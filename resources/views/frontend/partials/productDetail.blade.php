@@ -1,14 +1,3 @@
-<!-- <script>
-    const appCurrency = @json(app_currency());
-
-    const checkoutRoute = {!! json_encode(
-        route('web.checkoutDetails.single', [
-            'product_id' => $product->id,
-            'quantity' => 1,
-            'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0,
-        ])
-    ) !!};
-</script> -->
 @php
     $checkoutUrl = route('web.checkoutDetails.single', [
         'product_id' => $product->id,
@@ -71,411 +60,236 @@
         <meta property="og:price:currency" content="EUR" />
     @endif
 @endsection
-
 @section('content')
-    <section class="bg-[#f7f3e9] py-8 px-4 md:py-16 md:px-8 text-gray-800">
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 md:gap-10 items-start px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-            <div class="flex flex-col justify-center w-full max-w-md mx-auto"> <!-- Added max-w-md and mx-auto -->
-                {{-- Product Image Gallery --}}
-                @if($product->images->isNotEmpty())
-                    @php
-                        $primary = $product->getPrimaryImage() ?? $product->images->first();
-                        $initialImage = $primary->image_path ? $primary->image_path : $product->image ?? asset('images/default-product.png');
-                    @endphp
-
-                    {{-- Main Image Display --}}
-                    <div class="relative w-full">
-                        {{-- Mobile Version with Blur Background --}}
-                        <div class="relative sm:hidden w-full h-48 overflow-hidden rounded-xl shadow-lg">
-                            <!-- Reduced h-64 to h-48 -->
-                            <img id="blur-bg-mobile" src="{{ $initialImage }}" alt=""
-                                class="absolute inset-0 w-full h-full object-cover blur-lg scale-110" aria-hidden="true" />
-                            <div class="absolute inset-0 flex items-center justify-center p-4">
-                                <img id="main-img-mobile" src="{{ $initialImage }}" alt="{{ $product->name }}"
-                                    class="max-w-full max-h-40 object-contain rounded-lg shadow-lg" /> <!-- Added max-h-40 -->
-                            </div>
-                        </div>
-
-                        {{-- Desktop Version --}}
-                        <div class="hidden sm:block w-full max-w-xs mx-auto"> <!-- Added wrapper with max-w-xs -->
-                            <img id="main-img-desktop" src="{{ $initialImage }}" alt="{{ $product->name }}"
-                                class="rounded-xl w-full h-64 object-cover shadow-lg" /> <!-- Added fixed h-64 -->
-                        </div>
-                    </div>
-
-                    {{-- Thumbnails --}}
-                    <div class="flex gap-2 mt-4 overflow-x-auto pb-2 thumbnails-container justify-center">
-                        <!-- Added justify-center -->
-                        @foreach($product->images as $image)
-                            <img src="{{ $image->image_path }}" alt="{{ $product->name }} thumbnail"
-                                class="thumbnail w-16 h-16 object-cover rounded-md cursor-pointer border-2 transition-all {{ $image->is_primary || ($loop->first && !$product->getPrimaryImage()) ? 'border-pink-800 opacity-100' : 'border-gray-300 opacity-75 hover:opacity-100' }}"
-                                data-src="{{ $image->image_path }}">
-                        @endforeach
-                    </div>
-                @else
-                    {{-- Fallback if no images --}}
-                    <div class="w-full max-w-xs mx-auto"> <!-- Added wrapper -->
-                        <img src="{{ asset('images/default-product.png') }}" alt="{{ $product->name }}"
-                            class="rounded-xl w-full h-64 object-cover shadow-lg" /> <!-- Added fixed h-64 -->
-                    </div>
-                @endif
+    <section class="bg-white py-8 px-4 md:py-12">
+        <div class="max-w-7xl mx-auto">
+            <!-- Breadcrumb -->
+            <div class="mb-6 text-sm text-gray-600">
+                <a href="{{ route('home') }}" class="hover:text-gray-900">Home</a>
+                <span class="mx-2">/</span>
+                <a href="{{ route('web.products') }}" class="hover:text-gray-900">Products</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900">{{ $product->name }}</span>
             </div>
 
-            <div class="text-center md:text-left">
-                <!-- Product Name -->
-                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 text-gray-900 leading-tight">
-                    {{ $product->name }}
-                </h1>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Left Column - Product Images -->
+                <div class="space-y-4">
+                    <!-- Main Image -->
+                    <div class="relative aspect-square bg-gray-50 rounded-2xl overflow-hidden">
+                        @php
+                            $primary = $product->getPrimaryImage() ?? $product->images->first();
+                            $initialImage = $primary ? $primary->image_path : ($product->image ?? asset('images/default-product.png'));
+                        @endphp
+                        <img id="main-product-image" src="{{ $initialImage }}" alt="{{ $product->name }}"
+                            class="w-full h-full object-cover">
+                    </div>
 
-                <!-- Ratings -->
-                @if(($product->reviews_count ?? 0) > 0)
-                    <div class="flex items-center justify-center md:justify-start mb-4 sm:mb-6">
-                        <div class="flex items-center">
-                            <div class="flex text-yellow-400 mr-2">
-                                @for($i = 1; $i <= 5; $i++) <svg
-                                        class="w-5 h-5 sm:w-6 sm:h-6 {{ $i <= floor($product->average_rating) ? 'fill-current' : 'fill-gray-300' }}"
+                    <!-- Thumbnail Gallery -->
+                    @if($product->images->isNotEmpty())
+                        <div class="grid grid-cols-4 gap-3">
+                            @foreach($product->images as $image)
+                                <button type="button" onclick="changeMainImage('{{ $image->image_path }}')"
+                                    class="thumbnail-btn aspect-square rounded-lg overflow-hidden border-2 transition-all {{ $loop->first ? 'border-gray-900' : 'border-gray-200 hover:border-gray-400' }}">
+                                    <img src="{{ $image->image_path }}" alt="{{ $product->name }}"
+                                        class="w-full h-full object-cover">
+                                </button>
+                            @endforeach
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Right Column - Product Info -->
+                <div class="space-y-6">
+                    <!-- Sale Badge -->
+                    @if($product->getPrice() != $product->getOriginalPrice())
+                        <span class="inline-block px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
+                            Sale
+                        </span>
+                    @endif
+
+                    <!-- Pricing -->
+                    <div class="flex items-center gap-3">
+                        @if($product->getPrice() != $product->getOriginalPrice())
+                            <span class="text-gray-400 line-through text-xl">
+                                {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
+                            </span>
+                        @endif
+                        <span class="text-3xl font-bold text-gray-900" id="display-price">
+                            {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                        </span>
+                    </div>
+
+                    <!-- Product Name -->
+                    <h1 class="text-4xl font-bold text-gray-900">{{ $product->name }}</h1>
+
+                    <!-- Rating -->
+                    @if($product->reviews_count > 0)
+                        <div class="flex items-center gap-2">
+                            <div class="flex text-yellow-400">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <svg class="w-5 h-5 {{ $i <= floor($product->average_rating) ? 'fill-current' : 'fill-gray-300' }}"
                                         viewBox="0 0 20 20">
                                         <path
                                             d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                                     </svg>
                                 @endfor
                             </div>
-                            <span class="text-gray-600 text-sm sm:text-base font-medium ml-2">
-                                {{ number_format($product->average_rating, 1) }} • {{ $product->reviews_count ?? 0 }} reviews
-                            </span>
+                            <span class="text-gray-600 font-medium">{{ number_format($product->average_rating, 1) }}
+                                ({{ $product->reviews_count }} reviews)</span>
                         </div>
-                    </div>
-                @endif
-                <!-- Price -->
-                <div class="mb-5 sm:mb-6">
-                    <p class="text-3xl sm:text-4xl font-bold text-gray-900 text-left" id="price-display">
-                        @if ($product->getPrice() != $product->getOriginalPrice())
-                                            <span class="text-[#ef380d] mr-3" id="current-price">
-                                                {{ app_currency() }} &nbsp;{{ number_format($product->getPrice(), 2) }}
-                                            </span>
-                                            <span class="text-gray-500 line-through text-xl sm:text-2xl" id="original-price">
-                                                {{ app_currency() }} &nbsp;{{ number_format($product->getOriginalPrice(), 2) }}
-                                            </span>
-                                            <span class="ml-3 bg-[#ef380d]/10 text-[#ef380d] text-sm font-semibold px-3 py-1 rounded-full">
-                                                Save {{ app_currency() }} &nbsp;{{ number_format(
-                                $product->getOriginalPrice() - $product->getPrice(),
-                                2
-                            ) }}
-                                            </span>
-                        @else
-                            <span id="current-price">{{ app_currency() }}
-                                &nbsp;{{ number_format($product->getPrice(), 2) }}</span>
-                        @endif
-                    </p>
-                </div>
-                <!-- Size Selector -->
-                <div class="mb-6 @if($product->sizes->isEmpty()) hidden @endif">
+                    @endif
 
-                    <div class="flex items-center gap-4">
-
-                        <label for="size" class="text-sm font-semibold text-gray-700 flex-shrink-0">Select Size:</label>
-
-                        <div class="relative inline-block w-full max-w-xs flex-grow">
-                            <select id="size" name="size"
-                                class="appearance-none w-full bg-white border-2 border-gray-200 rounded-xl px-4 py-3 pr-10 text-gray-700 focus:outline-none focus:border-[#ef380d] focus:ring-2 focus:ring-[#ef380d]/20 transition-all duration-200 cursor-pointer shadow-sm">
-                                @if ($product->sizes->isNotEmpty())
-                                    @foreach ($product->sizes as $size)
-                                        <option value="{{ $size->id }}" data-price="{{ $size->price }}"
-                                            data-quantity="{{ $size->quantity }}" {{ $loop->first ? 'selected' : '' }}>
-                                            {{ $size->size }} - {{ app_currency() }}{{ number_format($size->price, 2) }}
-                                        </option>
-                                    @endforeach
-                                @else
-                                    <option value="0" data-price="{{ $product->price }}"
-                                        data-quantity="{{ $product->quantity }}" selected>
-                                        One Size - {{ app_currency() }}{{ number_format($product->price, 2) }}
-                                    </option>
-                                @endif
-                            </select>
-                            <div
-                                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7" />
-                                </svg>
+                    <!-- Size Selection -->
+                    @if($product->sizes->isNotEmpty())
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="font-semibold text-gray-900">Size:</span>
+                                <span class="text-gray-600"
+                                    id="selected-size-display">{{ $product->sizes->first()->size }}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                @foreach($product->sizes as $size)
+                                    <button type="button"
+                                        onclick="selectSize('{{ $size->id }}', '{{ $size->size }}', {{ $size->price }})"
+                                        data-size-id="{{ $size->id }}"
+                                        class="size-btn px-6 py-3 border-2 rounded-lg font-medium transition {{ $loop->first ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 hover:border-gray-400' }}">
+                                        {{ $size->size }}
+                                    </button>
+                                @endforeach
                             </div>
                         </div>
-                    </div>
-                    @error('size')
-                        <div class="text-red-500 text-sm mt-2 font-medium">{{ $message }}</div>
-                    @enderror
-                </div>
-                <!-- Description -->
-                <div class="mb-6 sm:mb-8 hidden">
-                    <p class="text-gray-700 leading-relaxed text-sm sm:text-base">
-                        {!! Str::limit($product->description, 200) !!}
-                    </p>
-                    @if(strlen($product->description) > 200)
-                        <button
-                            class="text-[#ef380d] font-semibold text-sm mt-2 hover:text-[#d6320c] transition-colors duration-200">
-                            Read more
-                        </button>
                     @endif
-                </div>
 
-                <!-- Quantity & Actions -->
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mb-6 sm:mb-8">
-            
-            <!-- Quantity Selector -->
-            <div class="flex items-center justify-start">
-                <span class="text-sm font-semibold text-gray-700 mr-4">Quantity:</span>
-                <div class="flex items-center space-x-1 border-2 border-gray-200 rounded-2xl px-3 py-2 bg-white shadow-sm">
-                    <button id="decrement"
-                        class="text-xl font-bold text-gray-500 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-50 hover:text-gray-700 active:bg-gray-100 transition-all duration-200">
-                        −
-                    </button>
-                    <input type="text" id="quantity" value="1" autocomplete="off"
-                        class="w-12 text-center focus:outline-none bg-transparent text-lg font-bold text-gray-900"
-                        readonly />
-                    <button id="increment"
-                        class="text-xl font-bold text-gray-500 rounded-full p-1 w-8 h-8 flex items-center justify-center hover:bg-gray-50 hover:text-gray-700 active:bg-gray-100 transition-all duration-200">
-                        +
-                    </button>
-                </div>
-            </div>
+                    <!-- Quantity & Actions -->
+                    <div class="space-y-4">
+                        <span class="font-semibold text-gray-900">Quantity</span>
 
-            <!-- Action Buttons -->
-            <div class="flex gap-3 w-full sm:w-auto">
-                
-                <!-- Buy Now Button -->
-                <a href="#" class="flex-grow sm:flex-grow-0" id="buy-now-link">
-                    <button class="relative bg-gradient-to-r from-[#ef380d] to-[#d6320c] hover:from-[#d6320c] hover:to-[#bf2c0a] text-white px-8 py-4 rounded-2xl font-semibold flex items-center justify-center gap-3 text-base w-full transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105 active:scale-95 shadow-md">
-                        <span id="buyNowCounter"
-                            class="absolute -left-2 -top-2 text-xs bg-white text-[#ef380d] border-2 border-[#ef380d] rounded-full px-2 py-1 font-bold shadow-sm">
-                            1
-                        </span>
-                        Buy Now
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </a>
+                        <div class="flex gap-4">
+                            <!-- Quantity Selector -->
+                            <div class="flex items-center border-2 border-gray-300 rounded-lg">
+                                <button type="button" id="decrement" class="p-3 hover:bg-gray-100 transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M20 12H4" />
+                                    </svg>
+                                </button>
+                                <input type="number" id="quantity" value="1" min="1"
+                                    class="w-16 text-center font-semibold text-lg border-none focus:outline-none" readonly>
+                                <button type="button" id="increment" class="p-3 hover:bg-gray-100 transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </button>
+                            </div>
 
-                <!-- Add to Cart Button -->
-                <button data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
-                        data-product-price="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->price : $product->price }}"
-                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
-                        data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : null }}"
-                    class="cart-item-btn relative bg-white border-2 border-[#ef380d] p-3 rounded-2xl text-[#ef380d] hover:bg-[#ef380d]/5 w-14 h-14 flex items-center justify-center transition-all duration-300 ease-in-out hover:shadow-lg hover:scale-105 active:scale-95 shadow-sm flex-shrink-0">
-                    <svg width="22" height="22" viewBox="0 0 31 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#a)" fill="#ef380d">
-                            <path d="M21.377 22.5a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.113-2.5 2.5-2.5m-20-20h4.087L6.64 5h18.488a1.25 1.25 0 0 1 1.25 1.25c0 .213-.062.425-.15.625l-4.475 8.088a2.51 2.51 0 0 1-2.187 1.287h-9.313l-1.125 2.038-.038.15a.313.313 0 0 0 .313.312h14.475v2.5h-15a2.5 2.5 0 0 1-2.5-2.5c0-.437.112-.85.3-1.2l1.7-3.062L3.877 5h-2.5zm7.5 20a2.5 2.5 0 1 1-2.5 2.5c0-1.387 1.112-2.5 2.5-2.5m11.25-8.75 3.475-6.25h-15.8l2.95 6.25z" />
-                            <path d="M25.127 15.5v6h6v4h-6v6h-4v-6h-6v-4h6v-6z" stroke="white" stroke-width="2" />
-                        </g>
-                        <defs>
-                            <clipPath id="a">
-                                <path fill="#fff" d="M.127 0h30v30h-30z" />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                    <span id="addToCartCounter"
-                        class="absolute -left-1 -top-1 text-xs bg-[#ef380d] text-white rounded-full px-2 py-1 font-bold shadow-sm">
-                        1
-                    </span>
-                </button>
-                
-            </div>
-        </div>
+                            <!-- Add to Cart Button -->
+                            <button type="button"
+                                class="cart-item-btn flex-1 bg-gray-900 text-white py-4 rounded-lg font-semibold hover:bg-gray-800 transition"
+                                data-product-id="{{ $product->id }}" data-product-name="{{ $product->name }}"
+                                data-product-price="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->price : $product->price }}"
+                                data-product-image="{{ $initialImage }}"
+                                data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0 }}">
+                                Add to cart
+                            </button>
+                        </div>
 
-                <!-- Additional Info -->
-                <div class="border-t border-gray-200 pt-4">
-                    <div class="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-gray-600">
-                        <div class="flex items-center">
-                            @if($product->quantity > 0)
-                                <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <!-- Buy Now Button -->
+                        <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0]) }}"
+                            id="buy-now-link"
+                            class="block w-full bg-white border-2 border-gray-900 text-gray-900 py-4 rounded-lg font-semibold text-center hover:bg-gray-50 transition">
+                            Buy it now
+                        </a>
+                    </div>
+
+                    <!-- Action Links -->
+                    <div class="flex items-center gap-6 pt-4 border-t">
+                        <button type="button" class="hidden flex items-center gap-2 text-gray-700 hover:text-gray-900 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            <span class="font-medium">Add To Wishlist</span>
+                        </button>
+                        <button type="button" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                            </svg>
+                            <span class="font-medium">Share</span>
+                        </button>
+                    </div>
+
+                    <!-- Delivery Info -->
+                    <div class="space-y-3 pt-6 border-t">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-gray-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-900">Estimated Delivery:</p>
+                                <p class="text-gray-600">{{ now()->addDays(7)->format('F d') }} -
+                                    {{ now()->addDays(14)->format('F d') }}</p>
+                            </div>
+                        </div>
+                        @if($product->quantity > 0)
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-gray-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
-                                <span class="text-green-600">In stock</span>
-                            @else
-                                <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                <span class="text-red-600">Out of stock</span>
-                            @endif
+                                <div>
+                                    <p class="font-semibold text-gray-900">Free Shipping & Returns:</p>
+                                    <p class="text-gray-600">On all orders over $75</p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="pt-6 border-t text-center hidden">
+                        <div class="flex items-center justify-center gap-4 mb-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa"
+                                class="h-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+                                alt="Mastercard" class="h-6">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal"
+                                class="h-6">
                         </div>
-                        <div class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                            </svg>
-                            Shipping Available
-                        </div>
-                        <!-- <div class="flex items-center">
-                                <svg class="w-4 h-4 mr-2 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
-                                </svg>
-                                30-day returns
-                            </div> -->
+                        <p class="text-sm text-gray-600">Guarantee safe & secure checkout</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="max-w-4xl mx-auto mt-8 md:mt-12">
-            <!-- Tabs Navigation -->
-            <div class="flex flex-wrap gap-2 sm:gap-4 mt-4 mb-6">
-                <button
-                    class="tab-button border border-[#ef380d] px-3 py-1 sm:px-4 sm:py-2 rounded-full text-[#ef380d] font-medium active text-sm sm:text-base bg-[#ef380d]/10"
-                    data-tab="description">
-                    Description
-                </button>
-                <button
-                    class="tab-button border border-[#ef380d] px-3 py-1 sm:px-4 sm:py-2 rounded-full text-[#ef380d] hover:bg-[#ef380d]/5 text-sm sm:text-base transition-colors duration-200"
-                    data-tab="ingredients">
-                    Ingredients
-                </button>
-                <button
-                    class="tab-button border border-[#ef380d] px-3 py-1 sm:px-4 sm:py-2 rounded-full text-[#ef380d] hover:bg-[#ef380d]/5 text-sm sm:text-base transition-colors duration-200"
-                    data-tab="how-to-use">
-                    How To Use
-                </button>
-                <button
-                    class="tab-button border border-[#ef380d] px-3 py-1 sm:px-4 sm:py-2 rounded-full text-[#ef380d] hover:bg-[#ef380d]/5 text-sm sm:text-base transition-colors duration-200"
-                    data-tab="reviews">
-                    Reviews
-                </button>
-            </div>
+            <!-- Product Tabs -->
+            <div class="mt-10 border-t pt-8">
+                <div class="flex gap-8 mb-8 border-b">
+                    <button type="button" onclick="showTab('description')"
+                        class="tab-btn font-semibold text-gray-900 border-b-2 border-gray-900 pb-3 -mb-px"
+                        data-tab="description">
+                        Description
+                    </button>
+                    <button type="button" onclick="showTab('ingredients')"
+                        class="tab-btn font-semibold text-gray-500 hover:text-gray-900 pb-3" data-tab="ingredients">
+                        Ingredients
+                    </button>
+                    <button type="button" onclick="showTab('reviews')"
+                        class="tab-btn font-semibold text-gray-500 hover:text-gray-900 pb-3" data-tab="reviews">
+                        Reviews ({{ $product->reviews_count }})
+                    </button>
+                </div>
 
-            <!-- Description Tab -->
-            <div id="description-content" class="tab-content">
-                <h2 class="text-lg sm:text-xl font-bold mb-4 text-gray-900">Product Description</h2>
-                <div class="text-gray-700 leading-relaxed mb-6 prose max-w-none">
+                <!-- Tab Contents -->
+                <div id="description-tab" class="tab-content prose max-w-none">
                     {!! $product->description !!}
                 </div>
 
-                {{-- 🆕 REAL TOP FEATURED REVIEWS --}}
-                @if($product->reviews->where('is_featured', 1)->count() > 0)
-                    <div class="container mx-auto px-0 py-8 sm:py-12">
-                        <div class="mb-10 sm:mb-16">
-                            <div class="flex flex-col md:flex-row items-center">
-                                <h1 class="text-3xl sm:text-5xl min-w-[26%] font-medium text-[#ef380d]">
-                                    <span class="block">Product</span>
-                                    <span class="text-[#ef380d] font-bold text-3xl sm:text-5xl w-full">Top Reviews</span>
-                                </h1>
-                                <div class="w-full h-1 bg-[#ef380d]/30 mt-4 md:mt-0"></div>
-                            </div>
-                        </div>
-                        <div class="flex flex-col lg:flex-row gap-6">
-                            <div class="lg:w-3/4 relative">
-                                <div class="testimonial-container relative">
-                                    @foreach($product->reviews->where('is_featured', 1)->take(4) as $index => $review)
-                                        <div class="testimonial-slide {{ $loop->first ? 'active' : '' }}" data-index="{{ $index }}">
-                                            <div
-                                                class="bg-white p-6 sm:p-8 rounded-lg shadow-sm border border-gray-100 mb-6 sm:mb-8">
-                                                <p class="text-base sm:text-lg text-gray-800 mb-4">"{{ $review->review }}"</p>
-                                                <div class="flex items-center mt-6">
-                                                    <div
-                                                        class="w-10 h-10 sm:w-12 sm:h-12 bg-[#ef380d]/10 rounded-full overflow-hidden border-2 border-[#ef380d]">
-                                                        <div
-                                                            class="w-full h-full flex items-center justify-center bg-[#ef380d]/20 text-[#ef380d] font-bold text-sm">
-                                                            {{ substr($review->name, 0, 1) }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="ml-4">
-                                                        <div class="flex text-yellow-400 mb-1">
-                                                            @for($i = 1; $i <= 5; $i++)
-                                                                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor"
-                                                                    viewBox="0 0 20 20">
-                                                                    <path
-                                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118l-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z">
-                                                                    </path>
-                                                                </svg>
-                                                            @endfor
-                                                        </div>
-                                                        <p class="font-medium text-gray-700 text-sm sm:text-base">
-                                                            {{ $review->name }}
-                                                        </p>
-                                                        <p class="text-xs sm:text-sm text-gray-500">
-                                                            {{ $review->created_at->format('M Y') }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <div class="flex mt-4">
-                                    <button id="prev-btn"
-                                        class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-[#ef380d] text-white rounded-full shadow-md hover:bg-[#d6320c] transition-all duration-200">
-                                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 19l-7-7 7-7"></path>
-                                        </svg>
-                                    </button>
-                                    <button id="next-btn"
-                                        class="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center bg-[#ef380d] text-white rounded-full shadow-md hover:bg-[#d6320c] transition-all duration-200 ml-4">
-                                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor"
-                                            viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                    </button>
-                                    <div class="ml-auto flex items-center">
-                                        <a href="#"
-                                            class="text-[#ef380d] font-medium flex items-center hover:underline text-sm sm:text-base hover:text-[#d6320c] transition-colors duration-200"
-                                            onclick="document.getElementById('reviews-tab').click(); return false;">
-                                            View All Reviews
-                                            <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 5l7 7-7 7"></path>
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="lg:w-1/4 mt-8 lg:mt-1">
-                                <div class="space-y-4 sm:space-y-6">
-                                    @foreach($product->reviews->where('is_featured', 1)->take(4) as $index => $review)
-                                        <div class="flex items-center cursor-pointer client-nav {{ $loop->first ? '' : 'opacity-50' }} transition-opacity duration-200 hover:opacity-100"
-                                            data-index-client="{{ $index }}">
-                                            <div
-                                                class="client-nav-c w-8 h-8 sm:w-10 sm:h-10 bg-[#ef380d]/10 rounded-full overflow-hidden border-2 {{ $loop->first ? 'border-[#ef380d]' : 'border-gray-300' }} transition-all duration-200">
-                                                <div
-                                                    class="w-full h-full flex items-center justify-center bg-[#ef380d]/20 text-[#ef380d] font-bold text-xs">
-                                                    {{ substr($review->name, 0, 1) }}
-                                                </div>
-                                            </div>
-                                            <p
-                                                class="ml-4 font-medium {{ $loop->first ? 'text-gray-700' : 'text-gray-500' }} text-sm sm:text-base transition-colors duration-200">
-                                                {{ $review->name }}
-                                            </p>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-            </div>
-
-            <!-- Ingredients Tab -->
-            <div id="ingredients-content" class="tab-content hidden">
-                <h2 class="text-lg sm:text-xl font-bold mb-4 text-gray-900">Ingredients</h2>
-                <div class="text-gray-700 leading-relaxed prose max-w-none">
+                <div id="ingredients-tab" class="tab-content hidden prose max-w-none">
                     {!! $product->ingredients !!}
                 </div>
-            </div>
 
-            <!-- How To Use Tab -->
-            <div id="how-to-use-content" class="tab-content hidden">
-                <h2 class="text-lg sm:text-xl font-bold mb-4 text-gray-900">How To Use</h2>
-                <div class="text-gray-700 leading-relaxed prose max-w-none">
-                    {!! $product->how_to_use !!}
-                </div>
-            </div>
-
-            <!-- Reviews Tab -->
-            <div id="reviews-content" class="tab-content hidden">
+                <div id="reviews-tab" class="tab-content hidden">
                 <div
                     class="mb-6 flex flex-col sm:flex-row bg-white/80 justify-between p-4 sm:p-6 rounded-xl items-start sm:items-center gap-4 sm:gap-0 border border-gray-200">
                     <p class="text-gray-700 mb-2 sm:mb-0 font-bold text-sm sm:text-base">
@@ -681,8 +495,134 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
+            {{-- Related products --}}
+    @if($relatedProducts && $relatedProducts->count())
+        <div class="mt-12">
+            <h3 class="text-2xl font-bold mb-6">Related Products</h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($relatedProducts as $product)
+                    <div class="gsp-search-recommend-collection-item group">
+                        <div class="card bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
+                            <!-- Image Section -->
+                            <figure class="gsp-product-card-image relative overflow-hidden mb-0"
+                                style="--aspect-ratio: 1/1;">
+                                <a href="{{ route('web.products.details', $product->slug) }}"
+                                    class="gsp-product-featured block text-inherit img-hover-zoom-in {{ $product->images->count() > 1 ? 'has_second_image' : '' }}"
+                                    title="{{ $product->name }}">
+                                    <div class="gsp-image gsp-product-thumb-primary">
+                                        <img src="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                            alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover"
+                                            width="540" height="720" />
+                                    </div>
+                                    @if ($product->images->count() > 1)
+                                        <div class="gsp-image gsp-product-thumb-secondary absolute top-0 left-0 opacity-0">
+                                            <img src="{{ asset($product->images[1]->image_path) }}"
+                                                alt="{{ $product->name }}" loading="lazy" class="w-full h-full object-cover"
+                                                width="540" height="720" />
+                                        </div>
+                                    @endif
+                                </a>
 
+                                <!-- Quick Action Buttons - Shown on Hover -->
+                                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <!-- Add to Cart Button -->
+                                    <button type="button"
+                                        class="cart-item-btn bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        data-product-id="{{ $product->id }}"
+                                        data-product-name="{{ $product->name }}"
+                                        data-product-price="{{ $product->price }}"
+                                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                        data-size-id="0"
+                                        title="Add to Cart">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                        </svg>
+                                    </button>
+
+                                    <!-- Quick View Button -->
+                                    <a href="{{ route('web.products.details', $product->slug) }}"
+                                        class="bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        title="Quick View">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                        </svg>
+                                    </a>
+
+                                    <!-- Wishlist Button -->
+                                    <button type="button"
+                                        class="hidden bg-white hover:bg-red-500 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        title="Add to Wishlist">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </figure>
+
+                            <!-- Card Body -->
+                            <div class="card-body p-4">
+                                <!-- Price -->
+                                <div class="gsp-product-price gsp-product-card-price flex items-center text-sm mb-2 {{ $product->compare_at_price ? 'gsp-price-on-sale' : '' }}">
+                                    @if ($product->compare_at_price)
+                                        <div class="gsp-product__price-sale">
+                                            <span class="gsp-price-item-regular line-through text-stone-500 mr-2">
+                                                {{ app_currency() }}{{ number_format($product->compare_at_price, 2) }}
+                                            </span>
+                                            <span class="gsp-price-item-sale font-semibold text-rose-500">
+                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <div class="gsp-product__price-regular">
+                                            <span class="gsp-price-item-regular font-semibold text-stone-700">
+                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Product Name -->
+                                <h3 class="gsp-product-card-title card-title mb-3 text-base font-medium relative">
+                                    <a href="{{ route('web.products.details', $product->slug) }}"
+                                        class="text-decoration-none text-stone-700 hover:text-rose-500 line-clamp-2">
+                                        {{ $product->name }}
+                                    </a>
+                                </h3>
+
+                                <!-- Action Buttons Row (Always Visible on Mobile) -->
+                                <div class="flex gap-2 mt-4 sm:hidden">
+                                    <!-- Add to Cart -->
+                                    <button type="button"
+                                        class="cart-item-btn flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                                        data-product-id="{{ $product->id }}"
+                                        data-product-name="{{ $product->name }}"
+                                        data-product-price="{{ $product->price }}"
+                                        data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
+                                        data-size-id="0">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                                        </svg>
+                                        Cart
+                                    </button>
+
+                                    <!-- Buy Now -->
+                                    <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => 0]) }}"
+                                        class="flex-1 bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 py-2 px-3 rounded-lg text-sm font-medium transition-colors text-center">
+                                        Buy
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    @endif
+        </div>
+    </section>
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     const reviewFormContainer = document.getElementById('review-form-container');
@@ -901,38 +841,90 @@
                     }
                 </style>
             @endpush
-        </div>
-    </section>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const thumbnails = document.querySelectorAll('.thumbnail');
-            const mainImgDesktop = document.getElementById('main-img-desktop');
-            const mainImgMobile = document.getElementById('main-img-mobile');
-            const blurBgMobile = document.getElementById('blur-bg-mobile');
+        // Image Gallery
+        function changeMainImage(imageSrc) {
+            document.getElementById('main-product-image').src = imageSrc;
 
-            function updateMainImage(src) {
-                if (mainImgDesktop) mainImgDesktop.src = src;
-                if (mainImgMobile) mainImgMobile.src = src;
-                if (blurBgMobile) blurBgMobile.src = src;
+            // Update thumbnail borders
+            document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+                btn.classList.remove('border-gray-900');
+                btn.classList.add('border-gray-200');
+            });
+            event.currentTarget.classList.remove('border-gray-200');
+            event.currentTarget.classList.add('border-gray-900');
+        }
 
-                // Highlight active thumbnail
-                thumbnails.forEach(thumb => {
-                    thumb.classList.remove('border-pink-800', 'opacity-100');
-                    thumb.classList.add('border-gray-300', 'opacity-75');
-                    if (thumb.dataset.src === src) {
-                        thumb.classList.remove('border-gray-300', 'opacity-75');
-                        thumb.classList.add('border-pink-800', 'opacity-100');
-                    }
-                });
+        // Size Selection
+        let selectedSizeId = {{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0 }};
+        function selectSize(sizeId, sizeName, price) {
+            selectedSizeId = sizeId;
+            console.log('Selected Size ID:', selectedSizeId);
+            document.getElementById('selected-size-display').textContent = sizeName;
+            document.getElementById('display-price').textContent = '{{ app_currency() }} ' + price.toFixed(2);
+
+            // Update size buttons
+            document.querySelectorAll('.size-btn').forEach(btn => {
+                btn.classList.remove('border-gray-900', 'bg-gray-900', 'text-white');
+                btn.classList.add('border-gray-300');
+            });
+            event.currentTarget.classList.remove('border-gray-300');
+            event.currentTarget.classList.add('border-gray-900', 'bg-gray-900', 'text-white');
+
+            // Update cart button data
+            document.querySelector('.cart-item-btn').dataset.sizeId = sizeId;
+            document.querySelector('.cart-item-btn').dataset.productPrice = price;
+
+            // Update buy now link
+            const quantity = document.getElementById('quantity').value;
+            const buyNowLink = document.getElementById('buy-now-link');
+            buyNowLink.href = checkoutRoute.replace('/1/', `/${quantity}/`).replace(/\/\d+$/, `/${sizeId}`);
+        }
+
+        // Quantity Controls
+        document.getElementById('decrement').addEventListener('click', () => {
+            const input = document.getElementById('quantity');
+            const currentValue = parseInt(input.value);
+            if (currentValue > 1) {
+                input.value = currentValue - 1;
+                updateBuyNowLink();
             }
+        });
 
-            thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', () => {
-                    updateMainImage(thumb.dataset.src);
-                });
+        document.getElementById('increment').addEventListener('click', () => {
+            const input = document.getElementById('quantity');
+            input.value = parseInt(input.value) + 1;
+            updateBuyNowLink();
+        });
+
+        function updateBuyNowLink() {
+            const quantity = document.getElementById('quantity').value;
+            const buyNowLink = document.getElementById('buy-now-link');
+            buyNowLink.href = checkoutRoute.replace('/1/', `/${quantity}/`).replace(/\/\d+$/, `/${selectedSizeId}`);
+        }
+
+        // Tabs
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
             });
 
-            // Optional: Add keyboard navigation or swipe for mobile if needed
-        });
+            // Remove active state from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('border-gray-900', 'text-gray-900');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+
+            // Add active state to clicked button
+            const activeBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            activeBtn.classList.remove('text-gray-500', 'border-transparent');
+            activeBtn.classList.add('text-gray-900', 'border-gray-900');
+        }
     </script>
+
+    <script src="{{ asset('js/productDetail.js') }}"></script>
 @endsection

@@ -1,10 +1,10 @@
-{{-- resources/views/emails/new-order-admin.blade.php --}}
+{{-- resources/views/emails/order-shipped-customer.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>New Order Placed on Afro Jee</title>
+    <title>Your Order Has Been Shipped!</title>
 </head>
 
 <body
@@ -23,25 +23,28 @@
                         </td>
                     </tr>
 
-                    <!-- Title -->
+                    <!-- Title Section -->
                     <tr>
                         <td align="center" style="padding:40px 20px 20px;">
                             <h1 style="font-size:26px; font-weight:500; margin:0; color:#2E2E2E;">
-                                🛍️ New Order Placed on <strong>Afro Jee</strong>
+                                🚚 Your Order Is On Its Way!
                             </h1>
                             <div style="width:60px; height:2px; background-color:#ef380d; margin:20px auto;"></div>
+                            <p style="font-size:17px; color:#666; margin:0;">
+                                Great news — your items have been shipped!
+                            </p>
                         </td>
                     </tr>
 
                     <!-- Body Content -->
                     <tr>
                         <td style="padding:20px 30px; background-color:#ffffff;">
-                            <p style="font-size:16px; color:#666; margin:0 0 15px;">
-                                Hello <strong>Admin</strong>,
+                            <p style="font-size:16px; color:#666; margin:0 0 20px;">
+                                Hi <strong>{{ $data['customer_name'] }}</strong>,
                             </p>
 
                             <p style="font-size:16px; color:#666; margin:0 0 20px;">
-                                A new order has just been placed by <strong>{{ $data['customer_name'] }}</strong>.
+                                Your order has been shipped and is now on its way to you. Here are the details:
                             </p>
 
                             <!-- Order Details -->
@@ -54,23 +57,24 @@
                                 </tr>
                                 <tr>
                                     <td style="font-size:15px; color:#2E2E2E; padding:8px 0;">
-                                        <strong>Customer Email:</strong> {{ $data['customer_email'] }}
+                                        <strong>Carrier:</strong> {{ $data['carrier'] ?? 'Afro Jee Logistics' }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="font-size:15px; color:#2E2E2E; padding:8px 0;">
-                                        <strong>Total:</strong> {{ app_currency() }} {{ $data['total'] }}
+                                        <strong>Tracking Number:</strong> {{ $data['tracking_number'] ?? 'N/A' }}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="font-size:15px; color:#2E2E2E; padding:8px 0;">
-                                        <strong>Order Time:</strong> {{ $data['order_time'] }}
+                                        <strong>Estimated Delivery:</strong>
+                                        {{ $data['estimated_delivery'] ?? '2–5 business days' }}
                                     </td>
                                 </tr>
                             </table>
 
-                            <p style="font-size:16px; color:#666; margin:0;">
-                                Please log in to your dashboard to review the order details and start processing it.
+                            <p style="font-size:16px; color:#666; margin:0 0 20px;">
+                                You can track your package anytime using the link below.
                             </p>
                         </td>
                     </tr>
@@ -78,9 +82,9 @@
                     <!-- CTA -->
                     <tr>
                         <td align="center" style="padding:40px 20px;">
-                            <a href="https://afrojee.store/admin/orders/{{ $data['order_id'] }}"
+                            <a href="{{ $data['tracking_url'] ?? 'https://afrojee.store/orders/' . $data['order_id'] }}"
                                 style="display:inline-block; background-color:#2E2E2E; color:#ffffff; padding:14px 36px; text-decoration:none; border-radius:40px; font-size:16px; font-weight:500;">
-                                View Order in Dashboard
+                                Track My Order
                             </a>
                         </td>
                     </tr>
@@ -90,8 +94,12 @@
                         <td align="center"
                             style="padding:30px 20px; background-color:#F8F7F4; border-top:1px solid #f0f0f0;">
                             <p style="font-size:14px; color:#999; margin:0;">
-                                This is an automated notification from <strong>Afro Jee</strong>.<br>
-                                &copy; {{ date('Y') }} Afro Jee. All rights reserved.
+                                This is an automated message. Please do not reply directly.<br>
+                                Need help? Contact <a href="mailto:support@afrojee.com"
+                                    style="color:#ef380d; text-decoration:none;">support@afrojee.com</a>.
+                            </p>
+                            <p style="font-size:14px; color:#999; margin-top:15px;">
+                                © {{ date('Y') }} Afro Jee. All rights reserved.
                             </p>
                         </td>
                     </tr>
