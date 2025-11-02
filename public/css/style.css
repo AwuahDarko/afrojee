@@ -109,7 +109,7 @@ html.is-scrolling a[href="#amber-section"] svg {
     background-color: var(--color-primary);
 }
 .hover\:bg-pink-900:hover {
-    background-color: #6a2831;
+    background-color: var(--color-primary-dark);
 }
 .text-pink-800 {
     color: var(--color-primary);

@@ -25,54 +25,142 @@ class OrderController extends Controller
     }
 
     /**
-     * Get shipping rate for a given zone and weight.
-     * Handles edge cases:
-     * - Weight below minimum: uses lowest available rate
-     * - Weight above maximum: uses highest available rate
-     * - Weight = 0 or invalid: returns null
+     * Get the maximum allowed weight for a shipping zone.
+     * 
+     * @param int $zone_id
+     * @return float|null Maximum weight in grams, or null if no rates found
+     */
+    private function getMaxWeightForZone($zone_id)
+    {
+        $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->orderBy('weight_to', 'desc')
+            ->first();
+        
+        return $maxRate ? $maxRate->weight_to : null;
+    }
+
+    /**
+     * Calculate shipping cost using tiered pricing model.
+     * Sums up costs for each weight tier the order spans across.
      * 
      * @param int $zone_id
      * @param float $weight
-     * @return ShippingRate|null
+     * @return array|null ['rate' => float, 'breakdown' => array] or null if invalid
      */
-    private function getShippingRate($zone_id, $weight)
+    private function calculateTieredShipping($zone_id, $weight)
     {
         // Validate weight
         if ($weight <= 0 || !is_numeric($weight)) {
             return null;
         }
 
-        // First, try to find an exact match
-        $rate = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->where('weight_from', '<=', $weight)
-            ->where('weight_to', '>=', $weight)
-            ->first();
-
-        // If exact match found, return it
-        if ($rate) {
-            return $rate;
-        }
-
-        // If weight is below minimum, get the lowest rate for this zone
-        $minRate = ShippingRate::where('shipping_zone_id', $zone_id)
+        // Get all rates for this zone, ordered by weight_from
+        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
             ->orderBy('weight_from', 'asc')
-            ->first();
-        
-        if ($minRate && $weight < $minRate->weight_from) {
-            return $minRate;
+            ->get();
+
+        if ($rates->isEmpty()) {
+            return null;
         }
 
-        // If weight exceeds maximum, get the highest rate for this zone
-        $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->orderBy('weight_to', 'desc')
-            ->first();
-        
-        if ($maxRate && $weight > $maxRate->weight_to) {
-            return $maxRate;
+        // If weight is below minimum, return the lowest rate
+        $minRate = $rates->first();
+        if ($weight < $minRate->weight_from) {
+            return [
+                'rate' => $minRate->rate,
+                'breakdown' => [
+                    [
+                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g",
+                        'weight' => $minRate->weight_from,
+                        'cost' => $minRate->rate
+                    ]
+                ]
+            ];
         }
 
-        // If no rates found for this zone, return null
-        return null;
+        $totalCost = 0;
+        $breakdown = [];
+        $remainingWeight = $weight;
+        $lastTierEnd = 0;
+
+        foreach ($rates as $rate) {
+            // If we still have remaining weight to calculate
+            if ($remainingWeight <= 0) {
+                break;
+            }
+
+            $tierStart = max($rate->weight_from, $lastTierEnd);
+            $tierEnd = $rate->weight_to;
+            $tierWeightRange = $tierEnd - $tierStart;
+
+            if ($remainingWeight <= $tierWeightRange) {
+                // Weight fits entirely in this tier
+                // Calculate proportional cost for the weight in this tier
+                $weightInTier = $remainingWeight;
+                $tierCost = ($weightInTier / $tierWeightRange) * $rate->rate;
+                
+                $totalCost += $tierCost;
+                $breakdown[] = [
+                    'tier' => "{$tierStart}-{$tierEnd}g",
+                    'weight' => $weightInTier,
+                    'cost' => round($tierCost, 2)
+                ];
+                $remainingWeight = 0;
+            } else {
+                // Weight spans beyond this tier, use full tier cost
+                $weightInTier = $tierWeightRange;
+                $totalCost += $rate->rate;
+                $breakdown[] = [
+                    'tier' => "{$tierStart}-{$tierEnd}g",
+                    'weight' => $weightInTier,
+                    'cost' => $rate->rate
+                ];
+                $remainingWeight -= $weightInTier;
+            }
+
+            $lastTierEnd = $tierEnd;
+        }
+
+        // If there's still remaining weight beyond the highest tier, use the highest tier rate
+        // and calculate proportional cost for excess weight
+        if ($remainingWeight > 0) {
+            $maxRate = $rates->last();
+            $maxTierRange = $maxRate->weight_to - $maxRate->weight_from;
+            // Use the rate per gram from the highest tier
+            $costPerGram = $maxRate->rate / $maxTierRange;
+            $excessCost = $remainingWeight * $costPerGram;
+            
+            $totalCost += $excessCost;
+            $breakdown[] = [
+                'tier' => "Above {$maxRate->weight_to}g (excess)",
+                'weight' => $remainingWeight,
+                'cost' => round($excessCost, 2)
+            ];
+        }
+
+        return [
+            'rate' => round($totalCost, 2),
+            'breakdown' => $breakdown
+        ];
+    }
+
+    /**
+     * Get shipping rate for a given zone and weight (legacy method - now uses tiered pricing).
+     * 
+     * @param int $zone_id
+     * @param float $weight
+     * @return object|null ShippingRate-like object with rate property
+     */
+    private function getShippingRate($zone_id, $weight)
+    {
+        $result = $this->calculateTieredShipping($zone_id, $weight);
+        
+        if (!$result) {
+            return null;
+        }
+
+        // Return an object with rate property for backward compatibility
+        return (object)['rate' => $result['rate']];
     }
 
     public function store(Request $request)
@@ -103,7 +191,17 @@ class OrderController extends Controller
         }
 
         $subtotal = $price * $quantity;
-        $weight = $weight * $quantity;  // Weight product-level
+        
+        // Safely handle null/zero weights
+        $productWeight = ($product->weight && $product->weight > 0) ? $product->weight : 0;
+        $weight = $productWeight * $quantity;  // Weight product-level
+
+        // Validate that we have some weight before calculating shipping
+        if ($weight <= 0) {
+            return back()->withErrors([
+                'shipping' => 'Unable to calculate shipping cost. This product has invalid or missing weight information.'
+            ])->withInput();
+        }
 
         $rates = $this->getShippingRate($zone_id, $weight);
 
@@ -180,7 +278,7 @@ class OrderController extends Controller
                             ],
                             'unit_amount' => $grand_total * 100, // Amount in cents
                         ],
-                        'quantity' => $quantity ?? 1,
+                        'quantity' => 1// $quantity ?? 1,
                     ]
                 ],
                 'mode' => 'payment',
@@ -229,13 +327,31 @@ class OrderController extends Controller
                         }
                     }
 
-                    $total_weight += $prod->quantity * $product->weight;
+                    // Safely handle null/zero weights: use 0 if weight is null or invalid
+                    $productWeight = ($product->weight && $product->weight > 0) ? $product->weight : 0;
+                    $total_weight += $prod->quantity * $productWeight;
                     $total_amount += $price * $prod->quantity;
                 }
             }
         }
 
-        $rates = $this->getShippingRate($zone_id, $total_weight);
+        // Validate that we have some weight before calculating shipping
+        if ($total_weight <= 0) {
+            return back()->withErrors([
+                'shipping' => 'Unable to calculate shipping cost. One or more products in your cart have invalid or missing weight information.'
+            ])->withInput();
+        }
+
+        // Calculate shipping using tiered pricing (no longer blocking excess weight)
+        $shippingCalculation = $this->calculateTieredShipping($zone_id, $total_weight);
+        
+        if (!$shippingCalculation) {
+            return back()->withErrors([
+                'shipping' => 'Unable to calculate shipping cost. Please verify your shipping address and ensure products have valid weight.'
+            ])->withInput();
+        }
+
+        $rates = (object)['rate' => $shippingCalculation['rate']];
 
         $guestAddressId = Session::get('guest_billing_address_id');
         

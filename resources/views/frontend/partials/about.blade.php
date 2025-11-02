@@ -92,7 +92,7 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Left Side - Image -->
                 <div class="relative">
-                    <img src="{{ asset('images/afro-jee-products.jpeg') }}" alt="Jennifer Pokuaa Effah - Founder"
+                    <img src="{{ asset('images/afro-jee-products-2.jpeg') }}" alt="Jennifer Pokuaa Effah - Founder"
                         class="w-full h-auto rounded-lg shadow-sm">
                 </div>
 
@@ -197,8 +197,7 @@
                     Our Coverage
                 </h2>
                 <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
-                    Afro Jee currently operates across several countries in Africa, Europe, and the Americas — including
-                    Ghana, Nigeria, Spain, Portugal, France, Germany, the UK, the USA, Canada, Brazil, and more.
+                    Afro Jee currently operates across several countries in Europe (Germany, Portugal, Italy, Austria, Switzerland, Luxembourg…) and the United States
                 </p>
             </div>
 

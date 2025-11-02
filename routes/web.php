@@ -40,6 +40,7 @@ Route::get('/checkout/info/regions', [CheckoutController::class, 'getRegionByCou
 Route::get('/checkout/info/prices', [CheckoutController::class, 'calculatePrice'])->name('web.checkoutDetails.info.price');
 Route::get('/checkout/info/price', [CheckoutController::class, 'getPrice'])->name('web.checkoutDetails.info.getprice');
 Route::get('/checkout/info/shipping-methods', [CheckoutController::class, 'getShippingMethods'])->name('web.checkoutDetails.info.shippingMethods');
+Route::post('/checkout/validate-weight', [CheckoutController::class, 'validateCartWeight'])->name('web.checkoutDetails.validateWeight');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
 // Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');
