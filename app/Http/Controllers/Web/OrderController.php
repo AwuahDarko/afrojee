@@ -24,6 +24,57 @@ class OrderController extends Controller
         Stripe::setApiKey(config('services.stripe.secret'));
     }
 
+    /**
+     * Get shipping rate for a given zone and weight.
+     * Handles edge cases:
+     * - Weight below minimum: uses lowest available rate
+     * - Weight above maximum: uses highest available rate
+     * - Weight = 0 or invalid: returns null
+     * 
+     * @param int $zone_id
+     * @param float $weight
+     * @return ShippingRate|null
+     */
+    private function getShippingRate($zone_id, $weight)
+    {
+        // Validate weight
+        if ($weight <= 0 || !is_numeric($weight)) {
+            return null;
+        }
+
+        // First, try to find an exact match
+        $rate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->where('weight_from', '<=', $weight)
+            ->where('weight_to', '>=', $weight)
+            ->first();
+
+        // If exact match found, return it
+        if ($rate) {
+            return $rate;
+        }
+
+        // If weight is below minimum, get the lowest rate for this zone
+        $minRate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->orderBy('weight_from', 'asc')
+            ->first();
+        
+        if ($minRate && $weight < $minRate->weight_from) {
+            return $minRate;
+        }
+
+        // If weight exceeds maximum, get the highest rate for this zone
+        $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->orderBy('weight_to', 'desc')
+            ->first();
+        
+        if ($maxRate && $weight > $maxRate->weight_to) {
+            return $maxRate;
+        }
+
+        // If no rates found for this zone, return null
+        return null;
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -54,10 +105,14 @@ class OrderController extends Controller
         $subtotal = $price * $quantity;
         $weight = $weight * $quantity;  // Weight product-level
 
-        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->where('weight_from', '<=', $weight)
-            ->where('weight_to', '>=', $weight)
-            ->first();
+        $rates = $this->getShippingRate($zone_id, $weight);
+
+        // If no rate found, redirect back with error
+        if (!$rates) {
+            return back()->withErrors([
+                'shipping' => 'Unable to calculate shipping cost. Please verify your shipping address and ensure products have valid weight.'
+            ])->withInput();
+        }
 
         $delivery_fee = $rates->rate;
 
@@ -76,7 +131,7 @@ class OrderController extends Controller
                 'total_amount' => $grand_total,
                 'payment_status' => 'unpaid',
                 'status' => 'pending',
-                'shipping_address_id' => $zone_id ?? 0,
+                'shipping_address_id' => $guestAddressId, // Use same address as billing, or null if not provided
             ]
         );
 
@@ -180,14 +235,19 @@ class OrderController extends Controller
             }
         }
 
-        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->where('weight_from', '<=', $total_weight)
-            ->where('weight_to', '>=', $total_weight)
-            ->first();
+        $rates = $this->getShippingRate($zone_id, $total_weight);
 
         $guestAddressId = Session::get('guest_billing_address_id');
+        
+        // If no rate found, redirect back with error
+        if (!$rates) {
+            return back()->withErrors([
+                'shipping' => 'Unable to calculate shipping cost. Total weight may be invalid or exceed maximum allowed weight for this shipping zone.'
+            ])->withInput();
+        }
 
-        $grand_total = $rates->rate + $total_amount;
+        $delivery_fee = $rates->rate;
+        $grand_total = $delivery_fee + $total_amount;
 
         $orderNo = "AFR".rand(111111111, 999999999);
 
@@ -197,12 +257,12 @@ class OrderController extends Controller
                 'billing_address_id' => $guestAddressId ?? 0,
                 'order_number' => $orderNo,
                 'subtotal' => $total_amount,
-                'delivery_fee' => $rates->rate,
+                'delivery_fee' => $delivery_fee,
                 'total_weight' => $total_weight,
                 'total_amount' => $grand_total,
                 'payment_status' => 'unpaid',
                 'status' => 'pending',
-                'shipping_address_id' => $zone_id ?? 0,
+                'shipping_address_id' => $guestAddressId, // Use same address as billing, or null if not provided
             ]
         );
 

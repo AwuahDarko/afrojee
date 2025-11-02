@@ -165,6 +165,20 @@
                     @endif
                 </div>
 
+                {{-- Shipping Method Selection --}}
+                @if ($userAddress)
+                <div class="bg-pink-100-light rounded-xl p-6 shadow-sm mb-8 hidden" id="shipping-method-section">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Shipping Method</h2>
+                    <div id="shipping-methods-container" class="space-y-3">
+                        <p class="text-gray-600 text-sm">Select your preferred shipping method</p>
+                        <div id="shipping-methods-loading" class="hidden text-center py-4">
+                            <span class="text-gray-500">Loading options...</span>
+                        </div>
+                        <div id="shipping-methods-list" class="space-y-2"></div>
+                    </div>
+                </div>
+                @endif
+
                 {{-- <div class="bg-white rounded-xl p-6 shadow-sm">
                     <h2 class="text-xl font-semibold text-gray-800 mb-6">Card Details</h2>
 
@@ -417,19 +431,30 @@
             const id = {{ $product->id }}
             const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
             const sizeId = {{ $size_id ?? 0 }};  // NEW: Get size_id from view variable
+            let selectedShippingZoneId = global_zone_id || 0; // Track selected shipping zone
         
-            getNewPrice(1, id, global_zone_id, sizeId)  // UPDATED: Pass sizeId
+            // Load shipping methods if address exists
+            if (global_zone_id) {
+                loadShippingMethods(global_zone_id);
+                getNewPrice(1, id, global_zone_id, sizeId);  // UPDATED: Pass sizeId
+            }
 
             region?.addEventListener('change', (evt) => {
                 const val = region.value
 
-                if (!val) return
+                if (!val) {
+                    hideShippingMethods();
+                    return;
+                }
 
                 let qty = parseInt(quantity.value)
                 orderZone.value = region.value
-
-
-                getNewPrice(qty, id, region.value, sizeId)  // UPDATED: Pass sizeId
+                
+                // Load shipping methods for selected region
+                loadShippingMethods(val);
+                
+                // Use first available shipping method or selected one
+                getNewPrice(qty, id, selectedShippingZoneId || val, sizeId)  // UPDATED: Pass sizeId
             })
 
             country?.addEventListener('change', (evt) => {
@@ -457,7 +482,16 @@
 
                 }
                 
-                getNewPrice(qty, id, region?.value ?? 0, sizeId)  // UPDATED: Pass sizeId
+                const zoneToUse = selectedShippingZoneId || region?.value || 0;
+                getNewPrice(qty, id, zoneToUse, sizeId)  // UPDATED: Pass sizeId
+                
+                // Update all shipping method prices
+                document.querySelectorAll('.shipping-method-option').forEach(el => {
+                    const zoneId = el.dataset.zoneId;
+                    if (zoneId) {
+                        loadShippingPrice(zoneId);
+                    }
+                });
             })
 
             document.getElementById('increase-btn').addEventListener('click', (evt) => {
@@ -470,8 +504,191 @@
                      qtylbl.value = quantity.value
                  }
                 
-                getNewPrice(qty, id, region?.value ?? 0, sizeId)  // UPDATED: Pass sizeId
+                const zoneToUse = selectedShippingZoneId || region?.value || 0;
+                getNewPrice(qty, id, zoneToUse, sizeId)  // UPDATED: Pass sizeId
+                
+                // Update all shipping method prices
+                document.querySelectorAll('.shipping-method-option').forEach(el => {
+                    const zoneId = el.dataset.zoneId;
+                    if (zoneId) {
+                        loadShippingPrice(zoneId);
+                    }
+                });
             })
+
+            // Load shipping methods for a zone
+            function loadShippingMethods(zoneId) {
+                if (!zoneId) return;
+                
+                const methodsContainer = document.getElementById('shipping-methods-list');
+                const loadingEl = document.getElementById('shipping-methods-loading');
+                const methodSection = document.getElementById('shipping-method-section');
+                
+                if (!methodsContainer || !methodSection) return;
+                
+                loadingEl.classList.remove('hidden');
+                methodsContainer.innerHTML = '';
+                
+                const url = "{{ route('web.checkoutDetails.info.shippingMethods') }}";
+                
+                fetch(`${url}?zone_id=${zoneId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        loadingEl.classList.add('hidden');
+                        
+                        if (data.methods && data.methods.length > 0) {
+                            methodSection.classList.remove('hidden');
+                            
+                            // If only one method, auto-select it
+                            if (data.methods.length === 1) {
+                                selectedShippingZoneId = data.methods[0].zone_id;
+                                orderZone.value = selectedShippingZoneId;
+                                updateShippingMethodUI(data.methods[0], true);
+                                getNewPrice(parseInt(quantity.value), id, selectedShippingZoneId, sizeId);
+                            } else {
+                                // Show all methods for selection
+                                data.methods.forEach((method, index) => {
+                                    const isFirst = index === 0;
+                                    if (isFirst) {
+                                        selectedShippingZoneId = method.zone_id;
+                                        orderZone.value = selectedShippingZoneId;
+                                        getNewPrice(parseInt(quantity.value), id, selectedShippingZoneId, sizeId);
+                                    }
+                                    createShippingMethodOption(method, isFirst);
+                                });
+                            }
+                        } else {
+                            methodSection.classList.add('hidden');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading shipping methods:', error);
+                        loadingEl.classList.add('hidden');
+                    });
+            }
+            
+            // Create shipping method option UI
+            function createShippingMethodOption(method, isSelected = false) {
+                const methodsList = document.getElementById('shipping-methods-list');
+                if (!methodsList) return;
+                
+                const methodDiv = document.createElement('div');
+                methodDiv.className = `shipping-method-option border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                    isSelected ? 'border-pink-600 bg-pink-50' : 'border-gray-200 hover:border-pink-300'
+                }`;
+                methodDiv.dataset.zoneId = method.zone_id;
+                methodDiv.dataset.carrier = method.carrier;
+                
+                methodDiv.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <input type="radio" 
+                                   name="shipping_method" 
+                                   value="${method.zone_id}" 
+                                   ${isSelected ? 'checked' : ''}
+                                   class="shipping-method-radio w-4 h-4 text-pink-600 focus:ring-pink-500">
+                            <div>
+                                <label class="font-semibold text-gray-900 cursor-pointer">${method.carrier}</label>
+                                <p class="text-xs text-gray-500">${method.region}</p>
+                            </div>
+                        </div>
+                        <div class="shipping-price-${method.zone_id} text-pink-600 font-bold">
+                            Loading...
+                        </div>
+                    </div>
+                `;
+                
+                // Load price for this method
+                loadShippingPrice(method.zone_id);
+                
+                // Add click handler
+                methodDiv.addEventListener('click', function(e) {
+                    if (e.target.type !== 'radio') {
+                        const radio = methodDiv.querySelector('input[type="radio"]');
+                        radio.checked = true;
+                        radio.dispatchEvent(new Event('change'));
+                    }
+                });
+                
+                const radio = methodDiv.querySelector('input[type="radio"]');
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        // Update UI
+                        document.querySelectorAll('.shipping-method-option').forEach(el => {
+                            el.classList.remove('border-pink-600', 'bg-pink-50');
+                            el.classList.add('border-gray-200');
+                        });
+                        methodDiv.classList.remove('border-gray-200');
+                        methodDiv.classList.add('border-pink-600', 'bg-pink-50');
+                        
+                        // Update selected zone
+                        selectedShippingZoneId = method.zone_id;
+                        orderZone.value = selectedShippingZoneId;
+                        
+                        // Recalculate price
+                        getNewPrice(parseInt(quantity.value), id, selectedShippingZoneId, sizeId);
+                    }
+                });
+                
+                methodsList.appendChild(methodDiv);
+            }
+            
+            // Update shipping method UI (for single method)
+            function updateShippingMethodUI(method, isSelected) {
+                const methodsList = document.getElementById('shipping-methods-list');
+                if (!methodsList) return;
+                
+                methodsList.innerHTML = `
+                    <div class="border-2 border-pink-600 bg-pink-50 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <label class="font-semibold text-gray-900">${method.carrier}</label>
+                                <p class="text-xs text-gray-500">${method.region}</p>
+                            </div>
+                            <div class="shipping-price-${method.zone_id} text-pink-600 font-bold">
+                                Loading...
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                loadShippingPrice(method.zone_id);
+            }
+            
+            // Load shipping price for a specific zone
+            function loadShippingPrice(zoneId) {
+                const priceEl = document.querySelector(`.shipping-price-${zoneId}`);
+                if (!priceEl) return;
+                
+                const qty = parseInt(quantity.value);
+                const url = "{{ route('web.checkoutDetails.info.price') }}";
+                
+                fetch(`${url}?qty=${qty}&id=${id}&zone_id=${zoneId}&size_id=${sizeId}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const shippingEl = doc.querySelector('.flex.justify-between.items-center.mb-6');
+                        if (shippingEl) {
+                            const priceText = shippingEl.textContent.match(/[\d.,]+\s*[\d.,]+/);
+                            if (priceText) {
+                                priceEl.textContent = priceText[0].trim();
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading shipping price:', error);
+                        priceEl.textContent = 'N/A';
+                    });
+            }
+            
+            // Hide shipping methods
+            function hideShippingMethods() {
+                const methodSection = document.getElementById('shipping-method-section');
+                if (methodSection) {
+                    methodSection.classList.add('hidden');
+                }
+            }
 
             function getNewPrice(qty, id, zone_id, size_id) {  // UPDATED: Accept size_id param
                 if (!zone_id && !global_zone_id) return
@@ -484,6 +701,14 @@
                     .then(res => res.text())
                     .then(data => {
                         summary.innerHTML = data
+                        
+                        // Update shipping prices in method options
+                        document.querySelectorAll('.shipping-method-option').forEach(el => {
+                            const zoneId = el.dataset.zoneId;
+                            if (zoneId && zoneId == z) {
+                                loadShippingPrice(zoneId);
+                            }
+                        });
                     }).catch(error => console.log(error))
             }
 

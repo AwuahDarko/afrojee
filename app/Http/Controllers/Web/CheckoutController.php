@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\Address; // Import the Address model
 use App\Models\Order;   // Import the Order model (for future use, if not already used)
 use Illuminate\Support\Facades\Session; // Import Session facade
+use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
@@ -24,6 +25,57 @@ class CheckoutController extends Controller
     public function __construct()
     {
         Stripe::setApiKey(config('services.stripe.secret'));
+    }
+
+    /**
+     * Get shipping rate for a given zone and weight.
+     * Handles edge cases:
+     * - Weight below minimum: uses lowest available rate
+     * - Weight above maximum: uses highest available rate
+     * - Weight = 0 or invalid: returns null
+     * 
+     * @param int $zone_id
+     * @param float $weight
+     * @return ShippingRate|null
+     */
+    private function getShippingRate($zone_id, $weight)
+    {
+        // Validate weight
+        if ($weight <= 0 || !is_numeric($weight)) {
+            return null;
+        }
+
+        // First, try to find an exact match
+        $rate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->where('weight_from', '<=', $weight)
+            ->where('weight_to', '>=', $weight)
+            ->first();
+
+        // If exact match found, return it
+        if ($rate) {
+            return $rate;
+        }
+
+        // If weight is below minimum, get the lowest rate for this zone
+        $minRate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->orderBy('weight_from', 'asc')
+            ->first();
+        
+        if ($minRate && $weight < $minRate->weight_from) {
+            return $minRate;
+        }
+
+        // If weight exceeds maximum, get the highest rate for this zone
+        $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
+            ->orderBy('weight_to', 'desc')
+            ->first();
+        
+        if ($maxRate && $weight > $maxRate->weight_to) {
+            return $maxRate;
+        }
+
+        // If no rates found for this zone, return null
+        return null;
     }
 
     /**
@@ -104,6 +156,58 @@ class CheckoutController extends Controller
         return view('frontend.partials.zone-option', compact('zones'));
     }
 
+    /**
+     * Get available shipping methods (carriers) for a region/zone
+     * Returns zones grouped by carrier name
+     */
+    public function getShippingMethods(Request $request)
+    {
+        $zone_id = $request->zone_id;
+        
+        if (!$zone_id) {
+            return response()->json(['methods' => []]);
+        }
+
+        // Get the zone to find its country and region
+        $selectedZone = ShippingZone::with('country')->find($zone_id);
+        
+        if (!$selectedZone) {
+            return response()->json(['methods' => []]);
+        }
+
+        // Get all zones for this country that match the region
+        // Region matching: could be exact match or if region dropdown uses zone_id, use that zone's region
+        $allZones = ShippingZone::where('country_id', $selectedZone->country_id)
+            ->where('region', $selectedZone->region)
+            ->get();
+
+        // If no zones found with exact region match, try to find zones by country only
+        if ($allZones->isEmpty()) {
+            $allZones = ShippingZone::where('country_id', $selectedZone->country_id)->get();
+        }
+
+        // Group by carrier name and create methods array
+        $methods = [];
+        $seen = [];
+        
+        foreach ($allZones as $shippingZone) {
+            // Create unique key to avoid duplicates
+            $key = $shippingZone->zone_name . '_' . $shippingZone->region;
+            
+            if (!in_array($key, $seen)) {
+                $seen[] = $key;
+                $methods[] = [
+                    'id' => $shippingZone->id,
+                    'carrier' => $shippingZone->zone_name,
+                    'region' => $shippingZone->region,
+                    'zone_id' => $shippingZone->id
+                ];
+            }
+        }
+
+        return response()->json(['methods' => $methods]);
+    }
+
     public function calculatePrice(Request $request)
     {
         $quantity = $request->qty;
@@ -127,16 +231,18 @@ class CheckoutController extends Controller
 
         $weight = $weight * $quantity;
 
-        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->where('weight_from', '<=', $weight)
-            ->where('weight_to', '>=', $weight)
-            ->first();
+        $rates = $this->getShippingRate($zone_id, $weight);
 
         $total_price = $price * $quantity;
-        $total_shipping = $rates->rate ?? 0;
+        // Use highest rate if weight exceeds max, or 0 if no rate found
+        $total_shipping = $rates ? $rates->rate : 0;
         $grand_total = $total_shipping + $total_price;
 
-        return view('frontend.partials.checkoutSummary', compact('total_price', 'total_shipping', 'grand_total'));
+        // Get the shipping zone to get carrier name
+        $zone = ShippingZone::find($zone_id);
+        $carrier_name = $zone ? $zone->zone_name : '';
+
+        return view('frontend.partials.checkoutSummary', compact('total_price', 'total_shipping', 'grand_total', 'carrier_name'));
     }
 
     public function getPrice(Request $request)
@@ -173,12 +279,10 @@ class CheckoutController extends Controller
             }
         }
 
-        $rates = ShippingRate::where('shipping_zone_id', $zone_id)
-            ->where('weight_from', '<=', $total_weight)
-            ->where('weight_to', '>=', $total_weight)
-            ->first();
+        $rates = $this->getShippingRate($zone_id, $total_weight);
 
-        $total_shipping = $rates->rate ?? 200;
+        // Use rate if found, otherwise use a high default (could indicate weight exceeded max)
+        $total_shipping = $rates ? $rates->rate : 200;
 
         return json_encode([
             'total_shipping' => app_currency(). ' '. number_format($total_shipping, 2),
@@ -291,7 +395,11 @@ class CheckoutController extends Controller
 
         // Redirect back to the checkout page, removing the edit_address parameter
         if ($request->from_where == 'single') {
-            return redirect()->route('web.checkoutDetails.single', ['product_id' => $request->product_id, 'quantity' => $request->quantity]);
+            return redirect()->route('web.checkoutDetails.single', [
+                'product_id' => $request->product_id, 
+                'quantity' => $request->quantity,
+                'size_id' => $request->size_id ?? 0
+            ]);
         }
         return redirect()->route('web.checkoutDetails');
     }
@@ -384,7 +492,7 @@ class CheckoutController extends Controller
 
             } catch (\Exception $e) {
                 // dd($e->getMessage());
-                \Log::error('Error retrieving session: ' . $e->getMessage());
+                Log::error('Error retrieving session: ' . $e->getMessage());
                 return redirect()->route('checkout.cancel.stripe');
             }
 

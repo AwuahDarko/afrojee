@@ -34,12 +34,12 @@ Route::get('/products/{slug}', [ProductController::class, 'filterByCategory'])->
 Route::get('/products/details/{slug}', [ProductController::class, 'productDetails'])->name('web.products.details');
 Route::get('/profile-management', [ProfileManagementController::class, 'index'])->name('web.profile.management');
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('web.checkoutDetails');
-Route::get('/checkout/single/{product_id}/{quantity}', [CheckoutController::class, 'single'])->name('web.checkoutDetails.single');
 // Updated checkout route to accept size_id
 Route::get('/checkout/single/{product_id}/{quantity}/{size_id}', [CheckoutController::class, 'single'])->name('web.checkoutDetails.single');
 Route::get('/checkout/info/regions', [CheckoutController::class, 'getRegionByCountry'])->name('web.checkoutDetails.info.region');
 Route::get('/checkout/info/prices', [CheckoutController::class, 'calculatePrice'])->name('web.checkoutDetails.info.price');
 Route::get('/checkout/info/price', [CheckoutController::class, 'getPrice'])->name('web.checkoutDetails.info.getprice');
+Route::get('/checkout/info/shipping-methods', [CheckoutController::class, 'getShippingMethods'])->name('web.checkoutDetails.info.shippingMethods');
 Route::get('/sign-in', [SignInController::class, 'index'])->name('web.signin');
 Route::get('/sign-up', [SignUpController::class, 'index'])->name('web.signup');
 // Route::get('/reviews', [ReviewController::class, 'index'])->name('web.review');

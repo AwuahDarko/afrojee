@@ -142,9 +142,9 @@
     </form>
     @yield('script')
 
-    <script src="{{ asset('js/plugins/jquery.js') }}"></script>
+    <!-- <script src="{{ asset('js/plugins/jquery.js') }}"></script> -->
     <script src="{{ asset('js/index.js') }}"></script>
-    <script src="{{ asset('js/plugins/slick.js') }}"></script>
+    <!-- <script src="{{ asset('js/plugins/slick.js') }}"></script> -->
     <!-- <script src="{{ asset('js/plugins/theme.js') }}"></script> -->
     <script src="{{ asset('js/cart.js') }}"></script>
     <script src="{{ asset('js/tooltip.js') }}"></script>
