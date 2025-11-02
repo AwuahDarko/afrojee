@@ -308,7 +308,7 @@
                             </div>
                             <div>
                                 <h3 class="text-xl font-medium text-gray-900 mb-2">Multiple Continents</h3>
-                                <p class="text-gray-600">Active operations across Africa, Europe, and the Americas with
+                                <p class="text-gray-600">Active operations across Europe, and the United States with
                                     growing presence worldwide.</p>
                             </div>
                         </div>

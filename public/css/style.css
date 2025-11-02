@@ -333,9 +333,11 @@ html.is-scrolling a[href="#amber-section"] svg {
 /* Product Card */
 .gsp-product-card {
     transition: transform 0.2s ease;
+    background: linear-gradient(145deg, #fffaf8, #ffe8e3) !important;
 }
 .gsp-product-card:hover {
     transform: translateY(-4px); /* Subtle lift effect */
+    background: linear-gradient(145deg, #ffe8e3, #ffd4c9) !important;
 }
 
 /* Image Container */

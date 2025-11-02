@@ -1,4 +1,4 @@
-<nav class="header-section sticky-header bg-white shadow-md sticky top-0 z-50">
+<nav class="header-section sticky-header bg-gradient-to-r from-[#fffaf8] via-[#ffe8e3] to-[#fffaf8] shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between py-4">
             <!-- Logo (left) -->

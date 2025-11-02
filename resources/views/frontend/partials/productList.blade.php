@@ -53,7 +53,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: white;
+            background: linear-gradient(145deg, #fffaf8, #ffe8e3);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-lg);
             overflow: hidden;
@@ -64,6 +64,7 @@
             transform: translateY(-8px);
             box-shadow: var(--shadow-lg);
             border-color: var(--primary-light);
+            background: linear-gradient(145deg, #ffe8e3, #ffd4c9);
         }
 
 
@@ -179,7 +180,7 @@
             display: flex;
             flex-direction: column;
             padding: 1.5rem;
-            background: white;
+            background: transparent;
         }
 
         .product-title {
@@ -657,7 +658,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @forelse ($products as $product)
                     <div class="gsp-search-recommend-collection-item group">
-                        <div class="card bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
+                        <div class="card overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
                             <!-- Image Section -->
                             <figure class="gsp-product-card-image relative overflow-hidden mb-0"
                                 style="--aspect-ratio: 1/1;">

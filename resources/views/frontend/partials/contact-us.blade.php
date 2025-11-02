@@ -107,7 +107,7 @@
             <div class="space-y-12">
                 
                 <!-- Address -->
-                <div>
+                <div class="hidden">
                     <h3 class="text-2xl font-light mb-6 text-gray-900">Address</h3>
                     <div class="space-y-4 text-gray-600">
                         <p class="text-lg leading-relaxed">

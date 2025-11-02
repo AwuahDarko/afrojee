@@ -35,7 +35,7 @@
     .product-card {
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         transform-style: preserve-3d;
-        background: linear-gradient(145deg, #ffffff, #f8fafc);
+        background: linear-gradient(145deg, #fffaf8, #ffe8e3);
         border: 1px solid rgba(239, 56, 13, 0.1);
     }
 
@@ -45,6 +45,7 @@
             0 25px 50px -12px rgba(239, 56, 13, 0.15),
             0 0 0 1px rgba(239, 56, 13, 0.1);
         border-color: rgba(239, 56, 13, 0.2);
+        background: linear-gradient(145deg, #ffe8e3, #ffd4c9);
     }
 
     .product-image {
@@ -262,7 +263,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" id="productsGrid">
             @forelse($featured_products as $product)
                     <div class="gsp-search-recommend-collection-item group">
-                        <div class="card bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
+                        <div class="card overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 gsp-product-card">
                             <!-- Image Section -->
                             <figure class="gsp-product-card-image relative overflow-hidden mb-0"
                                 style="--aspect-ratio: 1/1;">

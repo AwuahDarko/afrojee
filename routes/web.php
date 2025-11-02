@@ -17,6 +17,8 @@ use App\Http\Controllers\Web\QuestionsController;
 use App\Http\Controllers\Web\CartController;
 use App\Http\Controllers\Web\ContactController;
 use App\Http\Controllers\Web\NewsletterController;
+use App\Http\Controllers\Web\TermsController;
+use App\Http\Controllers\Web\PrivacyController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -26,6 +28,8 @@ use Illuminate\Support\Facades\Mail;
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutUsController::class, 'index'])->name('web.about');
 Route::get('/faq', [QuestionsController::class, 'index'])->name('web.questions');
+Route::get('/terms-and-conditions', [TermsController::class, 'index'])->name('web.terms');
+Route::get('/privacy-policy', [PrivacyController::class, 'index'])->name('web.privacy');
 Route::get('/products', [ProductController::class, 'index'])->name('web.products');
 Route::get('/products/search', [ProductController::class, 'search'])->name('web.product.search');
 Route::get('/products/search2', [ProductController::class, 'search2'])->name('web.product.search2');

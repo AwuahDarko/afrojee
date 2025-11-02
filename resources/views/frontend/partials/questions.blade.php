@@ -98,7 +98,11 @@
                 </a>
                 <a href="#products-faq"
                     class="bg-white border-2 border-[#ef380d] text-[#ef380d] px-6 py-3 rounded-2xl font-semibold hover:bg-[#ef380d] hover:text-white transition-all duration-300">
-                    Products
+                    Products & Personalization
+                </a>
+                <a href="#shipping-returns-faq"
+                    class="bg-white border-2 border-[#ef380d] text-[#ef380d] px-6 py-3 rounded-2xl font-semibold hover:bg-[#ef380d] hover:text-white transition-all duration-300">
+                    Shipping & Returns
                 </a>
             </div>
 
@@ -172,9 +176,17 @@
                             </div>
                         </button>
                         <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                At Afro Jee, we want to make sure your order reaches you quickly and safely.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Shipping rates vary depending on your location and will be automatically calculated during checkout.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                All orders are processed within one working day (excluding weekends and holidays). Once your package has been shipped, you will receive a confirmation email with your tracking number so you can follow your delivery in real time.
+                            </p>
                             <p class="text-gray-700 leading-relaxed">
-                                All orders are shipped within 2 working days (excluding weekends and bank holidays). Once
-                                your order has been shipped, you'll receive a confirmation email with tracking information.
+                                For international orders shipped from Spain, customs duties or additional fees may apply depending on the destination country. These charges are the responsibility of the customer.
                             </p>
                         </div>
                     </div>
@@ -283,11 +295,11 @@
                             </div>
                         </button>
                         <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                At Afro Jee, all transactions are processed in Euros (€) to ensure a simple and transparent shopping experience for our customers across Europe. Depending on your location and payment provider, you may also view prices or complete your purchase in your local currency during checkout.
+                            </p>
                             <p class="text-gray-700 leading-relaxed">
-                                At Afro Jee, all transactions are processed in Euros (€) to ensure a simple and transparent
-                                shopping experience for our customers across Europe. Depending on your location and payment
-                                provider, you may also view prices or complete your purchase in your local currency during
-                                checkout.
+                                Our goal is to make every step easy and clear, no matter where you shop from. If you have any questions about currency conversion or experience any issues during payment, please contact our support team at <a href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a> — we'll be happy to assist you.
                             </p>
                         </div>
                     </div>
@@ -319,10 +331,11 @@
                             </div>
                         </button>
                         <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                We offer several secure and convenient payment options to make your shopping experience as smooth as possible. Afro Jee accepts all major credit and debit cards, including Visa, MasterCard, American Express, and Maestro. You can also pay quickly and safely using PayPal, or take advantage of Apple Pay.
+                            </p>
                             <p class="text-gray-700 leading-relaxed">
-                                We offer several secure payment options: all major credit and debit cards (Visa, MasterCard,
-                                American Express, Maestro), PayPal, and Apple Pay. All payments are processed through
-                                trusted, encrypted gateways to ensure your data remains secure.
+                                All payments are processed through trusted, encrypted gateways to ensure your data and personal information remain completely secure. If you have any questions or need help with your order, our team is always available at <a href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a>.
                             </p>
                         </div>
                     </div>
@@ -360,13 +373,14 @@
                             </div>
                         </button>
                         <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                At Afro Jee, our current sets are predesigned with carefully selected combinations to meet specific hair needs — from hydration to growth and scalp care. While we don't yet offer fully personalised sets, we understand that every hair journey is unique.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                If you'd like to create a custom combination or prepare a special gift set using individual products, feel free to reach out to our team at <a href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a> and we'll be happy to assist you in arranging it.
+                            </p>
                             <p class="text-gray-700 leading-relaxed">
-                                Our current sets are predesigned with carefully selected combinations to meet specific hair
-                                needs. While we don't yet offer fully personalized sets, we understand that every hair
-                                journey is unique. If you'd like to create a custom combination or prepare a special gift
-                                set using individual products, contact us at <a href="mailto:info@afrojee.store"
-                                    class="text-[#ef380d] hover:underline">info@afrojee.store</a>. We're working on
-                                personalized options, so stay tuned for custom Afro Jee gift boxes!
+                                Personalised options are something we're working on, so stay tuned, because we'll soon be offering custom Afro Jee gift boxes and curated bundles made just for you.
                             </p>
                         </div>
                     </div>
@@ -437,6 +451,118 @@
                                 Store your Afro Jee products in a cool, dry place away from direct sunlight. Some products
                                 with natural ingredients may benefit from refrigeration during hot weather. Always check
                                 product labels for specific storage instructions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping & Returns FAQs -->
+                <div id="shipping-returns-faq" class="faq-section mt-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-[#ef380d] mb-6 border-b-2 border-[#ef380d]/20 pb-2">
+                        Shipping & Returns</h3>
+
+                    <!-- Returns & Exchanges -->
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white transition-all duration-300 hover:shadow-lg mb-4">
+                        <button class="faq-button w-full flex justify-between items-center px-6 py-5 text-left focus:outline-none" aria-expanded="false">
+                            <span class="font-bold text-lg">Returns & Exchanges</span>
+                            <div class="relative ml-2">
+                                <span class="plus-icon bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </span>
+                                <span class="minus-icon absolute top-0 left-0 bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                We want you to love your Afro Jee products. However, due to the nature of our handmade and personal care items, we only accept returns in specific cases, such as if the product arrives damaged, defective, or affected by an incident during shipping.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                If this occurs, please contact us within 15 days of receiving your order at <a href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a>, including your order number, photos of the issue, and a brief description of what happened.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Our team will carefully review your case and provide you with return or replacement instructions.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-2 font-semibold">Please note that:</p>
+                            <ul class="list-disc list-inside text-gray-700 space-y-2 mb-4">
+                                <li>We do not accept returns or exchanges if the product has been opened, used, or damaged after delivery.</li>
+                                <li>Items must remain in their original packaging, unused and sealed.</li>
+                                <li>Returns without prior authorization will not be accepted.</li>
+                            </ul>
+                            <p class="text-gray-700 leading-relaxed">
+                                Because all Afro Jee products are made for personal use, we cannot process returns for reasons related to preference, scent, or texture, only in cases of damage or shipping error.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Refunds -->
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white transition-all duration-300 hover:shadow-lg mb-4">
+                        <button class="faq-button w-full flex justify-between items-center px-6 py-5 text-left focus:outline-none" aria-expanded="false">
+                            <span class="font-bold text-lg">Refunds</span>
+                            <div class="relative ml-2">
+                                <span class="plus-icon bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </span>
+                                <span class="minus-icon absolute top-0 left-0 bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Once we receive and inspect your returned item, we will notify you by email regarding the approval of your refund or replacement.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                If approved, your refund will be issued to the original payment method within 10 business days.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                Please note that banks or credit card providers may take a few additional days to process the transaction.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed">
+                                If more than 15 business days have passed since your refund approval and you haven't received it, please contact us at <a href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a> and we'll be happy to assist you.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Exchanges -->
+                    <div class="border border-gray-200 rounded-2xl overflow-hidden bg-white transition-all duration-300 hover:shadow-lg">
+                        <button class="faq-button w-full flex justify-between items-center px-6 py-5 text-left focus:outline-none" aria-expanded="false">
+                            <span class="font-bold text-lg">Exchanges</span>
+                            <div class="relative ml-2">
+                                <span class="plus-icon bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </span>
+                                <span class="minus-icon absolute top-0 left-0 bg-[#ef380d]/10 rounded-full w-10 h-10 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                                    </svg>
+                                </span>
+                            </div>
+                        </button>
+                        <div class="faq-content hidden px-6 pb-5">
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                We currently do not offer direct exchanges.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mb-4">
+                                If your product is eligible for return due to damage or error, we will process either a refund or a replacement depending on stock availability.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed font-semibold mb-2">Note:</p>
+                            <p class="text-gray-700 leading-relaxed">
+                                All return shipping costs are the responsibility of the customer, unless the return is due to an error on our part or a damaged item.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed mt-4">
+                                At Afro Jee, every order is handled with care from our hands to your home. If there's ever a problem, our team is here to make it right.
                             </p>
                         </div>
                     </div>

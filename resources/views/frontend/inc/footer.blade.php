@@ -21,19 +21,19 @@
             <div>
                 <h3 class="text-xl font-medium mb-4">FAQs</h3>
                 <ul class="space-y-3">
-                    <li><a href="#shipping-faq" class="hover:underline">Shipping & Delivery</a></li>
-                    <li><a href="#payment-faq" class="hover:underline">Payment Options</a></li>
-                    <li><a href="#products-faq" class="hover:underline">Products & Personalization</a></li>
+                    <li><a href="{{ route('web.questions') }}#shipping-faq" class="hover:underline">Shipping & Delivery</a></li>
+                    <li><a href="{{ route('web.questions') }}#payment-faq" class="hover:underline">Payment Options</a></li>
+                    <li><a href="{{ route('web.questions') }}#products-faq" class="hover:underline">Products & Personalization</a></li>
+                    <li><a href="{{ route('web.questions') }}#shipping-returns-faq" class="hover:underline">Shipping & Returns</a></li>
                 </ul>
             </div>
 
             <!-- Terms & Conditions Column -->
             <div>
-                <h3 class="text-xl font-medium mb-4">Terms & Conditions</h3>
+                <h3 class="text-xl font-medium mb-4">Legal</h3>
                 <ul class="space-y-3">
-                    <li><a href="#shipping-returns" class="hover:underline">Shipping & Returns</a></li>
-                    <li><a href="#privacy-policy" class="hover:underline">Privacy Policy</a></li>
-                    <li><a href="#terms-conditions" class="hover:underline">Terms & Conditions</a></li>
+                    <li><a href="{{ route('web.terms') }}" class="hover:underline">Terms & Conditions</a></li>
+                    <li><a href="{{ route('web.privacy') }}" class="hover:underline">Privacy Policy</a></li>
                 </ul>
             </div>
         </div>

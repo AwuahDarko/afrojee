@@ -38,7 +38,7 @@
         .product-card {
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
-            background: linear-gradient(145deg, #ffffff, #f8fafc);
+            background: linear-gradient(145deg, #fffaf8, #ffe8e3);
             border: 1px solid rgba(239, 56, 13, 0.1);
         }
 
@@ -48,6 +48,7 @@
                 0 25px 50px -12px rgba(239, 56, 13, 0.15),
                 0 0 0 1px rgba(239, 56, 13, 0.1);
             border-color: rgba(239, 56, 13, 0.2);
+            background: linear-gradient(145deg, #ffe8e3, #ffd4c9);
         }
 
         .product-image {
@@ -342,7 +343,7 @@
             <!-- Products Grid -->
             <div class="grid-container" id="productGrid">
                 @forelse ($products as $product)
-                    <div class="group relative product-card bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100"
+                    <div class="group relative product-card rounded-3xl shadow-xl overflow-hidden border border-gray-100" style="background: linear-gradient(145deg, #fffaf8, #ffe8e3);"
                          data-product-id="{{ $product->id }}"
                          data-category="{{ strtolower(str_replace(' ', '-', $product->category->name)) }}">
 

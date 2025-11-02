@@ -19,9 +19,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-right delay-200">
-                        Curated <span class="font-bold">beauty<br class="hidden sm:block">essentials</span> for your<br
+                        Together, <span class="font-bold">we celebrate<br class="hidden sm:block">natural beauty</span> in every curl<br
                             class="hidden sm:block">
-                        <span class="font-bold">unique lifestyle</span>
+                        <span class="font-bold">Beauty that unites us all</span>
                     </h1>
                     <div class="hidden hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
@@ -100,9 +100,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-up delay-200">
-                        Discover <span class="font-bold">nature’s<br class="hidden sm:block">finest</span> for your<br
+                        Discover <span class="font-bold">nature’s power<br class="hidden sm:block">for your healthy,</span> radiant<br
                             class="hidden sm:block">
-                        <span class="font-bold">radiant glow</span>
+                        <span class="font-bold"> hair</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
@@ -179,9 +179,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-left delay-200">
-                        Embrace <span class="font-bold">pure<br class="hidden sm:block">hydration</span> for your<br
+                        Embrace <span class="font-bold">deep nourishment<br class="hidden sm:block">for your </span> vibrant curls<br
                             class="hidden sm:block">
-                        <span class="font-bold">vibrant skin</span>
+                        <span class="font-bold hidden">vibrant curls</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
@@ -258,9 +258,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-up-fast delay-200">
-                        Experience <span class="font-bold">calm<br class="hidden sm:block">serenity</span> with your<br
+                        From our hands <span class="font-bold">to your hair,<br class="hidden sm:block">pure care inside.</span> Every delivery, <br
                             class="hidden sm:block">
-                        <span class="font-bold">daily ritual</span>
+                        <span class="font-bold">a promise of beauty</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
@@ -338,9 +338,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-right delay-200">
-                        Indulge in <span class="font-bold">aromatic<br class="hidden sm:block">bliss</span> for your<br
+                        Experience joy <span class="font-bold">and confidence<br class="hidden sm:block">in every</span> hair<br
                             class="hidden sm:block">
-                        <span class="font-bold">daily wellness</span>
+                        <span class="font-bold">routine</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
