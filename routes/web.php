@@ -90,6 +90,7 @@ Route::post('/checkout/save-address', [CheckoutController::class, 'storeAddress'
 
 
 // orders
+Route::get('/orders/{orderNumber}', [OrderController::class, 'show'])->name('web.order.show');
 Route::post('/order/single/save', [OrderController::class, 'store'])->name('web.order.save');
 Route::post('/order/multiple/save', [OrderController::class, 'storeMultiple'])->name('web.order.multiple.save');
 

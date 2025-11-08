@@ -1,4 +1,4 @@
-<section class="bg-amber-50">
+<section class="bg-stone-200"> 
     <div class="container mx-auto px-4 py-12">
         <!-- Header Section -->
         <div class="mb-12">

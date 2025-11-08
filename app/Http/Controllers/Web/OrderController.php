@@ -25,6 +25,37 @@ class OrderController extends Controller
     }
 
     /**
+     * Display a summary of a customer's order by order number.
+     *
+     * @param  string  $orderNumber
+     * @return \Illuminate\View\View|\Illuminate\Http\Response
+     */
+    public function show(string $orderNumber)
+    {
+        $order = Order::with([
+                'orderProducts.product',
+                'orderProducts.size',
+                'billingAddress',
+                'shippingAddress',
+            ])
+            ->where('order_number', $orderNumber)
+            ->first();
+
+        if (!$order) {
+            abort(404);
+        }
+
+        $billingAddress = $order->billingAddress;
+        $shippingAddress = $order->shippingAddress ?: $billingAddress;
+
+        return view('frontend.orders.show', [
+            'order' => $order,
+            'billingAddress' => $billingAddress,
+            'shippingAddress' => $shippingAddress,
+        ]);
+    }
+
+    /**
      * Get the maximum allowed weight for a shipping zone.
      * 
      * @param int $zone_id

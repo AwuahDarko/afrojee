@@ -1,3 +1,18 @@
+@php
+    $cartItems = collect(session('cart', []));
+    $cartCount = $cartItems->sum(function ($item) {
+        if (is_array($item)) {
+            return (int) ($item['quantity'] ?? 0);
+        }
+
+        if (is_object($item) && isset($item->quantity)) {
+            return (int) $item->quantity;
+        }
+
+        return 1;
+    });
+@endphp
+
 <nav class="header-section sticky-header bg-gradient-to-r from-[#fffaf8] via-[#ffe8e3] to-[#fffaf8] shadow-md sticky top-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between py-4">
@@ -73,11 +88,10 @@
                             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
                         </path>
                     </svg>
-                    @if (session('cart') && count(session('cart')) > 0)
-                        <span class="absolute -top-2 -right-2 bg-[#ef380d] text-white text-xs rounded-full px-2 py-1">
-                            {{ count(session('cart')) }}
-                        </span>
-                    @endif
+                    <span id="cart-count"
+                        class="absolute -top-2 -right-2 bg-[#ef380d] text-white text-xs rounded-full px-2 py-1 {{ $cartCount > 0 ? '' : 'hidden' }}">
+                        {{ $cartCount > 0 ? $cartCount : '' }}
+                    </span>
                 </a>
 
                 <!-- Mobile Menu Toggle -->

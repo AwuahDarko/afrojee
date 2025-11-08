@@ -72,12 +72,12 @@
                     <!-- CTA Buttons -->
                     <tr>
                         <td align="center" style="padding:40px 20px;">
-                            <a href="{{ $data['review_url'] ?? 'https://afrojee.store/reviews' }}"
+                            <a href="{{ $data['review_url'] ?? route('reviews', [], true) }}"
                                 style="display:inline-block; background-color:#ef380d; color:#ffffff; padding:14px 36px; text-decoration:none; border-radius:40px; font-size:16px; font-weight:500; margin-right:10px;">
                                 Leave a Review
                             </a>
 
-                            <a href="{{ $data['order_url'] ?? 'https://afrojee.store/orders/' . $data['order_id'] }}"
+                            <a href="{{ $data['order_url'] ?? route('web.order.show', ['orderNumber' => $data['order_id']], true) }}"
                                 style="display:inline-block; background-color:#2E2E2E; color:#ffffff; padding:14px 36px; text-decoration:none; border-radius:40px; font-size:16px; font-weight:500;">
                                 View My Order
                             </a>
