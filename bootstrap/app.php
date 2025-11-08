@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(prepend: [
+            \App\Http\Middleware\SetLocale::class,
             LogWebsiteVisit::class,
         ]);
 

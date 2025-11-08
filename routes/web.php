@@ -25,6 +25,14 @@ use Illuminate\Support\Facades\Mail;
 
 
 
+// Language switcher route
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'es'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('language.switch');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/about', [AboutUsController::class, 'index'])->name('web.about');
 Route::get('/faq', [QuestionsController::class, 'index'])->name('web.questions');

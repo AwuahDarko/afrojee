@@ -179,7 +179,7 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-left delay-200">
-                        Embrace <span class="font-bold">deep nourishment<br class="hidden sm:block">for your </span> vibrant curls<br
+                        Embrace <span class="font-bold">deep nourishment <br class="hidden sm:block">for your </span> vibrant curls<br
                             class="hidden sm:block">
                         <span class="font-bold hidden">vibrant curls</span>
                     </h1>
@@ -258,9 +258,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-up-fast delay-200">
-                        From our hands <span class="font-bold">to your hair,<br class="hidden sm:block">pure care inside.</span> Every delivery, <br
+                        Experience <span class="font-bold">joy and confidence <br class="hidden sm:block">pure care inside.</span> Every delivery, <br
                             class="hidden sm:block">
-                        <span class="font-bold">a promise of beauty</span>
+                        <span class="font-bold"> hair routine.</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
@@ -338,9 +338,9 @@
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-right delay-200">
-                        Experience joy <span class="font-bold">and confidence<br class="hidden sm:block">in every</span> hair<br
+                        From our hands to your hair, <span class="font-bold">pure care inside. <br class="hidden sm:block">Every delivery, </span>a promise of<br
                             class="hidden sm:block">
-                        <span class="font-bold">routine</span>
+                        <span class="font-bold"> beauty.</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"

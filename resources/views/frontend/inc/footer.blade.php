@@ -1,7 +1,13 @@
-<footer class="bg-footergold text-white py-12">
-    <div class="container mx-auto px-4 md:px-8">
+<footer class="relative overflow-hidden bg-footergold text-white py-12">
+    <div class="absolute inset-0">
+        <div class="h-full w-full opacity-20 pointer-events-none"
+            style="background-image: radial-gradient(rgba(255,255,255,0.35) 1px, transparent 1px); background-size: 28px 28px;">
+        </div>
+    </div>
+    <div class="relative z-10 container mx-auto px-4 md:px-8">
         <!-- Logo Section -->
-        <div class="mb-10">
+        <div class="mb-10 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Afro Jee logo" class="w-24 h-auto mb-4 sm:mb-0 rounded-md object-contain">
             <h2 class="text-3xl font-bold text-white">AFRO JEE</h2>
         </div>
 
@@ -12,7 +18,7 @@
                 <h3 class="text-xl font-medium mb-4">About Us</h3>
                 <ul class="space-y-3">
                     <li><a href="/about#our-mission" class="hover:underline">Our Mission</a></li>
-                    <li><a href="/about#our-mission" class="hover:underline">Our Vision</a></li>
+                    <li><a href="/about#our-vision" class="hover:underline">Our Vision</a></li>
                     <li><a href="/about#our-coverage" class="hover:underline">Our Coverage</a></li>
                 </ul>
             </div>

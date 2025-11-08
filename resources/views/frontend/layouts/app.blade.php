@@ -49,12 +49,14 @@
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     <script type="module" src="{{ asset('js/app.js') }}"></script>
     <!-- Favicon -->
-<script>
-    const appCurrency = @json(app_currency());
-</script>
+    <script>
+        const appCurrency = @json(app_currency());
+    </script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet"> -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
@@ -63,12 +65,13 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <!-- <link rel="stylesheet" href="{{ asset('css/theme.css') }}"> -->
     <!-- <link rel="stylesheet" href="{{ asset('css/slick.css') }}"> -->
 
 
-    
+
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -86,11 +89,32 @@
             --color-strip: #766455;
         }
     </style>
+    <style>
+        #cursor-tracker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 9999px;
+            border: 2px solid rgba(240, 98, 67, 0.7);
+            background: radial-gradient(circle at center, rgba(200, 166, 85, 0.45) 0%, rgba(200, 166, 85, 0.1) 45%, transparent 70%);
+            box-shadow: 0 0 22px rgba(240, 98, 67, 0.35);
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: opacity 200ms ease;
+            z-index: 50;
+            mix-blend-mode: lighten;
+        }
+    </style>
 
 
 </head>
 
 <body id="body">
+    <div id="particles-js" style="position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1;"></div>
+    <div id="cursor-tracker"></div>
+
     <!-- aiz-main-wrapper -->
     <div>
 
@@ -124,14 +148,16 @@
                 <span id="cart-total" class="text-lg font-bold text-pink-800">$0.00</span>
             </div>
             {{-- New: View Cart Button --}}
-            <a href="{{ route('web.cart') }}" class="block w-full bg-gray-200 text-gray-800 text-center py-3 rounded-md hover:bg-gray-300 transition duration-200 mb-2">
+            <a href="{{ route('web.cart') }}"
+                class="block w-full bg-gray-200 text-gray-800 text-center py-3 rounded-md hover:bg-gray-300 transition duration-200 mb-2">
                 View Full Cart
             </a>
             {{-- Updated: Proceed to Checkout button now triggers JS --}}
-            <button id="proceed-to-checkout-btn" class="block w-full bg-[#ef380d] text-white text-center py-3 rounded-md hover:bg-[#f06243ff] transition duration-200">
+            <button id="proceed-to-checkout-btn"
+                class="block w-full bg-[#ef380d] text-white text-center py-3 rounded-md hover:bg-[#f06243ff] transition duration-200">
                 Proceed to Checkout
             </button>
-            
+
         </div>
     </div>
     <div id="cart-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[90] hidden"></div>
@@ -141,13 +167,167 @@
         <input type="hidden" name="cart_data" id="cart-data-input">
     </form>
     @yield('script')
+    <style>
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: transparent;
+            /* Ensure no background color */
+        }
 
+        /* Optional: Add a subtle background gradient */
+        body {
+            background: linear-gradient(135deg, #f8f6f1 0%, #f0f0f0 100%);
+            min-height: 100vh;
+        }
+    </style>
     <!-- <script src="{{ asset('js/plugins/jquery.js') }}"></script> -->
     <script src="{{ asset('js/index.js') }}"></script>
     <!-- <script src="{{ asset('js/plugins/slick.js') }}"></script> -->
     <!-- <script src="{{ asset('js/plugins/theme.js') }}"></script> -->
     <script src="{{ asset('js/cart.js') }}"></script>
     <script src="{{ asset('js/tooltip.js') }}"></script>
+    <!-- Add before closing </body> tag -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            particlesJS('particles-js', {
+                particles: {
+                    number: {
+                        value: 200, // More particles
+                        density: {
+                            enable: true,
+                            value_area: 1500 // Denser
+                        }
+                    },
+                    color: {
+                        value: ['#c8a655', '#b8963d', '#d4b86a'] // Multiple gold shades for depth
+                    },
+                    shape: {
+                        type: ['circle', 'edge'], // Mix of shapes
+                        stroke: {
+                            width: 1,
+                            color: '#c8a655'
+                        }
+                    },
+                    opacity: {
+                        value: 0.9, // Much more visible
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 1,
+                            opacity_min: 0.3,
+                            sync: false
+                        }
+                    },
+                    size: {
+                        value: 6, // Larger particles
+                        random: true,
+                        anim: {
+                            enable: true,
+                            speed: 2,
+                            size_min: 2,
+                            sync: false
+                        }
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 120, // Closer connections
+                        color: '#c8a655',
+                        opacity: 0.8, // More visible lines
+                        width: 2, // Thicker lines
+                        shadow: {
+                            enable: true,
+                            color: '#c8a655',
+                            blur: 5
+                        }
+                    },
+                    move: {
+                        enable: true,
+                        speed: 1.5, // Slightly faster
+                        direction: 'none',
+                        random: true,
+                        straight: false,
+                        out_mode: 'bounce', // Bounce off edges
+                        bounce: true,
+                        attract: {
+                            enable: true,
+                            rotateX: 600,
+                            rotateY: 1200
+                        }
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: false },
+                        onclick: { enable: false },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+        });
+    </script>
+
+
+    <script>
+        (function () {
+            const tracker = document.getElementById('cursor-tracker');
+            if (!tracker) {
+                return;
+            }
+
+            const prefersCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            if (prefersCoarse) {
+                tracker.style.display = 'none';
+                return;
+            }
+
+            let targetX = window.innerWidth / 2;
+            let targetY = window.innerHeight / 2;
+            let currentX = targetX;
+            let currentY = targetY;
+            let animationFrameId;
+            let isPointerInside = false;
+
+            const render = () => {
+                currentX += (targetX - currentX) * 0.18;
+                currentY += (targetY - currentY) * 0.18;
+                tracker.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                animationFrameId = requestAnimationFrame(render);
+            };
+
+            const handleMove = (event) => {
+                targetX = event.clientX;
+                targetY = event.clientY;
+                if (!isPointerInside) {
+                    tracker.style.opacity = '1';
+                    isPointerInside = true;
+                }
+            };
+
+            const handleLeave = () => {
+                tracker.style.opacity = '0';
+                isPointerInside = false;
+            };
+
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseleave', handleLeave);
+
+            tracker.style.opacity = '0';
+            render();
+
+            window.addEventListener('beforeunload', () => {
+                cancelAnimationFrame(animationFrameId);
+                document.removeEventListener('mousemove', handleMove);
+                document.removeEventListener('mouseleave', handleLeave);
+            });
+        })();
+    </script>
 </body>
 
 </html>
