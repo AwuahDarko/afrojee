@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        cartTotalElement.textContent = `${appCurrency || '€'} ${total.toFixed(2)}`;
+        cartTotalElement.textContent = ` ${total.toFixed(2)} ${appCurrency || '€'}`;
     };
 
     const updateCartCount = () => {

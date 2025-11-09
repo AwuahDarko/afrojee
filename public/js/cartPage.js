@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="flex flex-col sm:flex-row sm:items-center text-gray-600 mt-2 sm:mt-0">
                                 <p class="text-pink-800 font-bold text-xl sm:text-2xl mr-4 sm:border-r-2 sm:pr-5 mb-2 sm:mb-0">
                                    
-                                € ${parseFloat(item.price).toFixed(2)}
+                                 ${parseFloat(item.price).toFixed(2)} €
                             </p>
                             <span class="mr-2 font-bold mb-2 sm:mb-0">Quantity</span>
                             <div class="flex items-center">

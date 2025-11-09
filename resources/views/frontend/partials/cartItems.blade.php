@@ -34,7 +34,7 @@
                                 </h1>
                                 <div class="flex flex-col sm:flex-row sm:items-center text-gray-600 mt-2 sm:mt-0">
                                     <p class="text-pink-800 font-bold text-xl sm:text-2xl mr-4 sm:border-r-2 sm:pr-5 mb-2 sm:mb-0">
-                                        <span class="inline-block mb-1 -mr-1">
+                                        <span class="hidden inline-block mb-1 -mr-1">
                                             <svg width="12" height="15" viewBox="0 0 11 19" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <path
@@ -42,7 +42,7 @@
                                                     fill="#ef380d" />
                                             </svg>
                                         </span>
-                                       {{app_currency()}} {{ number_format($item['price'], 2) }}
+                                        {{ number_format($item['price'], 2) }} {{app_currency()}}
                                     </p>
                                     <span class="mr-2 font-bold mb-2 sm:mb-0">Quantity</span>
                                     <div class="flex items-center">
@@ -87,7 +87,7 @@
                         Sub-total (<span id="cart-item-count">{{ $totalItemsInCart }}</span> items)
                     </p>
                     <p class="text-xl font-bold text-gray-900">
-                        {{app_currency()}} <span id="cart-subtotal">{{ number_format($subtotalBill, 2) }}</span>
+                        <span id="cart-subtotal">{{ number_format($subtotalBill, 2) }}</span> {{app_currency()}}
                     </p>
                 </div>
                 <button id="checkout-page-proceed-btn" {{-- Added ID for potential JS interaction if needed --}}

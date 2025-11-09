@@ -292,7 +292,7 @@ class OrderController extends Controller
             [
                 'payment_method_types' => [
                     'card',           // Credit/debit cards
-                    'sepa_debit',     // SEPA Direct Debit
+                    //'sepa_debit',     // SEPA Direct Debit
                     'ideal',          // Netherlands
                     'bancontact',     // Belgium  
                     'eps',            // Austria
@@ -462,7 +462,7 @@ class OrderController extends Controller
             [
                 'payment_method_types' => [
                     'card',           // Credit/debit cards
-                    'sepa_debit',     // SEPA Direct Debit
+                    //'sepa_debit',     // SEPA Direct Debit
                     'ideal',          // Netherlands
                     'bancontact',     // Belgium  
                     'eps',            // Austria

@@ -112,11 +112,11 @@
                     <div class="flex items-center gap-3">
                         @if($product->getPrice() != $product->getOriginalPrice())
                             <span class="text-gray-400 line-through text-xl">
-                                {{ app_currency() }} {{ number_format($product->getOriginalPrice(), 2) }}
+                                 {{ number_format($product->getOriginalPrice(), 2) }} {{ app_currency() }}
                             </span>
                         @endif
                         <span class="text-3xl font-bold text-gray-900" id="display-price">
-                            {{ app_currency() }} {{ number_format($product->getPrice(), 2) }}
+                             {{ number_format($product->getPrice(), 2) }} {{ app_currency() }}
                         </span>
                     </div>
 
@@ -205,7 +205,7 @@
 
                     <!-- Action Links -->
                     <div class="flex items-center gap-6 pt-4 border-t">
-    <button type="button" class="flex items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors duration-200">
+    <button type="button" class="flex hidden items-center gap-2 text-gray-700 hover:text-gray-900 transition-colors duration-200">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -260,7 +260,7 @@
 
                     <!-- Delivery Info -->
                     <div class="space-y-3 pt-6 border-t">
-                        <div class="flex items-start gap-3">
+                        <div class="flex hidden items-start gap-3">
                             <svg class="w-5 h-5 text-gray-700 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
@@ -606,16 +606,16 @@
                                     @if ($product->compare_at_price)
                                         <div class="gsp-product__price-sale">
                                             <span class="gsp-price-item-regular line-through text-stone-500 mr-2">
-                                                {{ app_currency() }}{{ number_format($product->compare_at_price, 2) }}
+                                                {{ number_format($product->compare_at_price, 2) }} {{ app_currency() }}
                                             </span>
                                             <span class="gsp-price-item-sale font-semibold text-rose-500">
-                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @else
                                         <div class="gsp-product__price-regular">
                                             <span class="gsp-price-item-regular font-semibold text-stone-700">
-                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @endif
@@ -1032,30 +1032,39 @@
         // Share Dropdown Toggle
         document.addEventListener('DOMContentLoaded', function () {
             const shareToggle = document.getElementById('share-toggle');
-            console.log('------------>',shareToggle);
+
             if (shareToggle) {
                 const shareMenu = shareToggle.nextElementSibling;
-                
+
                 shareToggle.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
+
                     const isActive = shareMenu.classList.contains('active');
-                    console.log('------------>',isActive);
+
                     // Close all share menus
-                    document.querySelectorAll('.share-menu').forEach(m => {
-                        m.classList.remove('active');
+                    document.querySelectorAll('.share-menu').forEach(menu => {
+                        menu.classList.remove('active');
+                        menu.classList.add('hidden');
                     });
-                    
+
                     // Toggle current menu
                     if (!isActive) {
                         shareMenu.classList.add('active');
+                        shareMenu.classList.remove('hidden');
+                    } else {
+                        shareMenu.classList.remove('active');
+                        shareMenu.classList.add('hidden');
                     }
                 });
-                
+
                 // Close on outside click
                 document.addEventListener('click', function (e) {
                     if (!e.target.closest('.share-dropdown')) {
-                        shareMenu.classList.remove('active');
+                        document.querySelectorAll('.share-menu').forEach(menu => {
+                            menu.classList.remove('active');
+                            menu.classList.add('hidden');
+                        });
                     }
                 });
             }
@@ -1088,6 +1097,7 @@
             // Close menu
             document.querySelectorAll('.share-menu').forEach(menu => {
                 menu.classList.remove('active');
+                menu.classList.add('hidden');
             });
         }
         
@@ -1108,6 +1118,7 @@
                     button.innerHTML = originalHTML;
                     document.querySelectorAll('.share-menu').forEach(menu => {
                         menu.classList.remove('active');
+                        menu.classList.add('hidden');
                     });
                 }, 2000);
             }).catch(function (err) {
@@ -1125,6 +1136,7 @@
                 
                 document.querySelectorAll('.share-menu').forEach(menu => {
                     menu.classList.remove('active');
+                    menu.classList.add('hidden');
                 });
             });
         }

@@ -274,7 +274,7 @@
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                         <span class="text-gray-600 text-sm sm:text-base font-medium">Subtotal</span>
                         <span class="font-bold text-gray-900 text-base sm:text-lg">
-                            {{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}
+                             {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }} {{app_currency()}}
                         </span>
                     </div>
                     
@@ -284,7 +284,7 @@
                         @if ($userAddress)
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">FREE</span>
-                                <span class="font-bold text-gray-900 text-base sm:text-lg">{{app_currency()}} 0.00</span>
+                                <span class="font-bold text-gray-900 text-base sm:text-lg"> 0.00 {{app_currency()}}</span>
                             </div>
                         @else
                             <span class="text-xs sm:text-sm text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full font-semibold">
@@ -297,7 +297,7 @@
                     <div class="flex justify-between items-center pt-4 pb-2">
                         <span class="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
                         <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent">
-                            {{app_currency()}} {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }}
+                             {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }} {{app_currency()}}
                         </span>
                     </div>
                 </div>

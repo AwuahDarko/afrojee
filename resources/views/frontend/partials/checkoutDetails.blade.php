@@ -226,19 +226,19 @@
                     </div>
                     <div class="flex justify-between items-center mb-3 mt-3">
                         <p class="text-gray-700">Product sub-total</p>
-                        <p class="font-bold text-gray-900" id="total-lbl"> {{app_currency()}} {{ number_format(0, 2) }}</p>
+                        <p class="font-bold text-gray-900" id="total-lbl">  {{ number_format(0, 2) }} {{app_currency()}} </p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700">Delivery</p>
                         @if ($userAddress)
-                            <p class="font-bold text-gray-900" id="del-lbl"> {{app_currency()}} {{ number_format(0, 2) }}</p>
+                            <p class="font-bold text-gray-900" id="del-lbl">  {{ number_format(0, 2) }} {{app_currency()}}</p>
                         @else
                             <p class="font-bold text-gray-900" id="del-lbl"> Select region to determine cost </p>
                         @endif
                     </div>
                     <div class="flex justify-between items-center border-t border-gray-300 pt-4 mb-6">
                         <p class="text-xl font-bold text-gray-900">Total</p>
-                        <p class="text-3xl font-bold text-gray-900" id="grand-lbl"> {{app_currency()}} {{ number_format(0, 2) }}
+                        <p class="text-3xl font-bold text-gray-900" id="grand-lbl">  {{ number_format(0, 2) }} {{app_currency()}}
                         </p>
                     </div>
                 </div>

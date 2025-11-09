@@ -22,7 +22,7 @@
                         Sub-total (<span id="cart-item-count">0</span> items)
                     </p>
                     <p class="text-xl font-bold text-gray-900">
-                        {{app_currency()}} <span id="full-cart-total">0.00</span>
+                         <span id="full-cart-total">0.00</span> {{app_currency()}}
                     </p>
                 </div>
                 <a href="{{ route('web.checkoutDetails') }}" id="nav-link"

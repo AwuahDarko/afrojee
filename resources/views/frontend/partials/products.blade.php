@@ -238,8 +238,7 @@
 
         <div class="mb-10 max-w-3xl">
             <p class="text-stone-700 text-lg">
-                Discover our exclusive range of premium skincare essentials, crafted to keep your routine simple and
-                effective
+            Discover our exclusive range of premium hair care essentials, crafted to keep your routine simple, healthy, and effortlessly beautiful.
             </p>
         </div>
         <!-- View All Products Button -->
@@ -312,7 +311,7 @@
 
                                     <!-- Wishlist Button -->
                                     <button type="button"
-                                        class="bg-white hover:bg-red-500 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
+                                        class="bg-white hidden hover:bg-red-500 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                                         title="Add to Wishlist">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
@@ -328,16 +327,16 @@
                                     @if ($product->compare_at_price)
                                         <div class="gsp-product__price-sale">
                                             <span class="gsp-price-item-regular line-through text-stone-500 mr-2">
-                                                {{ app_currency() }}{{ number_format($product->compare_at_price, 2) }}
+                                                {{ number_format($product->compare_at_price, 2) }} {{ app_currency() }}
                                             </span>
                                             <span class="gsp-price-item-sale font-semibold text-rose-500">
-                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @else
                                         <div class="gsp-product__price-regular">
                                             <span class="gsp-price-item-regular font-semibold text-stone-700">
-                                                {{ app_currency() }}{{ number_format($product->price, 2) }}
+                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @endif

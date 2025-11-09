@@ -3,7 +3,7 @@
     const appCurrency = @json(app_currency());
 </script> -->
 @section('title')
-Afrojee - Hair and skin care products
+Afrojee - Hair care products
 @endsection
 
 @section('content')
