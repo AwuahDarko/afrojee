@@ -38,7 +38,7 @@ class CheckoutController extends Controller
         $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
             ->orderBy('weight_to', 'desc')
             ->first();
-        
+
         return $maxRate ? $maxRate->weight_to : null;
     }
 
@@ -66,79 +66,145 @@ class CheckoutController extends Controller
             return null;
         }
 
-        // If weight is below minimum, return the lowest rate
+        // Get the shipping zone to identify the carrier
+        $zone = ShippingZone::find($zone_id);
+        $isTipsa = $zone && (stripos($zone->zone_name, 'Tipsa') !== false);
+        $isCorreos = $zone && (stripos($zone->zone_name, 'Correos') !== false);
+
+        // Find the appropriate tier for the weight (flat rate per tier)
+        foreach ($rates as $rate) {
+            // Check if weight falls within this tier's range
+            if ($weight >= $rate->weight_from && $weight <= $rate->weight_to) {
+                return [
+                    'rate' => $rate->rate,
+                    'breakdown' => [
+                        [
+                            'tier' => "{$rate->weight_from}-{$rate->weight_to}g",
+                            'weight' => $weight,
+                            'cost' => $rate->rate
+                        ]
+                    ]
+                ];
+            }
+        }
+
+        // If weight is below the minimum tier, use the lowest tier rate
         $minRate = $rates->first();
         if ($weight < $minRate->weight_from) {
             return [
                 'rate' => $minRate->rate,
                 'breakdown' => [
                     [
-                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g",
-                        'weight' => $minRate->weight_from,
+                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g (minimum)",
+                        'weight' => $weight,
                         'cost' => $minRate->rate
                     ]
                 ]
             ];
         }
 
+        // If weight exceeds all tiers, calculate excess cost based on carrier type
+        $maxRate = $rates->last();
+        $remainingWeight = $weight;
         $totalCost = 0;
         $breakdown = [];
-        $remainingWeight = $weight;
-        $lastTierEnd = 0;
 
-        foreach ($rates as $rate) {
-            // If we still have remaining weight to calculate
-            if ($remainingWeight <= 0) {
-                break;
-            }
-
-            $tierStart = max($rate->weight_from, $lastTierEnd);
-            $tierEnd = $rate->weight_to;
-            $tierWeightRange = $tierEnd - $tierStart;
-
-            if ($remainingWeight <= $tierWeightRange) {
-                // Weight fits entirely in this tier
-                // Calculate proportional cost for the weight in this tier
-                $weightInTier = $remainingWeight;
-                $tierCost = ($weightInTier / $tierWeightRange) * $rate->rate;
-                
-                $totalCost += $tierCost;
-                $breakdown[] = [
-                    'tier' => "{$tierStart}-{$tierEnd}g",
-                    'weight' => $weightInTier,
-                    'cost' => round($tierCost, 2)
-                ];
-                $remainingWeight = 0;
-            } else {
-                // Weight spans beyond this tier, use full tier cost
-                $weightInTier = $tierWeightRange;
-                $totalCost += $rate->rate;
-                $breakdown[] = [
-                    'tier' => "{$tierStart}-{$tierEnd}g",
-                    'weight' => $weightInTier,
-                    'cost' => $rate->rate
-                ];
-                $remainingWeight -= $weightInTier;
-            }
-
-            $lastTierEnd = $tierEnd;
-        }
-
-        // If there's still remaining weight beyond the highest tier, use the highest tier rate
-        // and calculate proportional cost for excess weight
-        if ($remainingWeight > 0) {
-            $maxRate = $rates->last();
-            $maxTierRange = $maxRate->weight_to - $maxRate->weight_from;
-            // Use the rate per gram from the highest tier
-            $costPerGram = $maxRate->rate / $maxTierRange;
-            $excessCost = $remainingWeight * $costPerGram;
-            
-            $totalCost += $excessCost;
+        if ($isTipsa) {
+            // Tipsa: Fixed 0.60 EUR per 100g increment above maximum
             $breakdown[] = [
-                'tier' => "Above {$maxRate->weight_to}g (excess)",
-                'weight' => $remainingWeight,
+                'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (base)",
+                'weight' => $maxRate->weight_to,
+                'cost' => $maxRate->rate
+            ];
+            $totalCost += $maxRate->rate;
+
+            $excessWeight = $weight - $maxRate->weight_to;
+            $incrementUnit = 100; // 100g increments
+            $incrementCost = 0.60; // EUR per increment
+            $numberOfIncrements = ceil($excessWeight / $incrementUnit);
+            $excessCost = $numberOfIncrements * $incrementCost;
+
+            $breakdown[] = [
+                'tier' => "Above {$maxRate->weight_to}g (excess: {$excessWeight}g, {$numberOfIncrements} × {$incrementUnit}g @ {$incrementCost} EUR)",
+                'weight' => $excessWeight,
                 'cost' => round($excessCost, 2)
             ];
+
+            $totalCost += $excessCost;
+
+        } elseif ($isCorreos) {
+            // Correos: Iteratively subtract highest tier range and charge full tier rate each time
+            $maxTierRange = $maxRate->weight_to - $maxRate->weight_from;
+            $chargeCount = 0;
+
+            // Keep subtracting the highest tier's weight_to until we can't anymore
+            while ($remainingWeight > $maxRate->weight_to) {
+                $chargeCount++;
+                $breakdown[] = [
+                    'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (cycle {$chargeCount})",
+                    'weight' => $maxRate->weight_to,
+                    'cost' => $maxRate->rate
+                ];
+                $totalCost += $maxRate->rate;
+                $remainingWeight -= $maxRate->weight_to;
+            }
+
+            // Handle remaining weight: find which tier it falls into
+            if ($remainingWeight > 0) {
+                $tierFound = false;
+
+                // Check each tier from highest to lowest to find where remainder fits
+                foreach ($rates->reverse() as $rate) {
+                    if ($remainingWeight >= $rate->weight_from && $remainingWeight <= $rate->weight_to) {
+                        $breakdown[] = [
+                            'tier' => "{$rate->weight_from}-{$rate->weight_to}g (remainder: {$remainingWeight}g)",
+                            'weight' => $remainingWeight,
+                            'cost' => $rate->rate
+                        ];
+                        $totalCost += $rate->rate;
+                        $tierFound = true;
+                        break;
+                    }
+                }
+
+                // If remainder is below minimum tier, use the lowest tier rate
+                if (!$tierFound) {
+                    $minRate = $rates->first();
+                    $breakdown[] = [
+                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g (remainder: {$remainingWeight}g, minimum)",
+                        'weight' => $remainingWeight,
+                        'cost' => $minRate->rate
+                    ];
+                    $totalCost += $minRate->rate;
+                }
+            }
+
+        } else {
+            // Unknown carrier: use default calculation (highest tier's cost per gram)
+            $breakdown[] = [
+                'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (base)",
+                'weight' => $maxRate->weight_to,
+                'cost' => $maxRate->rate
+            ];
+            $totalCost += $maxRate->rate;
+
+            $excessWeight = $weight - $maxRate->weight_to;
+            $tierWeightRange = $maxRate->weight_to - $maxRate->weight_from;
+
+            if ($tierWeightRange > 0) {
+                $costPerGram = $maxRate->rate / $tierWeightRange;
+                $excessCost = $excessWeight * $costPerGram;
+            } else {
+                $excessCost = 0;
+            }
+
+            $breakdown[] = [
+                'tier' => "Above {$maxRate->weight_to}g (excess: {$excessWeight}g)",
+                'weight' => $excessWeight,
+                'cost' => round($excessCost, 2)
+            ];
+
+            $totalCost += $excessCost;
         }
 
         return [
@@ -157,13 +223,13 @@ class CheckoutController extends Controller
     private function getShippingRate($zone_id, $weight)
     {
         $result = $this->calculateTieredShipping($zone_id, $weight);
-        
+
         if (!$result) {
             return null;
         }
 
         // Return an object with rate property for backward compatibility
-        return (object)['rate' => $result['rate']];
+        return (object) ['rate' => $result['rate']];
     }
 
     /**
@@ -172,7 +238,13 @@ class CheckoutController extends Controller
     public function index(Request $request)
     {
         $userAddress = null;
-        $cartItems = json_decode($request->cart);
+
+        // Try to get cart from request, otherwise use empty array
+        // Cart is typically loaded from localStorage on the client side
+        $cartItems = [];
+        if ($request->has('cart') && !empty($request->cart)) {
+            $cartItems = json_decode($request->cart, true) ?? [];
+        }
 
         $scountries = Country::where('status', '=', 1)->get();
 
@@ -180,11 +252,8 @@ class CheckoutController extends Controller
         $guestAddressId = Session::get('guest_billing_address_id');
 
         if ($guestAddressId) {
-            $userAddress = Address::find($guestAddressId);
+            $userAddress = Address::with(['zone', 'country'])->find($guestAddressId);
         }
-
-        // Get cart items from the session (as implemented previously)
-        // $cartItems = Session::get('current_cart_for_checkout', []);
 
         return view('frontend.partials.checkoutDetails', [
             'editingAddress' => $request->has('edit_address'),
@@ -219,7 +288,7 @@ class CheckoutController extends Controller
         $guestAddressId = Session::get('guest_billing_address_id');
 
         if ($guestAddressId) {
-            $userAddress = Address::find($guestAddressId);
+            $userAddress = Address::with(['zone', 'country'])->find($guestAddressId);
         }
 
         // Get cart items from the session (as implemented previously)
@@ -251,14 +320,14 @@ class CheckoutController extends Controller
     public function getShippingMethods(Request $request)
     {
         $zone_id = $request->zone_id;
-        
+
         if (!$zone_id) {
             return response()->json(['methods' => []]);
         }
 
         // Get the zone to find its country and region
         $selectedZone = ShippingZone::with('country')->find($zone_id);
-        
+
         if (!$selectedZone) {
             return response()->json(['methods' => []]);
         }
@@ -277,11 +346,11 @@ class CheckoutController extends Controller
         // Group by carrier name and create methods array
         $methods = [];
         $seen = [];
-        
+
         foreach ($allZones as $shippingZone) {
             // Create unique key to avoid duplicates
             $key = $shippingZone->zone_name . '_' . $shippingZone->region;
-            
+
             if (!in_array($key, $seen)) {
                 $seen[] = $key;
                 $methods[] = [
@@ -372,7 +441,7 @@ class CheckoutController extends Controller
 
         // Calculate shipping using tiered pricing
         $shippingCalculation = $this->calculateTieredShipping($zone_id, $total_weight);
-        
+
         if (!$shippingCalculation) {
             $total_shipping = 0;
         } else {
@@ -380,8 +449,8 @@ class CheckoutController extends Controller
         }
 
         return json_encode([
-            'total_shipping' => app_currency(). ' '. number_format($total_shipping, 2),
-            'grand_total' => app_currency(). ' '. number_format($total_shipping + $total_amount, 2),
+            'total_shipping' => app_currency() . ' ' . number_format($total_shipping, 2),
+            'grand_total' => app_currency() . ' ' . number_format($total_shipping + $total_amount, 2),
             'total_weight' => $total_weight,
             'breakdown' => $shippingCalculation['breakdown'] ?? []
         ]);
@@ -424,7 +493,7 @@ class CheckoutController extends Controller
         }
 
         $maxWeight = $this->getMaxWeightForZone($zone_id);
-        
+
         if (!$maxWeight) {
             return response()->json([
                 'valid' => false,
@@ -439,7 +508,7 @@ class CheckoutController extends Controller
             'total_weight' => $total_weight,
             'max_weight' => $maxWeight,
             'weight_exceeded' => $weightExceeded,
-            'message' => $weightExceeded 
+            'message' => $weightExceeded
                 ? "Cannot proceed: Total cart weight ({$total_weight}g) exceeds the maximum allowed weight ({$maxWeight}g) for this shipping zone. Please remove some items."
                 : "Cart weight ({$total_weight}g) is within the allowed limit ({$maxWeight}g)."
         ]);
@@ -551,7 +620,7 @@ class CheckoutController extends Controller
         // Redirect back to the checkout page, removing the edit_address parameter
         if ($request->from_where == 'single') {
             return redirect()->route('web.checkoutDetails.single', [
-                'product_id' => $request->product_id, 
+                'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
                 'size_id' => $request->size_id ?? 0
             ]);
@@ -585,7 +654,7 @@ class CheckoutController extends Controller
                 $currency = $session->currency;
                 $metadata = $session->metadata;
 
-             
+
                 // $paymentIntent = $session->payment_intent;
                 // $paymentMethod = $paymentIntent->payment_method;
 
@@ -599,7 +668,7 @@ class CheckoutController extends Controller
                         // Data to create if not found
                         'user_id' => null,
                         'order_id' => $metadata->order_id,
-                        'amount' => $session['amount_total']/100,
+                        'amount' => $session['amount_total'] / 100,
                         'currency' => $session['currency'],
                         'status' => 'completed',
                         'payment_method' => $paymentMethod,
@@ -608,25 +677,25 @@ class CheckoutController extends Controller
 
                 $order = Order::with(['billingAddress', 'orderProducts'])->where('id', '=', $metadata->order_id)->first();
 
-                
+
                 // $order = Order::find($metadata->order_id);
                 $order->payment_status = 'paid';
                 $order->save();
-                
-                foreach($order->orderProducts as $oneProduct){
+
+                foreach ($order->orderProducts as $oneProduct) {
                     $product = Product::find($oneProduct->product_id);
                     $product->quantity -= $oneProduct->quantity;
                     $product->save();
                 }
-                
+
                 $name = $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name;
                 $email = $order->billingAddress->email;
-             
+
 
                 $data = [
                     'customer_name' => $name,
                     'order_id' => $order->order_number,
-                    'amount' => number_format($session->amount_total/100, 2),
+                    'amount' => number_format($session->amount_total / 100, 2),
                     'payment_method' => $paymentMethod,
                     'payment_time' => date("Y-m-d H:i:s")
                 ];
@@ -634,7 +703,7 @@ class CheckoutController extends Controller
                 $data2 = [
                     'customer_name' => $name,
                     'order_id' => $order->order_number,
-                    'amount' => number_format($session->amount_total/100, 2),
+                    'amount' => number_format($session->amount_total / 100, 2),
                     'payment_method' => $paymentMethod,
                 ];
 
@@ -688,7 +757,7 @@ class CheckoutController extends Controller
                     // Data to create if not found
                     'user_id' => null,
                     'order_id' => $metadata->order_id,
-                    'amount' => $session['amount_total']/100,
+                    'amount' => $session['amount_total'] / 100,
                     'currency' => $session['currency'],
                     'status' => 'failed',
                     'payment_method' => 'stripe',
@@ -758,7 +827,7 @@ class CheckoutController extends Controller
                 // Data to create if not found
                 'user_id' => null,
                 'order_id' => $orderId,
-                'amount' => $session['amount_total']/100,
+                'amount' => $session['amount_total'] / 100,
                 'currency' => $session['currency'],
                 'status' => 'completed',
                 'payment_method' => 'stripe',
@@ -786,7 +855,7 @@ class CheckoutController extends Controller
                 // Data to create if not found
                 'user_id' => null,
                 'order_id' => $orderId,
-                'amount' => $session['amount_total']/100,
+                'amount' => $session['amount_total'] / 100,
                 'currency' => $session['currency'],
                 'status' => 'failed',
                 'payment_method' => 'stripe',

@@ -154,8 +154,8 @@
                                 @if ($userAddress->address_line_2)
                                     <p>{{ $userAddress->address_line_2 }}</p>
                                 @endif
-                                <p>{{ $userAddress->country->name }}</p>
-                                <p>{{ $userAddress->zone->zone_name }} </p>
+                                <p>{{ $userAddress->country?->name ?? 'N/A' }}</p>
+                                <p>{{ $userAddress->zone?->zone_name ?? 'N/A' }} </p>
                                 <p>{{ $userAddress->postcode }}</p>
                                 <p>{{ $userAddress->mobile_number }}</p>
                             @else
@@ -244,7 +244,7 @@
                 </div>
                <form action="{{route('web.order.multiple.save')}}" method="POST">
                  @csrf
-                <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
+                <input type="hidden" name="zone_id" value="{{$userAddress?->zone?->id ?? $userAddress?->shipping_zone_id ?? ''}}" id="order-zone">
                 <input type="hidden" name="cart" value="" id="order-cart">
                  <button @if (!$userAddress) disabled @endif type="submit" 
                     class="bg-pink-800 hover:bg-pink-900 text-white px-6 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2">
@@ -335,7 +335,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const orderCart = document.getElementById('order-cart');
     const cartItemsContainer = document.getElementById('checkout-cart-items');
     const subtotalElement = document.getElementById('checkout-subtotal');
-    const global_zone_id = {{ $userAddress?->zone->id ?? 0 }};
+    const global_zone_id = {{ $userAddress?->zone?->id ?? $userAddress?->shipping_zone_id ?? 0 }};
+    const global_country_id = {{ $userAddress?->country_id ?? 0 }};
+    const global_region_id = {{ $userAddress?->shipping_zone_id ?? 0 }};
     const regionPriceUrl = "{{ route('web.checkoutDetails.info.getprice') }}";
     const regionUrl = "{{ route('web.checkoutDetails.info.region') }}";
 
@@ -443,29 +445,91 @@ document.addEventListener('DOMContentLoaded', function () {
         if (val != '0') {
             fetch(`${regionUrl}?country_id=${val}`)
                 .then(res => res.text())
-                .then(data => region.innerHTML = data)
+                .then(data => {
+                    if (region) {
+                        region.innerHTML = data;
+                        // Clear shipping price when country changes
+                        if (summary) summary.textContent = 'Select region to determine cost';
+                        if (orderZone) orderZone.value = '';
+                    }
+                })
                 .catch(console.error);
+        } else {
+            if (region) region.innerHTML = '';
+            if (orderZone) orderZone.value = '';
+            if (summary) summary.textContent = 'Select region to determine cost';
         }
     });
 
     // -------------------- PRICE RECALCULATION --------------------
     function getNewPrice(zone_id) {
-        if (!zone_id && !global_zone_id) return;
+        if (!zone_id && !global_zone_id) {
+            // No zone selected, show default message
+            if (summary) summary.textContent = 'Select region to determine cost';
+            if (grand) grand.textContent = `${appCurrency} ${parseFloat(totalLbl?.textContent?.replace(/[^0-9.]/g, '') || 0).toFixed(2)}`;
+            return;
+        }
         const z = zone_id || global_zone_id;
+        if (!z || z === 0) return;
+        
         const cart = JSON.stringify(cartData);
+        if (!cart || cart === '[]') return;
 
         fetch(`${regionPriceUrl}?cart=${encodeURIComponent(cart)}&zone_id=${z}`)
             .then(res => res.json())
             .then(data => {
-                summary.textContent = data.total_shipping;
-                grand.textContent = data.grand_total;
+                if (summary) summary.textContent = data.total_shipping;
+                if (grand) grand.textContent = data.grand_total;
+                if (orderZone) orderZone.value = z;
             })
-            .catch(console.error);
+            .catch(error => {
+                console.error('Error fetching shipping price:', error);
+            });
+    }
+
+    // -------------------- Initialize Region Dropdown (for edit mode) --------------------
+    function initializeRegionDropdown() {
+        if (global_country_id && global_country_id !== 0 && country && region) {
+            // Set the country dropdown
+            country.value = global_country_id;
+            
+            // Load regions for this country
+            fetch(`${regionUrl}?country_id=${global_country_id}`)
+                .then(res => res.text())
+                .then(data => {
+                    region.innerHTML = data;
+                    // Select the saved region/zone if it exists
+                    const zoneToSelect = global_zone_id && global_zone_id !== 0 ? global_zone_id : (global_region_id && global_region_id !== 0 ? global_region_id : null);
+                    if (zoneToSelect) {
+                        region.value = zoneToSelect;
+                        if (orderZone) orderZone.value = zoneToSelect;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading regions:', error);
+                });
+        }
     }
 
     // -------------------- Initialize --------------------
     renderCart();
-    getNewPrice(global_zone_id);
+    
+    // If address exists and we have a zone_id, fetch shipping price immediately
+    // This handles the case when address is saved and displayed (not in edit mode)
+    if (global_zone_id && global_zone_id !== 0) {
+        if (orderZone) orderZone.value = global_zone_id;
+        // Wait a bit for cart to render, then fetch shipping price
+        setTimeout(() => {
+            getNewPrice(global_zone_id);
+        }, 100);
+    }
+    
+    // If in edit mode and we have a saved address, populate the region dropdown
+    @if($editingAddress && $userAddress)
+        if (global_country_id && global_country_id !== 0) {
+            initializeRegionDropdown();
+        }
+    @endif
 
     @if(!$userAddress)
         const currentUrl = new URL(window.location.href);

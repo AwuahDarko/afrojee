@@ -154,8 +154,8 @@
                                 @if ($userAddress->address_line_2)
                                     <p>{{ $userAddress->address_line_2 }}</p>
                                 @endif
-                                <p>{{ $userAddress->country->name }}</p>
-                                <p>{{ $userAddress->zone->zone_name }} </p>
+                                <p>{{ $userAddress->country?->name ?? 'N/A' }}</p>
+                                <p>{{ $userAddress->zone?->zone_name ?? 'N/A' }} </p>
                                 <p>{{ $userAddress->postcode }}</p>
                                 <p>{{ $userAddress->mobile_number }}</p>
                             @else
@@ -308,7 +308,7 @@
                 @csrf
                 <input type="hidden" name="product_id" value="{{$product->id}}">
                 <input type="hidden" name="quantity" value="1" id="order-qty">
-                <input type="hidden" name="zone_id" value="{{$userAddress?->zone->id}}" id="order-zone">
+                <input type="hidden" name="zone_id" value="{{$userAddress?->zone?->id ?? $userAddress?->shipping_zone_id ?? ''}}" id="order-zone">
                 <input type="hidden" name="size_id" value="{{ $size_id }}">
                 
                 <button @if (!$userAddress) disabled @endif type="submit"
@@ -429,15 +429,34 @@
             const summary = document.getElementById('checkout-summary')
             const maxQty = {{ $product->quantity }}
             const id = {{ $product->id }}
-            const global_zone_id = {{ $userAddress->zone->id ?? 0 }};
+            const global_zone_id = {{ $userAddress?->zone?->id ?? $userAddress?->shipping_zone_id ?? 0 }};
+            const global_country_id = {{ $userAddress?->country_id ?? 0 }};
+            const global_region_id = {{ $userAddress?->shipping_zone_id ?? 0 }};
             const sizeId = {{ $size_id ?? 0 }};  // NEW: Get size_id from view variable
             let selectedShippingZoneId = global_zone_id || 0; // Track selected shipping zone
         
-            // Load shipping methods if address exists
-            if (global_zone_id) {
-                loadShippingMethods(global_zone_id);
-                getNewPrice(1, id, global_zone_id, sizeId);  // UPDATED: Pass sizeId
+            // Initialize shipping price and methods if address exists
+            if (global_zone_id && global_zone_id !== 0) {
+                // Set the order zone immediately
+                if (orderZone) orderZone.value = global_zone_id;
+                selectedShippingZoneId = global_zone_id;
+                
+                // Load shipping methods if address exists (only if not in edit mode)
+                @if(!$editingAddress)
+                    loadShippingMethods(global_zone_id);
+                @endif
+                
+                // Fetch shipping price with current quantity
+                const qty = parseInt(quantity.value) || 1;
+                getNewPrice(qty, id, global_zone_id, sizeId);
             }
+            
+            // If in edit mode and we have a saved address, populate the region dropdown
+            @if($editingAddress && $userAddress)
+                if (global_country_id && global_country_id !== 0) {
+                    initializeRegionDropdown();
+                }
+            @endif
 
             region?.addEventListener('change', (evt) => {
                 const val = region.value
@@ -460,14 +479,24 @@
             country?.addEventListener('change', (evt) => {
                 const val = country.value
                 if (val != '0') {
-
                     const url = "{{ route('web.checkoutDetails.info.region') }}"
-
-                    fetch(`${url}?country_id=${val}`, )
+                    fetch(`${url}?country_id=${val}`)
                         .then(res => res.text())
                         .then(data => {
-                            region.innerHTML = data
-                        }).catch(error => console.log(error))
+                            if (region) {
+                                region.innerHTML = data;
+                                // Clear shipping methods and price when country changes
+                                hideShippingMethods();
+                                if (orderZone) orderZone.value = '';
+                                selectedShippingZoneId = 0;
+                            }
+                        })
+                        .catch(error => console.error('Error loading regions:', error))
+                } else {
+                    if (region) region.innerHTML = '';
+                    hideShippingMethods();
+                    if (orderZone) orderZone.value = '';
+                    selectedShippingZoneId = 0;
                 }
             })
 
@@ -691,16 +720,25 @@
             }
 
             function getNewPrice(qty, id, zone_id, size_id) {  // UPDATED: Accept size_id param
-                if (!zone_id && !global_zone_id) return
+                if (!zone_id && !global_zone_id) {
+                    console.log('No zone_id available for shipping calculation');
+                    return;
+                }
 
-                const z = zone_id || global_zone_id
+                const z = zone_id || global_zone_id;
+                if (!z || z === 0) {
+                    console.log('Invalid zone_id:', z);
+                    return;
+                }
 
                 const url = "{{ route('web.checkoutDetails.info.price') }}"
 
                 fetch(`${url}?qty=${qty}&id=${id}&zone_id=${z}&size_id=${size_id}`)  // UPDATED: Include size_id in query
                     .then(res => res.text())
                     .then(data => {
-                        summary.innerHTML = data
+                        if (summary) {
+                            summary.innerHTML = data;
+                        }
                         
                         // Update shipping prices in method options
                         document.querySelectorAll('.shipping-method-option').forEach(el => {
@@ -709,7 +747,35 @@
                                 loadShippingPrice(zoneId);
                             }
                         });
-                    }).catch(error => console.log(error))
+                    }).catch(error => {
+                        console.error('Error fetching shipping price:', error);
+                    })
+            }
+            
+            // Initialize region dropdown when in edit mode with saved address
+            function initializeRegionDropdown() {
+                if (global_country_id && global_country_id !== 0 && country && region) {
+                    // Set the country dropdown
+                    country.value = global_country_id;
+                    
+                    // Load regions for this country
+                    const url = "{{ route('web.checkoutDetails.info.region') }}";
+                    fetch(`${url}?country_id=${global_country_id}`)
+                        .then(res => res.text())
+                        .then(data => {
+                            region.innerHTML = data;
+                            // Select the saved region/zone if it exists
+                            const zoneToSelect = global_zone_id && global_zone_id !== 0 ? global_zone_id : (global_region_id && global_region_id !== 0 ? global_region_id : null);
+                            if (zoneToSelect) {
+                                region.value = zoneToSelect;
+                                if (orderZone) orderZone.value = zoneToSelect;
+                                selectedShippingZoneId = zoneToSelect;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error loading regions:', error);
+                        });
+                }
             }
 
             @if(!$userAddress)

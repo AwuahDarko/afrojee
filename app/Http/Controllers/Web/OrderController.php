@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\ShippingRate;
+use App\Models\ShippingZone;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
@@ -33,11 +34,11 @@ class OrderController extends Controller
     public function show(string $orderNumber)
     {
         $order = Order::with([
-                'orderProducts.product',
-                'orderProducts.size',
-                'billingAddress',
-                'shippingAddress',
-            ])
+            'orderProducts.product',
+            'orderProducts.size',
+            'billingAddress',
+            'shippingAddress',
+        ])
             ->where('order_number', $orderNumber)
             ->first();
 
@@ -66,7 +67,7 @@ class OrderController extends Controller
         $maxRate = ShippingRate::where('shipping_zone_id', $zone_id)
             ->orderBy('weight_to', 'desc')
             ->first();
-        
+
         return $maxRate ? $maxRate->weight_to : null;
     }
 
@@ -94,79 +95,145 @@ class OrderController extends Controller
             return null;
         }
 
-        // If weight is below minimum, return the lowest rate
+        // Get the shipping zone to identify the carrier
+        $zone = ShippingZone::find($zone_id);
+        $isTipsa = $zone && (stripos($zone->zone_name, 'Tipsa') !== false);
+        $isCorreos = $zone && (stripos($zone->zone_name, 'Correos') !== false);
+
+        // Find the appropriate tier for the weight (flat rate per tier)
+        foreach ($rates as $rate) {
+            // Check if weight falls within this tier's range
+            if ($weight >= $rate->weight_from && $weight <= $rate->weight_to) {
+                return [
+                    'rate' => $rate->rate,
+                    'breakdown' => [
+                        [
+                            'tier' => "{$rate->weight_from}-{$rate->weight_to}g",
+                            'weight' => $weight,
+                            'cost' => $rate->rate
+                        ]
+                    ]
+                ];
+            }
+        }
+
+        // If weight is below the minimum tier, use the lowest tier rate
         $minRate = $rates->first();
         if ($weight < $minRate->weight_from) {
             return [
                 'rate' => $minRate->rate,
                 'breakdown' => [
                     [
-                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g",
-                        'weight' => $minRate->weight_from,
+                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g (minimum)",
+                        'weight' => $weight,
                         'cost' => $minRate->rate
                     ]
                 ]
             ];
         }
 
+        // If weight exceeds all tiers, calculate excess cost based on carrier type
+        $maxRate = $rates->last();
+        $remainingWeight = $weight;
         $totalCost = 0;
         $breakdown = [];
-        $remainingWeight = $weight;
-        $lastTierEnd = 0;
 
-        foreach ($rates as $rate) {
-            // If we still have remaining weight to calculate
-            if ($remainingWeight <= 0) {
-                break;
-            }
-
-            $tierStart = max($rate->weight_from, $lastTierEnd);
-            $tierEnd = $rate->weight_to;
-            $tierWeightRange = $tierEnd - $tierStart;
-
-            if ($remainingWeight <= $tierWeightRange) {
-                // Weight fits entirely in this tier
-                // Calculate proportional cost for the weight in this tier
-                $weightInTier = $remainingWeight;
-                $tierCost = ($weightInTier / $tierWeightRange) * $rate->rate;
-                
-                $totalCost += $tierCost;
-                $breakdown[] = [
-                    'tier' => "{$tierStart}-{$tierEnd}g",
-                    'weight' => $weightInTier,
-                    'cost' => round($tierCost, 2)
-                ];
-                $remainingWeight = 0;
-            } else {
-                // Weight spans beyond this tier, use full tier cost
-                $weightInTier = $tierWeightRange;
-                $totalCost += $rate->rate;
-                $breakdown[] = [
-                    'tier' => "{$tierStart}-{$tierEnd}g",
-                    'weight' => $weightInTier,
-                    'cost' => $rate->rate
-                ];
-                $remainingWeight -= $weightInTier;
-            }
-
-            $lastTierEnd = $tierEnd;
-        }
-
-        // If there's still remaining weight beyond the highest tier, use the highest tier rate
-        // and calculate proportional cost for excess weight
-        if ($remainingWeight > 0) {
-            $maxRate = $rates->last();
-            $maxTierRange = $maxRate->weight_to - $maxRate->weight_from;
-            // Use the rate per gram from the highest tier
-            $costPerGram = $maxRate->rate / $maxTierRange;
-            $excessCost = $remainingWeight * $costPerGram;
-            
-            $totalCost += $excessCost;
+        if ($isTipsa) {
+            // Tipsa: Fixed 0.60 EUR per 100g increment above maximum
             $breakdown[] = [
-                'tier' => "Above {$maxRate->weight_to}g (excess)",
-                'weight' => $remainingWeight,
+                'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (base)",
+                'weight' => $maxRate->weight_to,
+                'cost' => $maxRate->rate
+            ];
+            $totalCost += $maxRate->rate;
+
+            $excessWeight = $weight - $maxRate->weight_to;
+            $incrementUnit = 100; // 100g increments
+            $incrementCost = 0.60; // EUR per increment
+            $numberOfIncrements = ceil($excessWeight / $incrementUnit);
+            $excessCost = $numberOfIncrements * $incrementCost;
+
+            $breakdown[] = [
+                'tier' => "Above {$maxRate->weight_to}g (excess: {$excessWeight}g, {$numberOfIncrements} × {$incrementUnit}g @ {$incrementCost} EUR)",
+                'weight' => $excessWeight,
                 'cost' => round($excessCost, 2)
             ];
+
+            $totalCost += $excessCost;
+
+        } elseif ($isCorreos) {
+            // Correos: Iteratively subtract highest tier range and charge full tier rate each time
+            $maxTierRange = $maxRate->weight_to - $maxRate->weight_from;
+            $chargeCount = 0;
+
+            // Keep subtracting the highest tier's weight_to until we can't anymore
+            while ($remainingWeight > $maxRate->weight_to) {
+                $chargeCount++;
+                $breakdown[] = [
+                    'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (cycle {$chargeCount})",
+                    'weight' => $maxRate->weight_to,
+                    'cost' => $maxRate->rate
+                ];
+                $totalCost += $maxRate->rate;
+                $remainingWeight -= $maxRate->weight_to;
+            }
+
+            // Handle remaining weight: find which tier it falls into
+            if ($remainingWeight > 0) {
+                $tierFound = false;
+
+                // Check each tier from highest to lowest to find where remainder fits
+                foreach ($rates->reverse() as $rate) {
+                    if ($remainingWeight >= $rate->weight_from && $remainingWeight <= $rate->weight_to) {
+                        $breakdown[] = [
+                            'tier' => "{$rate->weight_from}-{$rate->weight_to}g (remainder: {$remainingWeight}g)",
+                            'weight' => $remainingWeight,
+                            'cost' => $rate->rate
+                        ];
+                        $totalCost += $rate->rate;
+                        $tierFound = true;
+                        break;
+                    }
+                }
+
+                // If remainder is below minimum tier, use the lowest tier rate
+                if (!$tierFound) {
+                    $minRate = $rates->first();
+                    $breakdown[] = [
+                        'tier' => "{$minRate->weight_from}-{$minRate->weight_to}g (remainder: {$remainingWeight}g, minimum)",
+                        'weight' => $remainingWeight,
+                        'cost' => $minRate->rate
+                    ];
+                    $totalCost += $minRate->rate;
+                }
+            }
+
+        } else {
+            // Unknown carrier: use default calculation (highest tier's cost per gram)
+            $breakdown[] = [
+                'tier' => "{$maxRate->weight_from}-{$maxRate->weight_to}g (base)",
+                'weight' => $maxRate->weight_to,
+                'cost' => $maxRate->rate
+            ];
+            $totalCost += $maxRate->rate;
+
+            $excessWeight = $weight - $maxRate->weight_to;
+            $tierWeightRange = $maxRate->weight_to - $maxRate->weight_from;
+
+            if ($tierWeightRange > 0) {
+                $costPerGram = $maxRate->rate / $tierWeightRange;
+                $excessCost = $excessWeight * $costPerGram;
+            } else {
+                $excessCost = 0;
+            }
+
+            $breakdown[] = [
+                'tier' => "Above {$maxRate->weight_to}g (excess: {$excessWeight}g)",
+                'weight' => $excessWeight,
+                'cost' => round($excessCost, 2)
+            ];
+
+            $totalCost += $excessCost;
         }
 
         return [
@@ -185,13 +252,13 @@ class OrderController extends Controller
     private function getShippingRate($zone_id, $weight)
     {
         $result = $this->calculateTieredShipping($zone_id, $weight);
-        
+
         if (!$result) {
             return null;
         }
 
         // Return an object with rate property for backward compatibility
-        return (object)['rate' => $result['rate']];
+        return (object) ['rate' => $result['rate']];
     }
 
     public function store(Request $request)
@@ -206,7 +273,7 @@ class OrderController extends Controller
         $product_id = $request->product_id;
         $quantity = $request->quantity;
         $zone_id = $request->zone_id;
-        $size_id = $request->size_id !== null ? (int)$request->size_id : null;  // NEW
+        $size_id = $request->size_id !== null ? (int) $request->size_id : null;  // NEW
         $guestAddressId = Session::get('guest_billing_address_id');
 
         $product = Product::with('sizes')->findOrFail($product_id);  // Updated: Load sizes
@@ -222,7 +289,7 @@ class OrderController extends Controller
         }
 
         $subtotal = $price * $quantity;
-        
+
         // Safely handle null/zero weights
         $productWeight = ($product->weight && $product->weight > 0) ? $product->weight : 0;
         $weight = $productWeight * $quantity;  // Weight product-level
@@ -247,7 +314,7 @@ class OrderController extends Controller
 
         $grand_total = $delivery_fee + $subtotal;
 
-        $orderNo = "AFR".rand(111111111, 999999999);
+        $orderNo = "AFR" . rand(111111111, 999999999);
 
         $order = Order::create(
             [
@@ -278,7 +345,7 @@ class OrderController extends Controller
         $address = Address::find($guestAddressId);
 
         $data = [
-            'customer_name' => $address->first_name . ' '. $address->last_name,
+            'customer_name' => $address->first_name . ' ' . $address->last_name,
             'customer_email' => $address->email,
             'order_id' => $orderNo,
             'total' => number_format($grand_total, 2),
@@ -375,17 +442,17 @@ class OrderController extends Controller
 
         // Calculate shipping using tiered pricing (no longer blocking excess weight)
         $shippingCalculation = $this->calculateTieredShipping($zone_id, $total_weight);
-        
+
         if (!$shippingCalculation) {
             return back()->withErrors([
                 'shipping' => 'Unable to calculate shipping cost. Please verify your shipping address and ensure products have valid weight.'
             ])->withInput();
         }
 
-        $rates = (object)['rate' => $shippingCalculation['rate']];
+        $rates = (object) ['rate' => $shippingCalculation['rate']];
 
         $guestAddressId = Session::get('guest_billing_address_id');
-        
+
         // If no rate found, redirect back with error
         if (!$rates) {
             return back()->withErrors([
@@ -396,7 +463,7 @@ class OrderController extends Controller
         $delivery_fee = $rates->rate;
         $grand_total = $delivery_fee + $total_amount;
 
-        $orderNo = "AFR".rand(111111111, 999999999);
+        $orderNo = "AFR" . rand(111111111, 999999999);
 
         $order = Order::create(
             [
@@ -449,7 +516,7 @@ class OrderController extends Controller
         $address = Address::find($guestAddressId);
 
         $data = [
-            'customer_name' => $address->first_name . ' '. $address->last_name,
+            'customer_name' => $address->first_name . ' ' . $address->last_name,
             'customer_email' => $address->email,
             'order_id' => $orderNo,
             'total' => number_format($grand_total, 2),
