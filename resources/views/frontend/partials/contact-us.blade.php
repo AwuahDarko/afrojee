@@ -144,8 +144,8 @@
                         </p>
                         <p>
                             <span class="text-gray-500">E-mail:</span> 
-                            <a href="mailto:info@afrojee.com" class="text-gray-900 hover:text-[#ef380d] transition">
-                                info@afrojee.com
+                            <a href="mailto:info@afrojee.store" class="text-gray-900 hover:text-[#ef380d] transition">
+                                info@afrojee.store
                             </a>
                         </p>
                     </div>

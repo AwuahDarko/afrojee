@@ -75,6 +75,14 @@
         </a>
       </li>
 
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.email*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+          href="{{ route('admin.email') }}">
+          <i class="material-symbols-rounded opacity-5">mail</i>
+          <span class="nav-link-text ms-1">Send Email</span>
+        </a>
+      </li>
+
       <li class="nav-item visually-hidden">
         <a class="nav-link {{ request()->routeIs('admin.tables') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.tables') }}">

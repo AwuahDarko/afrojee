@@ -123,7 +123,7 @@
                             </p>
                             <p style="font-size:14px; color:#666; margin:0;">
                                 Barcelona, Spain | Accra, Ghana<br>
-                                <a href="mailto:info@afrojee.com" style="color:#ef380d; text-decoration:none;">info@afrojee.com</a> |
+                                <a href="mailto:info@afrojee.store" style="color:#ef380d; text-decoration:none;">info@afrojee.store</a> |
                                 <a href="tel:+34602181565" style="color:#ef380d; text-decoration:none;">+34 602 181 565</a>
                             </p>
                             <p style="font-size:13px; color:#999; margin-top:20px;">

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\EmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -82,6 +83,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/promo/activate/{id}', [PromoController::class, 'activate'])->name('admin.promos.activate');
         Route::get('/promo/deactivate/{id}', [PromoController::class, 'deactivate'])->name('admin.promos.deactivate');
         Route::post('/promo/edit', [PromoController::class, 'update'])->name('admin.promos.edit');
+
+        Route::get('/email', [EmailController::class, 'index'])->name('admin.email');
+        Route::post('/email/send', [EmailController::class, 'send'])->name('admin.email.send');
     });
 
     Route::get('/billing', function () {

@@ -422,7 +422,7 @@
             <p class="footer-title">Afro Jee</p>
             <div class="footer-info">
                 Barcelona, Spain | Accra, Ghana<br>
-                <a href="mailto:info@afrojee.com">info@afrojee.com</a> |
+                <a href="mailto:info@afrojee.store">info@afrojee.store</a> |
                 <a href="tel:+34602181565">+34 602 181 565</a>
             </div>
 

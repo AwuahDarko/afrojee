@@ -95,8 +95,8 @@
                             style="padding:30px 20px; background-color:#F8F7F4; border-top:1px solid #f0f0f0;">
                             <p style="font-size:14px; color:#999; margin:0;">
                                 This is an automated message. Please do not reply directly.<br>
-                                Need help? Contact <a href="mailto:support@afrojee.com"
-                                    style="color:#ef380d; text-decoration:none;">support@afrojee.com</a>.
+                                Need help? Contact <a href="mailto:info@afrojee.store"
+                                    style="color:#ef380d; text-decoration:none;">info@afrojee.store</a>.
                             </p>
                             <p style="font-size:14px; color:#999; margin-top:15px;">
                                 © {{ date('Y') }} Afro Jee. All rights reserved.

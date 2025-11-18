@@ -80,8 +80,8 @@
                             style="padding:30px 20px; background-color:#F8F7F4; border-top:1px solid #f0f0f0;">
                             <p style="font-size:15px; color:#666; margin:0 0 10px;">
                                 Questions? Contact our support team at
-                                <a href="mailto:support@afrojee.com"
-                                    style="color:#ef380d; text-decoration:none;">support@afrojee.com</a>
+                                <a href="mailto:info@afrojee.store"
+                                    style="color:#ef380d; text-decoration:none;">info@afrojee.store</a>
                             </p>
 
                             <p style="font-size:14px; color:#999; margin-top:15px;">
