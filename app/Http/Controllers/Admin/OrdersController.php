@@ -21,7 +21,7 @@ class OrdersController extends Controller
         $date = $request->input('date');
 
 
-        $query = Order::with('orderProducts')->orderBy('id', 'desc');
+        $query = Order::with(['orderProducts', 'shippingAddress'])->orderBy('id', 'desc');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -58,7 +58,14 @@ class OrdersController extends Controller
 
     public function viewOrder($id)
     {
-        $order = Order::with(['billingAddress', 'orderProducts'], 'items.product')->findOrFail($id);
+        $order = Order::with([
+            'billingAddress.country',
+            'billingAddress.zone',
+            'shippingAddress.country',
+            'shippingAddress.zone',
+            'orderProducts.product',
+            'orderProducts.size'
+        ])->findOrFail($id);
          
       
 

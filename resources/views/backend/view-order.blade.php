@@ -16,14 +16,6 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-md-6">
-                                <h6 class="mb-3">Customer Information</h6>
-                                <p><strong>Name:</strong>
-                                    {{ $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name }}</p>
-                                <p><strong>Email:</strong> {{ $order->billingAddress->email ?? 'N/A' }}</p>
-                                <p><strong>Phone:</strong> {{ $order->billingAddress->mobile_number ?? 'N/A' }}</p>
-                            </div>
-
-                            <div class="col-md-6">
                                 <h6 class="mb-3">Order Summary</h6>
                                 <p><strong>Status:</strong> <span
                                         class="badge bg-gradient-secondary">{{ ucfirst($order->status) }}</span></p>
@@ -31,7 +23,77 @@
                                         class="badge bg-gradient-{{ $order->payment_status == 'paid' ? 'success' : 'warning' }}">{{ ucfirst($order->payment_status) }}</span>
                                 </p>
                                 <p><strong>Total:</strong> {{app_currency()}} {{ number_format($order->total_amount, 2) }}</p>
+                                <p><strong>Subtotal:</strong> {{app_currency()}} {{ number_format($order->subtotal, 2) }}</p>
+                                <p><strong>Delivery Fee:</strong> {{app_currency()}} {{ number_format($order->delivery_fee, 2) }}</p>
                                 <p><strong>Placed on:</strong> {{ $order->created_at->format('Y-m-d H:i') }}</p>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Billing Address</h6>
+                                @if ($order->billingAddress)
+                                    <div class="text-sm">
+                                        <p><strong>{{ $order->billingAddress->first_name }} {{ $order->billingAddress->last_name }}</strong></p>
+                                        <p>{{ $order->billingAddress->address_line_1 ?? '—' }}</p>
+                                        @if (!empty($order->billingAddress->address_line_2))
+                                            <p>{{ $order->billingAddress->address_line_2 }}</p>
+                                        @endif
+                                        <p>
+                                            @if (!empty($order->billingAddress->city))
+                                                {{ $order->billingAddress->city }}
+                                            @endif
+                                            @if (!empty($order->billingAddress->county))
+                                                , {{ $order->billingAddress->county }}
+                                            @endif
+                                            @if (!empty($order->billingAddress->postcode))
+                                                , {{ $order->billingAddress->postcode }}
+                                            @endif
+                                        </p>
+                                        <p>{{ optional($order->billingAddress->country)->name ?? 'N/A' }}</p>
+                                        @if ($order->billingAddress->zone)
+                                            <p>{{ $order->billingAddress->zone->zone_name ?? '' }}</p>
+                                        @endif
+                                        <p><strong>Email:</strong> {{ $order->billingAddress->email ?? 'N/A' }}</p>
+                                        <p><strong>Phone:</strong> {{ $order->billingAddress->mobile_number ?? 'N/A' }}</p>
+                                    </div>
+                                @else
+                                    <p class="text-muted">Billing address not available.</p>
+                                @endif
+                            </div>
+
+                            <div class="col-md-6">
+                                <h6 class="mb-3">Shipping Address</h6>
+                                @if ($order->shippingAddress)
+                                    <div class="text-sm">
+                                        <p><strong>{{ $order->shippingAddress->first_name }} {{ $order->shippingAddress->last_name }}</strong></p>
+                                        <p>{{ $order->shippingAddress->address_line_1 ?? '—' }}</p>
+                                        @if (!empty($order->shippingAddress->address_line_2))
+                                            <p>{{ $order->shippingAddress->address_line_2 }}</p>
+                                        @endif
+                                        <p>
+                                            @if (!empty($order->shippingAddress->city))
+                                                {{ $order->shippingAddress->city }}
+                                            @endif
+                                            @if (!empty($order->shippingAddress->county))
+                                                , {{ $order->shippingAddress->county }}
+                                            @endif
+                                            @if (!empty($order->shippingAddress->postcode))
+                                                , {{ $order->shippingAddress->postcode }}
+                                            @endif
+                                        </p>
+                                        <p>{{ optional($order->shippingAddress->country)->name ?? 'N/A' }}</p>
+                                        @if ($order->shippingAddress->zone)
+                                            <p>{{ $order->shippingAddress->zone->zone_name ?? '' }}</p>
+                                        @endif
+                                        <p><strong>Email:</strong> {{ $order->shippingAddress->email ?? 'N/A' }}</p>
+                                        <p><strong>Phone:</strong> {{ $order->shippingAddress->mobile_number ?? 'N/A' }}</p>
+                                    </div>
+                                @else
+                                    <p class="text-muted">Shipping address not available. Using billing address.</p>
+                                @endif
                             </div>
                         </div>
 
