@@ -7,6 +7,7 @@ use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class OrdersController extends Controller
 {
@@ -19,6 +20,8 @@ class OrdersController extends Controller
         $status = $request->input('status');
         $paymentStatus = $request->input('payment_status');
         $date = $request->input('date');
+        $dateFrom = $request->input('date_from');
+        $dateTo = $request->input('date_to');
 
 
         $query = Order::with(['orderProducts', 'shippingAddress'])->orderBy('id', 'desc');
@@ -40,7 +43,18 @@ class OrdersController extends Controller
             $query->where('payment_status', $paymentStatus);
         }
 
-        if ($date) {
+        // Support date range (from/to takes precedence over single date)
+        if ($dateFrom && $dateTo) {
+            $query->whereBetween('created_at', [
+                $dateFrom . ' 00:00:00',
+                $dateTo . ' 23:59:59'
+            ]);
+        } elseif ($dateFrom) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        } elseif ($dateTo) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        } elseif ($date) {
+            // Legacy support for single date filter
             $query->whereDate('created_at', $date);
         }
 
@@ -88,36 +102,42 @@ class OrdersController extends Controller
         // $order = Order::findOrFail($request->id);
         $order = Order::with('billingAddress')->where('id', '=', $request->id)->first();
 
+        $oldStatus = $order->status;
         $order->status = $request->status;
         $order->save();
-        // Optional: notify customer via email
-        // if ($order->customer && $order->customer->email) {
-        //     Mail::raw("Your order #{$order->order_number} status has been updated to: {$order->status}.", function ($message) use ($order) {
-        //         $message->to($order->customer->email)
-        //             ->subject("Order Status Updated");
-        //     });
-        // }
 
-        // Optional notification
-        if ($request->has('notify_user')) {
-            // Example: send email or SMS (you can expand this)
+        // Automatically send email when order is marked as completed
+        // Also send if checkbox is checked for other status changes
+        $shouldSendEmail = false;
+        $emailReason = '';
+
+        if ($request->status === 'completed' && $oldStatus !== 'completed') {
+            // Automatically send email when status changes to completed
+            $shouldSendEmail = true;
+            $emailReason = 'Order marked as completed';
+        } elseif ($request->has('notify_user')) {
+            // Send email if checkbox is checked for other status changes
+            $shouldSendEmail = true;
+            $emailReason = 'Admin requested notification';
+        }
+
+        if ($shouldSendEmail) {
             try {
-                // $user = $order->customer;
-
-                if ( $order->billingAddress->email) {
-
-                     $data = [
-                        'customer_name' => $order->billingAddress->first_name . ' '. $order->billingAddress->last_name,
+                // Check if billing address exists and has email
+                if ($order->billingAddress && $order->billingAddress->email) {
+                    $data = [
+                        'customer_name' => $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name,
                         'order_id' => $order->order_number,
                         'status' => $request->status,
                     ];
 
                     Mail::to($order->billingAddress->email)->queue(new DeliveryMail($data));
+                    Log::info("Delivery email sent for order #{$order->order_number}. Reason: {$emailReason}");
+                } else {
+                    Log::warning("Cannot send delivery email for order #{$order->order_number}: No billing address or email found");
                 }
-
-                // You can add SMS logic here too if you have an SMS provider integrated.
             } catch (\Exception $e) {
-                \Log::error('Failed to notify customer: ' . $e->getMessage());
+                Log::error('Failed to notify customer for order #' . $order->order_number . ': ' . $e->getMessage());
             }
         }
         return redirect()->route('admin.orders')->with('success', 'Order updated successfully.');

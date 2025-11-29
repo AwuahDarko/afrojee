@@ -66,10 +66,30 @@
                                 </option>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <input type="date" name="date" value="{{ request('date') }}" class="form-control">
+                        <div class="col-md-5">
+                            <div class="row g-2">
+                                <div class="col-md-12 mb-2">
+                                    <select id="quickDateFilter" class="form-select form-select-sm">
+                                        <option value="">Quick Date Filters</option>
+                                        <option value="last_month">Last Month</option>
+                                        <option value="1_week">1 Week Ago</option>
+                                        <option value="2_weeks">2 Weeks Ago</option>
+                                        <option value="custom">Custom Range</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6" id="dateFromWrapper" style="display: none;">
+                                    <label class="form-label small mb-0">From</label>
+                                    <input type="date" name="date_from" id="dateFrom" value="{{ request('date_from') }}" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-6" id="dateToWrapper" style="display: none;">
+                                    <label class="form-label small mb-0">To</label>
+                                    <input type="date" name="date_to" id="dateTo" value="{{ request('date_to') }}" class="form-control form-control-sm">
+                                </div>
+                                <!-- Legacy single date field (hidden, kept for compatibility) -->
+                                <input type="hidden" name="date" value="{{ request('date') }}">
+                            </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <button class="btn btn-dark w-100" type="submit">Filter</button>
                         </div>
                     </div>
@@ -244,4 +264,109 @@
         </div>
     @endforeach
 
+@endsection
+
+@section('script')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quickDateFilter = document.getElementById('quickDateFilter');
+    const dateFromWrapper = document.getElementById('dateFromWrapper');
+    const dateToWrapper = document.getElementById('dateToWrapper');
+    const dateFrom = document.getElementById('dateFrom');
+    const dateTo = document.getElementById('dateTo');
+    
+    // Show date inputs if custom dates are already set
+    if (dateFrom.value || dateTo.value) {
+        dateFromWrapper.style.display = 'block';
+        dateToWrapper.style.display = 'block';
+        quickDateFilter.value = 'custom';
+    }
+    
+    quickDateFilter.addEventListener('change', function() {
+        const today = new Date();
+        let fromDate = '';
+        let toDate = '';
+        
+        // Clear previous values
+        dateFrom.value = '';
+        dateTo.value = '';
+        dateFromWrapper.style.display = 'none';
+        dateToWrapper.style.display = 'none';
+        
+        switch(this.value) {
+            case 'last_month':
+                // First day of last month
+                const firstDayLastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+                // Last day of last month
+                const lastDayLastMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                fromDate = formatDate(firstDayLastMonth);
+                toDate = formatDate(lastDayLastMonth);
+                dateFrom.value = fromDate;
+                dateTo.value = toDate;
+                dateFromWrapper.style.display = 'block';
+                dateToWrapper.style.display = 'block';
+                break;
+                
+            case '1_week':
+                // 1 week ago (7 days)
+                const oneWeekAgo = new Date(today);
+                oneWeekAgo.setDate(today.getDate() - 7);
+                fromDate = formatDate(oneWeekAgo);
+                toDate = formatDate(today);
+                dateFrom.value = fromDate;
+                dateTo.value = toDate;
+                dateFromWrapper.style.display = 'block';
+                dateToWrapper.style.display = 'block';
+                break;
+                
+            case '2_weeks':
+                // 2 weeks ago (14 days)
+                const twoWeeksAgo = new Date(today);
+                twoWeeksAgo.setDate(today.getDate() - 14);
+                fromDate = formatDate(twoWeeksAgo);
+                toDate = formatDate(today);
+                dateFrom.value = fromDate;
+                dateTo.value = toDate;
+                dateFromWrapper.style.display = 'block';
+                dateToWrapper.style.display = 'block';
+                break;
+                
+            case 'custom':
+                // Show date inputs for custom range
+                dateFromWrapper.style.display = 'block';
+                dateToWrapper.style.display = 'block';
+                break;
+                
+            default:
+                // Clear everything
+                dateFromWrapper.style.display = 'none';
+                dateToWrapper.style.display = 'none';
+        }
+    });
+    
+    // Show custom inputs when user manually changes dates
+    dateFrom.addEventListener('change', function() {
+        if (this.value && quickDateFilter.value !== 'custom') {
+            quickDateFilter.value = 'custom';
+            dateFromWrapper.style.display = 'block';
+            dateToWrapper.style.display = 'block';
+        }
+    });
+    
+    dateTo.addEventListener('change', function() {
+        if (this.value && quickDateFilter.value !== 'custom') {
+            quickDateFilter.value = 'custom';
+            dateFromWrapper.style.display = 'block';
+            dateToWrapper.style.display = 'block';
+        }
+    });
+    
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+});
+</script>
 @endsection
