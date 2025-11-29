@@ -284,7 +284,7 @@ class OrderController extends Controller
         if ($size_id) {
             $size = $product->sizes->firstWhere('id', $size_id);
             if ($size) {
-                $price = $size->price;  // NEW: Use size price
+                $price = $product->getPriceForSize($size_id);  // Apply discount to size price
             }
         }
 
@@ -421,7 +421,7 @@ class OrderController extends Controller
                     if (property_exists($prod, 'sizeId') && $prod->sizeId) {
                         $size = $product->sizes->firstWhere('id', $prod->sizeId);
                         if ($size) {
-                            $price = $size->price;  // NEW: Use size price
+                            $price = $product->getPriceForSize($prod->sizeId);  // Apply discount to size price
                         }
                     }
 
@@ -491,7 +491,7 @@ class OrderController extends Controller
                     if (property_exists($prod, 'sizeId') && $prod->sizeId) {
                         $size = $product->sizes->firstWhere('id', $prod->sizeId);
                         if ($size) {
-                            $price = $size->price;  // NEW: Use size price
+                            $price = $product->getPriceForSize($prod->sizeId);  // Apply discount to size price
                         }
                     }
 

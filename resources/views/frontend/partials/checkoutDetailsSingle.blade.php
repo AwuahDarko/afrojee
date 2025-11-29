@@ -274,7 +274,10 @@
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                         <span class="text-gray-600 text-sm sm:text-base font-medium">Subtotal</span>
                         <span class="font-bold text-gray-900 text-base sm:text-lg">
-                             {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }} {{app_currency()}}
+                             @php
+                                 $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
+                             @endphp
+                             {{ number_format($unitPrice * $quantity, 2) }} {{app_currency()}}
                         </span>
                     </div>
                     
@@ -297,7 +300,10 @@
                     <div class="flex justify-between items-center pt-4 pb-2">
                         <span class="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
                         <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent">
-                             {{ number_format(($selectedSize ? $selectedSize->price : $product->getPrice()) * $quantity, 2) }} {{app_currency()}}
+                             @php
+                                 $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
+                             @endphp
+                             {{ number_format($unitPrice * $quantity, 2) }} {{app_currency()}}
                         </span>
                     </div>
                 </div>

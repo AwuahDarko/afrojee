@@ -4,11 +4,48 @@
         'quantity' => 1,
         'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0,
     ]);
+    
+    // Prepare discount information
+    $activePromo = $product->getActivePromo();
+    $hasDiscount = $product->hasDiscount();
+    $discountType = null;
+    $discountValue = null;
+    
+    if ($hasDiscount && $activePromo) {
+        $discountType = $activePromo->discount_type;
+        $discountValue = (float) $activePromo->discount;
+    }
+    
+    // Prepare sizes data with original and discounted prices
+    $sizesData = [];
+    if ($product->sizes->isNotEmpty()) {
+        foreach ($product->sizes as $size) {
+            $originalPrice = (float) $size->price;
+            $discountedPrice = $product->applyDiscount($originalPrice);
+            $sizesData[] = [
+                'id' => $size->id,
+                'size' => $size->size,
+                'originalPrice' => $originalPrice,
+                'discountedPrice' => $discountedPrice,
+                'hasDiscount' => $hasDiscount && ($originalPrice != $discountedPrice)
+            ];
+        }
+    }
 @endphp
 <script>
     const checkoutRoute = @json($checkoutUrl);
-
     const productReviews = @json($product->reviews);
+    
+    // Discount information
+    const productDiscount = {
+        hasDiscount: @json($hasDiscount),
+        discountType: @json($discountType),
+        discountValue: @json($discountValue)
+    };
+    
+    // Sizes data with prices
+    const productSizes = @json($sizesData);
+    const currency = @json(app_currency());
 
 </script>
 <script src="{{ asset('js/productDetail.js') }}"></script>
@@ -104,15 +141,18 @@
                     <!-- Sale Badge -->
                     @if($product->getPrice() != $product->getOriginalPrice())
                         <span class="inline-block px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
-                            Sale
+                            Discount Sale
                         </span>
                     @endif
 
                     <!-- Pricing -->
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-3" id="pricing-container">
+                        <!-- <span class="text-gray-400 line-through text-xl " id="original-price-display">
+                             {{ number_format($product->getOriginalPrice(), 2) }} {{ app_currency() }}
+                        </span> -->
                         @if($product->getPrice() != $product->getOriginalPrice())
-                            <span class="text-gray-400 line-through text-xl">
-                                 {{ number_format($product->getOriginalPrice(), 2) }} {{ app_currency() }}
+                            <span class="text-gray-400 line-through text-xl " id="original-price-display">
+                                {{ number_format($product->getOriginalPrice(), 2) }} {{ app_currency() }}
                             </span>
                         @endif
                         <span class="text-3xl font-bold text-gray-900" id="display-price">
@@ -150,9 +190,15 @@
                             </div>
                             <div class="flex gap-2">
                                 @foreach($product->sizes as $size)
+                                    @php
+                                        $originalPrice = (float) $size->price;
+                                        $discountedPrice = $product->applyDiscount($originalPrice);
+                                    @endphp
                                     <button type="button"
-                                        onclick="selectSize('{{ $size->id }}', '{{ $size->size }}', {{ $size->price }})"
+                                        onclick="selectSize({{ $size->id }}, '{{ $size->size }}', {{ $originalPrice }}, {{ $discountedPrice }})"
                                         data-size-id="{{ $size->id }}"
+                                        data-original-price="{{ $originalPrice }}"
+                                        data-discounted-price="{{ $discountedPrice }}"
                                         class="size-btn px-6 py-3 border-2 rounded-lg font-medium transition {{ $loop->first ? 'border-gray-900 bg-gray-900 text-white' : 'border-gray-300 hover:border-gray-400' }}">
                                         {{ $size->size }}
                                     </button>
@@ -961,29 +1007,104 @@
 
         // Size Selection
         let selectedSizeId = {{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0 }};
-        function selectSize(sizeId, sizeName, price) {
+        
+        function selectSize(sizeId, sizeName, originalPrice, discountedPrice) {
             selectedSizeId = sizeId;
-            console.log('Selected Size ID:', selectedSizeId);
+            
+            // Update selected size display
             document.getElementById('selected-size-display').textContent = sizeName;
-            document.getElementById('display-price').textContent = '{{ app_currency() }} ' + price.toFixed(2);
+            
+            // Update pricing display
+            const displayPriceEl = document.getElementById('display-price');
+            const originalPriceEl = document.getElementById('original-price-display');
+            const saleBadge = document.getElementById('sale-badge');
+            
+            // Format prices
+            const originalPriceFormatted = originalPrice.toFixed(2);
+            const discountedPriceFormatted = discountedPrice.toFixed(2);
+            
+            // Check if discount applies
+            const hasDiscount = originalPrice !== discountedPrice;
+            
+            if (hasDiscount) {
+                // Show original price (slashed) and discounted price
+                originalPriceEl.textContent = currency + ' ' + originalPriceFormatted;
+                originalPriceEl.classList.remove('hidden');
+                displayPriceEl.textContent = currency + ' ' + discountedPriceFormatted;
+                
+                // Show sale badge
+                if (saleBadge) {
+                    saleBadge.classList.remove('hidden');
+                }
+            } else {
+                // Only show original price
+                displayPriceEl.textContent = currency + ' ' + originalPriceFormatted;
+                originalPriceEl.classList.add('hidden');
+                
+                // Hide sale badge
+                if (saleBadge) {
+                    saleBadge.classList.add('hidden');
+                }
+            }
 
             // Update size buttons
             document.querySelectorAll('.size-btn').forEach(btn => {
                 btn.classList.remove('border-gray-900', 'bg-gray-900', 'text-white');
                 btn.classList.add('border-gray-300');
             });
-            event.currentTarget.classList.remove('border-gray-300');
-            event.currentTarget.classList.add('border-gray-900', 'bg-gray-900', 'text-white');
+            
+            // Find and update the clicked button
+            const clickedButton = document.querySelector(`[data-size-id="${sizeId}"]`);
+            if (clickedButton) {
+                clickedButton.classList.remove('border-gray-300');
+                clickedButton.classList.add('border-gray-900', 'bg-gray-900', 'text-white');
+            }
 
-            // Update cart button data
-            document.querySelector('.cart-item-btn').dataset.sizeId = sizeId;
-            document.querySelector('.cart-item-btn').dataset.productPrice = price;
+            // Update cart button data - use discounted price for cart
+            const cartButton = document.querySelector('.cart-item-btn');
+            if (cartButton) {
+                cartButton.dataset.sizeId = sizeId;
+                cartButton.dataset.productPrice = discountedPriceFormatted;
+            }
 
             // Update buy now link
             const quantity = document.getElementById('quantity').value;
             const buyNowLink = document.getElementById('buy-now-link');
-            buyNowLink.href = checkoutRoute.replace('/1/', `/${quantity}/`).replace(/\/\d+$/, `/${sizeId}`);
+            if (buyNowLink) {
+                buyNowLink.href = checkoutRoute.replace('/1/', `/${quantity}/`).replace(/\/\d+$/, `/${sizeId}`);
+            }
         }
+        
+        // Initialize pricing on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get first size data or use product data
+            @if($product->sizes->isNotEmpty())
+                const firstSize = productSizes[0];
+                if (firstSize) {
+                    // Update pricing display for initial size
+                    const displayPriceEl = document.getElementById('display-price');
+                    const originalPriceEl = document.getElementById('original-price-display');
+                    const saleBadge = document.getElementById('sale-badge');
+                    
+                    if (firstSize.hasDiscount) {
+                        originalPriceEl.textContent = currency + ' ' + firstSize.originalPrice.toFixed(2);
+                        originalPriceEl.classList.remove('hidden');
+                        displayPriceEl.textContent = currency + ' ' + firstSize.discountedPrice.toFixed(2);
+                        if (saleBadge) saleBadge.classList.remove('hidden');
+                    } else {
+                        displayPriceEl.textContent = currency + ' ' + firstSize.originalPrice.toFixed(2);
+                        originalPriceEl.classList.add('hidden');
+                        if (saleBadge) saleBadge.classList.add('hidden');
+                    }
+                    
+                    // Update cart button with discounted price
+                    const cartButton = document.querySelector('.cart-item-btn');
+                    if (cartButton) {
+                        cartButton.dataset.productPrice = firstSize.discountedPrice.toFixed(2);
+                    }
+                }
+            @endif
+        });
 
         // Quantity Controls
         document.getElementById('decrement').addEventListener('click', () => {

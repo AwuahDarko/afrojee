@@ -49,10 +49,13 @@ class Product extends Model
         return $this->status === 1;
     }
 
-    public function getPrice()
+    /**
+     * Get the active promo for this product (if any)
+     */
+    public function getActivePromo()
     {
         $now = Carbon::now();
-        $promoProduct = PromoProduct::where('product_id', '=', $this->id)
+        return PromoProduct::where('product_id', '=', $this->id)
             ->join('promos', 'promos.id', '=', 'promo_products.promo_id')
             ->where('promos.status', '=', 1)
             ->where('start_at', '<=', $now)
@@ -60,22 +63,57 @@ class Product extends Model
             ->orderBy('promo_products.id', 'desc')
             ->limit(1)
             ->first();
+    }
 
+    /**
+     * Check if product has an active discount
+     */
+    public function hasDiscount()
+    {
+        return $this->getActivePromo() !== null;
+    }
+
+    /**
+     * Apply discount to a given base price
+     */
+    public function applyDiscount($basePrice)
+    {
+        $promoProduct = $this->getActivePromo();
+        
+        if (!$promoProduct) {
+            return $basePrice;
+        }
+
+        if ($promoProduct->discount_type == 'fixed') {
+            return max(0, $basePrice - (float) $promoProduct->discount);
+        }
+
+        return $basePrice - ($promoProduct->discount / 100) * $basePrice;
+    }
+
+    /**
+     * Get the discounted price for a specific size
+     */
+    public function getPriceForSize($sizeId)
+    {
+        $size = $this->sizes()->find($sizeId);
+        
+        if (!$size) {
+            return $this->getPrice(); // fallback to default
+        }
+
+        return $this->applyDiscount($size->price);
+    }
+
+    public function getPrice()
+    {
         if ($this->sizes()->exists()) {
             $basePrice = $this->sizes()->first()->price;
         } else {
             $basePrice = $this->price;
         }
 
-        if (!$promoProduct) {
-            return $basePrice;
-        }
-
-        if ($promoProduct->discount_type == 'fixed') {
-            return $basePrice - (float) $promoProduct->discount;
-        }
-
-        return $basePrice - ($promoProduct->discount / 100) * $basePrice;
+        return $this->applyDiscount($basePrice);
     }
 
     public function getOriginalPrice()

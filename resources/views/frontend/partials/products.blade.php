@@ -266,6 +266,16 @@
                             <!-- Image Section -->
                             <figure class="gsp-product-card-image relative overflow-hidden mb-0"
                                 style="--aspect-ratio: 1/1;">
+                                <!-- Discount Badge -->
+                                @if($product->getPrice() != $product->getOriginalPrice())
+                                    @php
+                                        $discountAmount = $product->getOriginalPrice() - $product->getPrice();
+                                        $discountPercentage = $product->getOriginalPrice() > 0 ? ($discountAmount / $product->getOriginalPrice()) * 100 : 0;
+                                    @endphp
+                                    <span class="absolute top-3 left-3 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
+                                        -{{ number_format($discountPercentage, 0) }}%
+                                    </span>
+                                @endif
                                 <a href="{{ route('web.products.details', $product->slug) }}"
                                     class="gsp-product-featured block text-inherit img-hover-zoom-in {{ $product->images->count() > 1 ? 'has_second_image' : '' }}"
                                     title="{{ $product->name }}">
@@ -290,7 +300,7 @@
                                         class="cart-item-btn bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
                                         data-product-id="{{ $product->id }}"
                                         data-product-name="{{ $product->name }}"
-                                        data-product-price="{{ $product->price }}"
+                                        data-product-price="{{ $product->getPrice() }}"
                                         data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
                                         data-size-id="0"
                                         title="Add to Cart">
@@ -323,20 +333,20 @@
                             <!-- Card Body -->
                             <div class="card-body p-4">
                                 <!-- Price -->
-                                <div class="gsp-product-price gsp-product-card-price flex items-center text-sm mb-2 {{ $product->compare_at_price ? 'gsp-price-on-sale' : '' }}">
-                                    @if ($product->compare_at_price)
+                                <div class="gsp-product-price gsp-product-card-price flex items-center text-sm mb-2 {{ $product->getPrice() != $product->getOriginalPrice() ? 'gsp-price-on-sale' : '' }}">
+                                    @if ($product->getPrice() != $product->getOriginalPrice())
                                         <div class="gsp-product__price-sale">
                                             <span class="gsp-price-item-regular line-through text-stone-500 mr-2">
-                                                {{ number_format($product->compare_at_price, 2) }} {{ app_currency() }}
+                                                {{ number_format($product->getOriginalPrice(), 2) }} {{ app_currency() }}
                                             </span>
                                             <span class="gsp-price-item-sale font-semibold text-rose-500">
-                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
+                                                {{ number_format($product->getPrice(), 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @else
                                         <div class="gsp-product__price-regular">
                                             <span class="gsp-price-item-regular font-semibold text-stone-700">
-                                                {{ number_format($product->price, 2) }} {{ app_currency() }}
+                                                {{ number_format($product->getPrice(), 2) }} {{ app_currency() }}
                                             </span>
                                         </div>
                                     @endif
@@ -357,7 +367,7 @@
                                         class="cart-item-btn flex-1 bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
                                         data-product-id="{{ $product->id }}"
                                         data-product-name="{{ $product->name }}"
-                                        data-product-price="{{ $product->price }}"
+                                        data-product-price="{{ $product->getPrice() }}"
                                         data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
                                         data-size-id="0">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
