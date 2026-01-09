@@ -707,8 +707,42 @@ class CheckoutController extends Controller
                     'payment_method' => $paymentMethod,
                 ];
 
+                // Send payment confirmation email to admin
+                $adminEmail = config('app.admin_email');
+                if ($adminEmail) {
+                    try {
+                        Mail::to($adminEmail)->send(new PaymentMail($data));
+                        Log::info('Payment confirmation email sent to admin for order #' . $order->order_number . ' with mail: ' . $adminEmail);
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send payment confirmation email: ' . $e->getMessage());
+                        // Fallback to queue
+                        Mail::to($adminEmail)->queue(new PaymentMail($data));
+                    }
+                }
 
-                Mail::to(env('ADMIN_EMAIL'))->queue(new PaymentMail($data));
+                // Send order notification email to admin (when payment is confirmed)
+                $orderData = [
+                    'customer_name' => $name,
+                    'customer_email' => $email,
+                    'order_id' => $order->order_number,
+                    'total' => number_format($session->amount_total / 100, 2),
+                    'estimated_delivery_date' => '2025-07-05',
+                    'order_time' => date('Y-m-d H:i:s')
+                ];
+
+                if ($adminEmail) {
+                    try {
+                        Mail::to($adminEmail)->send(new \App\Mail\OrderMail($orderData));
+                        // add actual mail to the logs
+                        Log::info('Order notification email sent to admin for order #' . $order->order_number . ' with mail: ' . $adminEmail);
+                    } catch (\Exception $e) {
+                        Log::error('Failed to send order notification email: ' . $e->getMessage());
+                        // Fallback to queue
+                        Mail::to($adminEmail)->queue(new \App\Mail\OrderMail($orderData));
+                    }
+                }
+
+                // Send receipt to customer
                 Mail::to($email)->queue(new ReceiptMail($data2));
 
 
@@ -834,9 +868,37 @@ class CheckoutController extends Controller
             ]
         );
 
-        $order = Order::find($orderId);
-        $order->payment_status = 'paid';
-        $order->save();
+        $order = Order::with('billingAddress')->find($orderId);
+        if ($order) {
+            $order->payment_status = 'paid';
+            $order->save();
+
+            // Send order notification email to admin when payment is confirmed via webhook
+            $adminEmail = config('app.admin_email');
+            if ($adminEmail && $order->billingAddress) {
+                try {
+                    $orderData = [
+                        'customer_name' => $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name,
+                        'customer_email' => $order->billingAddress->email,
+                        'order_id' => $order->order_number,
+                        'total' => number_format($session['amount_total'] / 100, 2),
+                        'estimated_delivery_date' => '2025-07-05',
+                        'order_time' => date('Y-m-d H:i:s')
+                    ];
+
+                    Mail::to($adminEmail)->send(new \App\Mail\OrderMail($orderData));
+                    Log::info('Order notification email sent to admin via webhook for order #' . $order->order_number);
+                } catch (\Exception $e) {
+                    Log::error('Failed to send order notification email via webhook: ' . $e->getMessage());
+                    // Fallback to queue
+                    try {
+                        Mail::to($adminEmail)->queue(new \App\Mail\OrderMail($orderData));
+                    } catch (\Exception $queueException) {
+                        Log::error('Failed to queue order notification email via webhook: ' . $queueException->getMessage());
+                    }
+                }
+            }
+        }
     }
 
     private function handleFailedPayment($session)

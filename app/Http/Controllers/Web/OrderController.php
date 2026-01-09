@@ -15,6 +15,7 @@ use Stripe\Stripe;
 use Stripe\Webhook;
 use Stripe\Checkout\Session as StripeSession;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\OrderMail;
 
 class OrderController extends Controller
@@ -54,6 +55,48 @@ class OrderController extends Controller
             'billingAddress' => $billingAddress,
             'shippingAddress' => $shippingAddress,
         ]);
+    }
+
+    /**
+     * Send order notification email to admin
+     * 
+     * @param Order $order
+     * @param Address $address
+     * @param float $grand_total
+     * @return void
+     */
+    private function sendOrderNotification($order, $address, $grand_total)
+    {
+        $adminEmail = config('app.admin_email');
+        
+        if (!$adminEmail) {
+            Log::warning('ADMIN_EMAIL not configured. Order notification not sent for order #' . $order->order_number);
+            return;
+        }
+
+        try {
+            $data = [
+                'customer_name' => $address->first_name . ' ' . $address->last_name,
+                'customer_email' => $address->email,
+                'order_id' => $order->order_number,
+                'total' => number_format($grand_total, 2),
+                'estimated_delivery_date' => '2025-07-05',
+                'order_time' => date('Y-m-d H:i:s')
+            ];
+
+            // Use send() for immediate delivery instead of queue()
+            Mail::to($adminEmail)->send(new OrderMail($data));
+            Log::info('Order notification email sent to admin for order #' . $order->order_number . ' with mail: ' . $adminEmail);
+        } catch (\Exception $e) {
+            Log::error('Failed to send order notification email for order #' . $order->order_number . ': ' . $e->getMessage());
+            // Try to send via queue as fallback
+            try {
+                Mail::to($adminEmail)->queue(new OrderMail($data));
+                Log::info('Order notification email queued as fallback for order #' . $order->order_number);
+            } catch (\Exception $queueException) {
+                Log::error('Failed to queue order notification email for order #' . $order->order_number . ': ' . $queueException->getMessage());
+            }
+        }
     }
 
     /**
@@ -344,16 +387,8 @@ class OrderController extends Controller
 
         $address = Address::find($guestAddressId);
 
-        $data = [
-            'customer_name' => $address->first_name . ' ' . $address->last_name,
-            'customer_email' => $address->email,
-            'order_id' => $orderNo,
-            'total' => number_format($grand_total, 2),
-            'estimated_delivery_date' => '2025-07-05',
-            'order_time' => date('Y-m-d H:i:s')
-        ];
-
-        Mail::to(env('ADMIN_EMAIL'))->queue(new OrderMail($data));
+        // Send order notification email to admin
+        $this->sendOrderNotification($order, $address, $grand_total);
 
         $session = StripeSession::create(
             [
@@ -515,15 +550,8 @@ class OrderController extends Controller
 
         $address = Address::find($guestAddressId);
 
-        $data = [
-            'customer_name' => $address->first_name . ' ' . $address->last_name,
-            'customer_email' => $address->email,
-            'order_id' => $orderNo,
-            'total' => number_format($grand_total, 2),
-            'order_time' => date('Y-m-d H:i:s')
-        ];
-
-        Mail::to(env('ADMIN_EMAIL'))->queue(new OrderMail($data));
+        // Send order notification email to admin
+        $this->sendOrderNotification($order, $address, $grand_total);
 
         $session = StripeSession::create(
             [

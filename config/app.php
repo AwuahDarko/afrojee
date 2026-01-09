@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email
+    |--------------------------------------------------------------------------
+    |
+    | This email address will receive order notifications and other admin
+    | notifications from the application.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', 'admin@afrojee.com'),
+
 ];
