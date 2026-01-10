@@ -90,6 +90,28 @@ class CheckoutController extends Controller
     }
 
     /**
+     * Check if order qualifies for free shipping (Spain orders over €70)
+     * 
+     * @param Address|null $address
+     * @param float $discountedSubtotal
+     * @return bool
+     */
+    private function qualifiesForFreeShipping($address, $discountedSubtotal)
+    {
+        if (!$address || !$address->country) {
+            return false;
+        }
+
+        // Check if country is Spain (mainland, not islands)
+        $isSpain = strtolower(trim($address->country->name)) === 'spain';
+        
+        // Check if subtotal (after discount) is >= €70
+        $meetsMinimum = $discountedSubtotal >= 70.00;
+
+        return $isSpain && $meetsMinimum;
+    }
+
+    /**
      * Calculate shipping cost using tiered pricing model.
      * Sums up costs for each weight tier the order spans across.
      * 
@@ -444,12 +466,19 @@ class CheckoutController extends Controller
 
         // Check if customer is first-time (need email from request)
         $customerEmail = $request->input('email');
+        $address = null;
         if (!$customerEmail) {
             // Try to get from session address
             $guestAddressId = Session::get('guest_billing_address_id');
             if ($guestAddressId) {
-                $address = Address::find($guestAddressId);
+                $address = Address::with('country')->find($guestAddressId);
                 $customerEmail = $address ? $address->email : null;
+            }
+        } else {
+            // If email provided, try to get address from session
+            $guestAddressId = Session::get('guest_billing_address_id');
+            if ($guestAddressId) {
+                $address = Address::with('country')->find($guestAddressId);
             }
         }
 
@@ -461,6 +490,11 @@ class CheckoutController extends Controller
             $discountData = $this->calculateFirstOrderDiscount($total_price);
             $discountAmount = $discountData['discount_amount'];
             $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Check for free shipping (Spain orders over €70)
+        if ($this->qualifiesForFreeShipping($address, $discountedSubtotal)) {
+            $total_shipping = 0;
         }
 
         // Calculate grand total with discount
@@ -520,12 +554,19 @@ class CheckoutController extends Controller
 
         // Check if customer is first-time (need email from request or session)
         $customerEmail = $request->input('email');
+        $address = null;
         if (!$customerEmail) {
             // Try to get from session address
             $guestAddressId = Session::get('guest_billing_address_id');
             if ($guestAddressId) {
-                $address = Address::find($guestAddressId);
+                $address = Address::with('country')->find($guestAddressId);
                 $customerEmail = $address ? $address->email : null;
+            }
+        } else {
+            // If email provided, try to get address from session
+            $guestAddressId = Session::get('guest_billing_address_id');
+            if ($guestAddressId) {
+                $address = Address::with('country')->find($guestAddressId);
             }
         }
 
@@ -537,6 +578,11 @@ class CheckoutController extends Controller
             $discountData = $this->calculateFirstOrderDiscount($total_amount);
             $discountAmount = $discountData['discount_amount'];
             $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Check for free shipping (Spain orders over €70)
+        if ($this->qualifiesForFreeShipping($address, $discountedSubtotal)) {
+            $total_shipping = 0;
         }
 
         // Calculate grand total with discount

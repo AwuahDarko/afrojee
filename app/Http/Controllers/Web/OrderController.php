@@ -96,6 +96,28 @@ class OrderController extends Controller
     }
 
     /**
+     * Check if order qualifies for free shipping (Spain orders over €70)
+     * 
+     * @param Address|null $address
+     * @param float $discountedSubtotal
+     * @return bool
+     */
+    private function qualifiesForFreeShipping($address, $discountedSubtotal)
+    {
+        if (!$address || !$address->country) {
+            return false;
+        }
+
+        // Check if country is Spain (mainland, not islands)
+        $isSpain = strtolower(trim($address->country->name)) === 'spain';
+        
+        // Check if subtotal (after discount) is >= €70
+        $meetsMinimum = $discountedSubtotal >= 70.00;
+
+        return $isSpain && $meetsMinimum;
+    }
+
+    /**
      * Send order notification email to admin
      * 
      * @param Order $order
@@ -407,6 +429,11 @@ class OrderController extends Controller
 
         $delivery_fee = $rates->rate;
 
+        // Check for free shipping (Spain orders over €70)
+        if ($this->qualifiesForFreeShipping($address, $discountedSubtotal)) {
+            $delivery_fee = 0;
+        }
+
         // Calculate grand total with discount applied
         $grand_total = $delivery_fee + $discountedSubtotal;
 
@@ -564,6 +591,11 @@ class OrderController extends Controller
             $discountData = $this->calculateFirstOrderDiscount($total_amount);
             $discountAmount = $discountData['discount_amount'];
             $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Check for free shipping (Spain orders over €70)
+        if ($this->qualifiesForFreeShipping($address, $discountedSubtotal)) {
+            $delivery_fee = 0;
         }
 
         // Calculate grand total with discount applied
