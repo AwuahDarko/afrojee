@@ -25,7 +25,9 @@ class Order extends Model
         'total_weight',
         'status',
         'order_number',
-        'payment_status'
+        'payment_status',
+        'tracking_number',
+        'tracking_link'
         // Add other order specific fields here
     ];
 

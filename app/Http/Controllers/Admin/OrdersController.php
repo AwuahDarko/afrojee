@@ -93,6 +93,8 @@ class OrdersController extends Controller
         $validator = Validator::make($request->all(), [
             'id' => 'required|exists:orders,id',
             'status' => 'required|string',
+            'tracking_number' => 'nullable|string|max:255',
+            'tracking_link' => 'nullable|url|max:500',
         ]);
 
         if ($validator->fails()) {
@@ -104,6 +106,15 @@ class OrdersController extends Controller
 
         $oldStatus = $order->status;
         $order->status = $request->status;
+        
+        // Update tracking fields if provided
+        if ($request->has('tracking_number')) {
+            $order->tracking_number = $request->tracking_number;
+        }
+        if ($request->has('tracking_link')) {
+            $order->tracking_link = $request->tracking_link;
+        }
+        
         $order->save();
 
         // Automatically send email when order is marked as completed
@@ -129,6 +140,8 @@ class OrdersController extends Controller
                         'customer_name' => $order->billingAddress->first_name . ' ' . $order->billingAddress->last_name,
                         'order_id' => $order->order_number,
                         'status' => $request->status,
+                        'tracking_number' => $order->tracking_number,
+                        'tracking_link' => $order->tracking_link,
                     ];
 
                     Mail::to($order->billingAddress->email)->queue(new DeliveryMail($data));

@@ -40,21 +40,37 @@
                                 Hi <strong>{{ $data['customer_name'] }}</strong>,
                             </p>
                             <p style="font-size:16px; color:#666; margin:0 0 15px;">
-                                We’re excited to let you know that your order <strong>#{{ $data['order_id'] }}</strong>
+                                We're excited to let you know that your order <strong>#{{ $data['order_id'] }}</strong>
                                 is now
                                 <strong style="color:#ef380d;">{{ ucfirst($data['status']) }}</strong>.
                             </p>
 
-                            {{-- Optional estimated delivery --}}
-                            {{--
-                            <p style="font-size:16px; color:#666; margin:0 0 15px;">
-                                Estimated delivery: <strong>{{ $data['estimated_delivery_date'] }}</strong>
-                            </p>
-                            --}}
+                            @if(isset($data['tracking_number']) && $data['tracking_number'] || isset($data['tracking_link']) && $data['tracking_link'])
+                            <!-- Tracking Information -->
+                            <div style="background-color:#F8F7F4; border-radius:6px; padding:20px; margin:20px 0; border-left:4px solid #ef380d;">
+                                <p style="font-size:16px; color:#2E2E2E; margin:0 0 10px; font-weight:600;">
+                                    📦 Tracking Information
+                                </p>
+                                @if(isset($data['tracking_number']) && $data['tracking_number'])
+                                <p style="font-size:15px; color:#666; margin:0 0 8px;">
+                                    <strong>Tracking Number:</strong> {{ $data['tracking_number'] }}
+                                </p>
+                                @endif
+                                @if(isset($data['tracking_link']) && $data['tracking_link'])
+                                <p style="font-size:15px; color:#666; margin:0 0 10px;">
+                                    <strong>Track Your Package:</strong>
+                                </p>
+                                <a href="{{ $data['tracking_link'] }}" 
+                                    style="display:inline-block; background-color:#ef380d; color:#ffffff; padding:12px 24px; text-decoration:none; border-radius:6px; font-size:15px; font-weight:500; margin-top:8px;">
+                                    Click Here to Track
+                                </a>
+                                @endif
+                            </div>
+                            @endif
 
                             <p style="font-size:16px; color:#666; margin:0 0 20px;">
-                                You’ll receive another update once your package has been delivered. We appreciate your
-                                patience and can’t wait for you to enjoy your Afro Jee products!
+                                You'll receive another update once your package has been delivered. We appreciate your
+                                patience and can't wait for you to enjoy your Afro Jee products!
                             </p>
 
                             <p style="font-size:16px; color:#2E2E2E; margin:0;">

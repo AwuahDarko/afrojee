@@ -229,7 +229,7 @@
                         <div class="modal-body">
                             <div class="form-group mb-3">
                                 <label for="status" class="form-label">Order Status</label>
-                                <select class="form-select" name="status" required>
+                                <select class="form-select" name="status" id="status{{ $order->id }}" required>
                                     <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending
                                     </option>
                                     <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>
@@ -242,6 +242,27 @@
                                         Cancelled
                                     </option>
                                 </select>
+                            </div>
+
+                            <!-- Tracking Fields (shown when status is completed or changing to completed) -->
+                            <div id="trackingFields{{ $order->id }}" class="{{ $order->status == 'completed' ? '' : 'd-none' }}">
+                                <div class="form-group mb-3">
+                                    <label for="tracking_number{{ $order->id }}" class="form-label">Tracking Number</label>
+                                    <input type="text" class="form-control" name="tracking_number" 
+                                        id="tracking_number{{ $order->id }}" 
+                                        placeholder="e.g., TIPSA123456789"
+                                        value="{{ old('tracking_number', $order->tracking_number ?? '') }}">
+                                    <small class="form-text text-muted">Enter the tracking number provided by your courier</small>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="tracking_link{{ $order->id }}" class="form-label">Tracking Link</label>
+                                    <input type="url" class="form-control" name="tracking_link" 
+                                        id="tracking_link{{ $order->id }}" 
+                                        placeholder="https://tipsa.com/track/..."
+                                        value="{{ old('tracking_link', $order->tracking_link ?? '') }}">
+                                    <small class="form-text text-muted">Paste the full tracking URL (e.g., from TIPSA)</small>
+                                </div>
                             </div>
 
                             <div class="form-check">
@@ -367,6 +388,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const day = String(date.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-});
+    });
+
+    // Show/hide tracking fields based on status selection
+    @foreach($orders as $order)
+        (function() {
+            const statusSelect{{ $order->id }} = document.getElementById('status{{ $order->id }}');
+            const trackingFields{{ $order->id }} = document.getElementById('trackingFields{{ $order->id }}');
+            
+            if (statusSelect{{ $order->id }} && trackingFields{{ $order->id }}) {
+                // Check initial state
+                if (statusSelect{{ $order->id }}.value === 'completed') {
+                    trackingFields{{ $order->id }}.classList.remove('d-none');
+                }
+                
+                // Listen for changes
+                statusSelect{{ $order->id }}.addEventListener('change', function() {
+                    if (this.value === 'completed') {
+                        trackingFields{{ $order->id }}.classList.remove('d-none');
+                    } else {
+                        trackingFields{{ $order->id }}.classList.add('d-none');
+                    }
+                });
+            }
+        })();
+    @endforeach
 </script>
 @endsection
