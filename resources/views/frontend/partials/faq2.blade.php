@@ -288,3 +288,46 @@
     transform: rotate(0deg);
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const faqButtons = document.querySelectorAll('.faq-button');
+    
+    // Remove 'hidden' class from all FAQ content divs on load to enable transitions
+    // document.querySelectorAll('.faq-content').forEach(content => {
+    //   content.classList.remove('hidden');
+    // });
+    
+    faqButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const isExpanded = button.getAttribute('aria-expanded') === 'true';
+        // Find the content div - it's the next sibling of the button
+        const content = button.nextElementSibling;
+        
+        if (!content || !content.classList.contains('faq-content')) {
+          return;
+        }
+        
+        // Close all FAQ items
+        faqButtons.forEach(btn => {
+          if (btn !== button) {
+            btn.setAttribute('aria-expanded', 'false');
+            const otherContent = btn.nextElementSibling;
+            if (otherContent && otherContent.classList.contains('faq-content')) {
+              otherContent.classList.remove('active');
+            }
+          }
+        });
+        
+        // Toggle the clicked FAQ item
+        if (isExpanded) {
+          button.setAttribute('aria-expanded', 'false');
+          content.classList.remove('active');
+        } else {
+          button.setAttribute('aria-expanded', 'true');
+          content.classList.add('active');
+        }
+      });
+    });
+  });
+</script>

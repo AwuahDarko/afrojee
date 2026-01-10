@@ -1,5 +1,5 @@
 <section class="max-w-6xl mx-auto py-12">
-    <h1 class="text-4xl font-semibold text-gray-800 mb-8">Your Cart</h1>
+    <h1 class="text-4xl font-semibold text-gray-800 mb-8">{{ __('common.cart.title') }}</h1>
 
     <div class="grid md:grid-cols-3 gap-8">
         <div
@@ -35,7 +35,7 @@
                             ></span>
                             20.00
                         </p>
-                        <span class="mr-2 font-bold">Quantity</span>
+                        <span class="mr-2 font-bold">{{ __('common.cart.quantity') }}</span>
                         <button
                             class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
                         >
@@ -105,7 +105,7 @@
                             ></span>
                             20.00
                         </p>
-                        <span class="mr-2 font-bold">Quantity</span>
+                        <span class="mr-2 font-bold">{{ __('common.cart.quantity') }}</span>
                         <button
                             class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
                         >
@@ -175,7 +175,7 @@
                             ></span>
                             20.00
                         </p>
-                        <span class="mr-2 font-bold">Quantity</span>
+                        <span class="mr-2 font-bold">{{ __('common.cart.quantity') }}</span>
                         <button
                             class="quantity-minus px-2 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
                         >
@@ -221,7 +221,7 @@
         >
             <div class="flex justify-between items-center mb-4 p-5">
                 <p class="text-lg text-gray-700">
-                    Sub-total (<span id="cart-item-count">0</span> items)
+                    {{ __('common.cart.subtotal') }} (<span id="cart-item-count">0</span> {{ __('common.cart.items') }})
                 </p>
                 <p class="text-xl font-bold text-gray-900">
                     $ <span id="cart-subtotal">0.00</span>
@@ -230,7 +230,7 @@
             <button
                 class="bg-pink-800 hover:bg-pink-900 text-white px-16 py-3 rounded-full font-medium mr-4 ml-6 flex items-center justify-center gap-2 mb-6"
             >
-                Proceed to checkout
+                {{ __('common.checkout.proceed_to_checkout') }}
                 <svg
                     class="w-4 h-4"
                     fill="none"

@@ -1,30 +1,30 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-    Afrojee - Checkout
+    Afrojee - {{ __('common.checkout.title') }}
 @endsection
 
 @section('content')
     <section class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">Afrojee Checkout</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">{{ __('common.checkout.afrojee_checkout') }}</h1>
 
         {{-- Session messages --}}
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Success!</strong>
+                <strong class="font-bold">{{ __('common.message.success') }}</strong>
                 <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
         @if (session('error'))
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Error!</strong>
+                <strong class="font-bold">{{ __('common.message.error') }}</strong>
                 <span class="block sm:inline">{{ session('error') }}</span>
             </div>
         @endif
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Whoops!</strong>
-                <span class="block sm:inline">There were some problems with your input.</span>
+                <strong class="font-bold">{{ __('common.review_form.whoops') }}</strong>
+                <span class="block sm:inline">{{ __('common.message.problems_with_input') }}</span>
                 <ul class="mt-3 list-disc list-inside">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -112,7 +112,7 @@
                                             {{ __('common.checkout.province') }} <span class="text-red-500">*</span>
                                         </label>
                                         <input type="text" id="province" name="province"
-                                            placeholder="e.g., Barcelona, Madrid"
+                                            placeholder="{{ __('common.checkout.province_placeholder') }}"
                                             value="{{ old('province', $userAddress->province ?? '') }}"
                                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                                     </div>
@@ -121,7 +121,7 @@
                                             {{ __('common.checkout.city') }} <span class="text-red-500">*</span>
                                         </label>
                                         <input type="text" id="city" name="city"
-                                            placeholder="e.g., Barcelona, Madrid"
+                                            placeholder="{{ __('common.checkout.city_placeholder') }}"
                                             value="{{ old('city', $userAddress->city ?? '') }}"
                                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                                     </div>
@@ -131,7 +131,7 @@
                             <div>
                                 <label for="address_line_1" class="block text-gray-700 text-sm font-medium mb-1">{{ __('common.checkout.address_line_1') }}</label>
                                 <input type="text" id="address_line_1" name="address_line_1" required
-                                    placeholder="Enter your address"
+                                    placeholder="{{ __('common.checkout.enter_address') }}"
                                     value="{{ old('address_line_1', $userAddress->address_line_1 ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
@@ -139,14 +139,14 @@
                             <div>
                                 <label for="address_line_2" class="block text-gray-700 text-sm font-medium mb-1">{{ __('common.checkout.address_line_2') }}</label>
                                 <input type="text" id="address_line_2" name="address_line_2"
-                                    placeholder="Enter Street name (Optional)"
+                                    placeholder="{{ __('common.checkout.enter_street') }}"
                                     value="{{ old('address_line_2', $userAddress->address_line_2 ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
 
                             <div>
                                 <label for="postcode" class="block text-gray-700 text-sm font-medium mb-1">{{ __('common.checkout.postcode') }}</label>
-                                <input type="text" id="postcode" name="postcode" placeholder="Enter your postcode"
+                                <input type="text" id="postcode" name="postcode" placeholder="{{ __('common.checkout.enter_postcode') }}"
                                     required value="{{ old('postcode', $userAddress->postcode ?? '') }}"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
                             </div>
@@ -184,11 +184,11 @@
                 {{-- Shipping Method Selection --}}
                 @if ($userAddress)
                 <div class="bg-pink-100-light rounded-xl p-6 shadow-sm mb-8 hidden" id="shipping-method-section">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Shipping Method</h2>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ __('common.checkout.shipping_method') }}</h2>
                     <div id="shipping-methods-container" class="space-y-3">
-                        <p class="text-gray-600 text-sm">Select your preferred shipping method</p>
+                        <p class="text-gray-600 text-sm">{{ __('common.checkout.select_shipping_method') }}</p>
                         <div id="shipping-methods-loading" class="hidden text-center py-4">
-                            <span class="text-gray-500">Loading options...</span>
+                            <span class="text-gray-500">{{ __('common.checkout.loading_options') }}</span>
                         </div>
                         <div id="shipping-methods-list" class="space-y-2"></div>
                     </div>
@@ -288,7 +288,7 @@
                 <div id="checkout-summary" class="space-y-3">
                     <!-- Subtotal -->
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                        <span class="text-gray-600 text-sm sm:text-base font-medium">Subtotal</span>
+                        <span class="text-gray-600 text-sm sm:text-base font-medium">{{ __('common.cart.subtotal') }}</span>
                         <span class="font-bold text-gray-900 text-base sm:text-lg" id="subtotal-display">
                              @php
                                  $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
@@ -300,8 +300,8 @@
                     <!-- First Order Discount (will be shown/hidden by JS) -->
                     <div id="discount-row-single" class="flex justify-between items-center py-3 border-b border-gray-200 hidden">
                         <div class="flex items-center gap-2">
-                            <span class="text-gray-600 text-sm sm:text-base font-medium">First Order Discount (10%)</span>
-                            <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">SAVED</span>
+                            <span class="text-gray-600 text-sm sm:text-base font-medium">{{ __('common.checkout.discount') }}</span>
+                            <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">{{ __('common.checkout.saved') }}</span>
                         </div>
                         <span class="font-bold text-green-600 text-base sm:text-lg" id="discount-display-single">-0.00 {{app_currency()}}</span>
                     </div>
@@ -316,14 +316,14 @@
                             </div>
                         @else
                             <span class="text-xs sm:text-sm text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full font-semibold">
-                                Select address
+                                {{ __('common.checkout.select_address') }}
                             </span>
                         @endif
                     </div>
                     
                     <!-- Total -->
                     <div class="flex justify-between items-center pt-4 pb-2">
-                        <span class="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
+                        <span class="text-xl sm:text-2xl font-bold text-gray-900">{{ __('common.cart.total') }}</span>
                         <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent" id="total-display-single">
                              @php
                                  $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
@@ -345,7 +345,7 @@
                 <button @if (!$userAddress) disabled @endif type="submit"
                     class="group relative w-full bg-gradient-to-r from-pink-600 to-pink-700 hover:from-pink-700 hover:to-pink-800 disabled:from-gray-300 disabled:to-gray-400 text-white px-6 py-4 rounded-xl font-bold text-base sm:text-lg shadow-lg hover:shadow-xl disabled:shadow-none transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden active:scale-98">
                     <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity duration-300"></span>
-                    <span class="relative z-10">Proceed to Checkout</span>
+                    <span class="relative z-10">{{ __('common.checkout.proceed_to_checkout') }}</span>
                     <svg class="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                     </svg>
@@ -353,7 +353,7 @@
                 
                 @if (!$userAddress)
                     <p class="text-center text-xs sm:text-sm text-gray-500 mt-3">
-                        Please add a delivery address to continue
+                        {{ __('common.checkout.add_address_to_continue') }}
                     </p>
                 @endif
             </form>
@@ -378,45 +378,45 @@
             <form>
                 {{-- Form fields are intentionally left generic here as the primary editing is now inline --}}
                 <div class="space-y-4">
-                    <div><label class="block font-medium text-gray-700 mb-1">First Name</label><input type="text"
-                            placeholder="Enter first name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.first_name') }}</label><input type="text"
+                            placeholder="{{ __('common.checkout.enter_first_name') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
-                    <div><label class="block font-medium text-gray-700 mb-1">Last Name</label><input type="text"
-                            placeholder="Enter last name" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.last_name') }}</label><input type="text"
+                            placeholder="{{ __('common.checkout.enter_last_name') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
-                    <div><label class="block font-medium text-gray-700 mb-1">Mobile Number</label><input type="tel"
-                            placeholder="Enter mobile number" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.mobile_number') }}</label><input type="tel"
+                            placeholder="{{ __('common.checkout.enter_mobile') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
-                    <div><label class="block font-medium text-gray-700 mb-1">Country</label><select
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.country') }}</label><select
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                             <option>United States of America</option>
                         </select></div>
-                    <div><label class="block font-medium text-gray-700 mb-1">Address</label><input type="text"
-                            placeholder="Enter your address" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.address_line_1') }}</label><input type="text"
+                            placeholder="{{ __('common.checkout.enter_address') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
-                    <div><input type="text" placeholder="Enter Street name (Optional)"
+                    <div><input type="text" placeholder="{{ __('common.checkout.enter_street') }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block font-medium text-gray-700 mb-1">City</label><input type="text"
-                                placeholder="Enter the city you're from"
+                        <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.city') }}</label><input type="text"
+                                placeholder="{{ __('common.checkout.enter_city') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
-                        <div><label class="block font-medium text-gray-700 mb-1">County</label><input type="text"
-                                placeholder="Enter the county you're from"
+                        <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.region') }}</label><input type="text"
+                                placeholder="{{ __('common.checkout.enter_county') }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg"></div>
                     </div>
-                    <div><label class="block font-medium text-gray-700 mb-1">Postcode</label><input type="text"
-                            placeholder="Enter your postcode" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <div><label class="block font-medium text-gray-700 mb-1">{{ __('common.checkout.postcode') }}</label><input type="text"
+                            placeholder="{{ __('common.checkout.enter_postcode') }}" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
                     </div>
                 </div>
 
                 <div class="mt-8 space-y-4">
                     <button type="button"
                         class="bg-pink-800 hover:bg-pink-900 text-white w-full py-3 rounded-full font-medium">
-                        Use this address
+                        {{ __('common.checkout.use_this_address') }}
                     </button>
                     <button type="button"
                         class="border border-pink-800 text-pink-800 hover:bg-pink-50 w-full py-3 rounded-full font-medium">
-                        Save this address
+                        {{ __('common.checkout.save_this_address') }}
                     </button>
                 </div>
             </form>

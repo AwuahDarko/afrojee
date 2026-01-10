@@ -1,12 +1,12 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-    Afrojee - Cart
+    Afrojee - {{ __('common.cart.title') }}
 @endsection
 
 @section('content')
     <section class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8"> {{-- Added padding for mobile --}}
-        <h1 class="text-4xl font-semibold text-gray-800 mb-8 text-center md:text-left">Your Cart</h1>
+        <h1 class="text-4xl font-semibold text-gray-800 mb-8 text-center md:text-left">{{ __('common.cart.title') }}</h1>
 
         <div class="grid md:grid-cols-3 gap-8">
             {{-- Left Column: Dynamic Cart Items Display --}}
@@ -44,7 +44,7 @@
                                         </span>
                                         {{ number_format($item['price'], 2) }} {{app_currency()}}
                                     </p>
-                                    <span class="mr-2 font-bold mb-2 sm:mb-0">Quantity</span>
+                                    <span class="mr-2 font-bold mb-2 sm:mb-0">{{ __('common.cart.quantity') }}</span>
                                     <div class="flex items-center">
                                         <button
                                             class="quantity-minus px-3 py-1 border border-gray-300 rounded-full hover:bg-gray-100 transition duration-200"
@@ -75,7 +75,7 @@
                         </div>
                     @endforeach
                 @else
-                    <p class="text-gray-500 text-center py-8">Your cart is empty.</p>
+                    <p class="text-gray-500 text-center py-8">{{ __('common.cart.empty') }}</p>
                 @endif
             </div>
 
@@ -84,7 +84,7 @@
                 here --}}
                 <div class="flex justify-between items-center mb-4">
                     <p class="text-lg text-gray-700">
-                        Sub-total (<span id="cart-item-count">{{ $totalItemsInCart }}</span> items)
+                        {{ __('common.cart.subtotal') }} (<span id="cart-item-count">{{ $totalItemsInCart }}</span> {{ __('common.cart.items') }})
                     </p>
                     <p class="text-xl font-bold text-gray-900">
                         <span id="cart-subtotal">{{ number_format($subtotalBill, 2) }}</span> {{app_currency()}}
@@ -93,7 +93,7 @@
                 <button id="checkout-page-proceed-btn" {{-- Added ID for potential JS interaction if needed --}}
                     class="bg-pink-800 hover:bg-pink-900 text-white px-16 py-3 rounded-full font-medium w-full flex items-center justify-center gap-2 mb-6"
                     {{-- Adjusted classes for full width --}}>
-                    Proceed to checkout
+                    {{ __('common.checkout.proceed_to_checkout') }}
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -176,7 +176,7 @@
                 });
 
                 if (cartItemsData.length === 0) {
-                    alert('Your cart is empty. Please add items before proceeding to checkout.');
+                    alert('{{ __('common.cart.empty_checkout_message') }}');
                     return;
                 }
 
@@ -202,7 +202,7 @@
                 })
                 .catch(error => {
                     console.error('Error proceeding to checkout:', error);
-                    alert('An error occurred while preparing your checkout. Please try again.');
+                    alert('{{ __('common.cart.checkout_error') }}');
                 });
             });
         });
