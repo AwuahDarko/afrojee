@@ -15,31 +15,31 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
             <!-- About Us Column -->
             <div>
-                <h3 class="text-xl font-medium mb-4">About Us</h3>
+                <h3 class="text-xl font-medium mb-4">{{ __('common.footer.about_us') }}</h3>
                 <ul class="space-y-3">
-                    <li><a href="/about#our-mission" class="hover:underline">Our Mission</a></li>
-                    <li><a href="/about#our-vision" class="hover:underline">Our Vision</a></li>
-                    <li><a href="/about#our-coverage" class="hover:underline">Our Coverage</a></li>
+                    <li><a href="/about#our-mission" class="hover:underline">{{ __('common.footer.our_mission') }}</a></li>
+                    <li><a href="/about#our-vision" class="hover:underline">{{ __('common.footer.our_vision') }}</a></li>
+                    <li><a href="/about#our-coverage" class="hover:underline">{{ __('common.footer.our_coverage') }}</a></li>
                 </ul>
             </div>
 
             <!-- FAQs Column -->
             <div>
-                <h3 class="text-xl font-medium mb-4">FAQs</h3>
+                <h3 class="text-xl font-medium mb-4">{{ __('common.footer.faqs') }}</h3>
                 <ul class="space-y-3">
-                    <li><a href="{{ route('web.questions') }}#shipping-faq" class="hover:underline">Shipping & Delivery</a></li>
-                    <li><a href="{{ route('web.questions') }}#payment-faq" class="hover:underline">Payment Options</a></li>
-                    <li><a href="{{ route('web.questions') }}#products-faq" class="hover:underline">Products & Personalization</a></li>
-                    <li><a href="{{ route('web.questions') }}#shipping-returns-faq" class="hover:underline">Shipping & Returns</a></li>
+                    <li><a href="{{ route('web.questions') }}#shipping-faq" class="hover:underline">{{ __('common.footer.shipping_delivery') }}</a></li>
+                    <li><a href="{{ route('web.questions') }}#payment-faq" class="hover:underline">{{ __('common.footer.payment_options') }}</a></li>
+                    <li><a href="{{ route('web.questions') }}#products-faq" class="hover:underline">{{ __('common.footer.products_personalization') }}</a></li>
+                    <li><a href="{{ route('web.questions') }}#shipping-returns-faq" class="hover:underline">{{ __('common.footer.shipping_returns') }}</a></li>
                 </ul>
             </div>
 
             <!-- Terms & Conditions Column -->
             <div>
-                <h3 class="text-xl font-medium mb-4">Legal</h3>
+                <h3 class="text-xl font-medium mb-4">{{ __('common.footer.legal') }}</h3>
                 <ul class="space-y-3">
-                    <li><a href="{{ route('web.terms') }}" class="hover:underline">Terms & Conditions</a></li>
-                    <li><a href="{{ route('web.privacy') }}" class="hover:underline">Privacy Policy</a></li>
+                    <li><a href="{{ route('web.terms') }}" class="hover:underline">{{ __('common.footer.terms_conditions') }}</a></li>
+                    <li><a href="{{ route('web.privacy') }}" class="hover:underline">{{ __('common.footer.privacy_policy') }}</a></li>
                 </ul>
             </div>
         </div>

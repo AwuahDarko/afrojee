@@ -5,8 +5,8 @@
             <div class="flex flex-col md:flex-row items-center justify-items-start">
 
                 <h1 class="text-4xl md:text-5xl lg:text-6xl min-w-[26%] text-left">
-                    <span class="block font-light text-primary">How</span>
-                    <span class="block font-bold text-primary">To Buy?</span>
+                    <span class="block font-light text-primary">{{ __('common.howtobuy.title') }}</span>
+                    <span class="block font-bold text-primary">{{ __('common.howtobuy.title_bold') }}</span>
                 </h1>
                 <div class="w-full h-1 bg-primary-light mt-4 md:mt-0"></div>
             </div>
@@ -16,8 +16,7 @@
         <!-- Introduction Text -->
         <div class="mb-10 max-w-3xl">
             <p class="text-stone-700 text-lg">
-                Wondering how to go from here to owning a product from <span class="font-semibold">Afro Jee?</span> Its
-                pretty easy:
+                {{ __('common.howtobuy.subtitle') }} <span class="font-semibold">{{ __('common.howtobuy.subtitle_bold') }}</span> {{ __('common.howtobuy.subtitle_end') }}
             </p>
         </div>
 

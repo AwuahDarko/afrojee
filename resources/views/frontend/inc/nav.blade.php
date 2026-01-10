@@ -13,7 +13,8 @@
     });
 @endphp
 
-<nav class="header-section sticky-header bg-gradient-to-r from-[#fffaf8] via-[#ffe8e3] to-[#fffaf8] shadow-md sticky top-0 z-50">
+<nav class="header-section sticky-header bg-gradient-to-r from-[#fffaf8] via-[#ffe8e3] to-[#fffaf8] shadow-md sticky top-0 z-50"
+    x-data="{ mobileMenuOpen: false }">
     <div class="container mx-auto px-4">
         <div class="flex items-center justify-between py-4">
             <!-- Logo (left) -->
@@ -26,13 +27,13 @@
             <!-- Desktop Nav Links (center) -->
             <ul class="hidden lg:flex items-center space-x-8 text-[#ef380d] font-bold">
                 <li>
-                    <a href="{{ route('home') }}" class="hover:underline transition">Home</a>
+                    <a href="{{ route('home') }}" class="hover:underline transition">{{ __('common.nav.home') }}</a>
                 </li>
 
                 <!-- Products Dropdown -->
                 <li class="relative group">
                     <a href="{{ route('web.products') }}" class="hover:underline transition flex items-center">
-                        Products
+                        {{ __('common.nav.products') }}
                         <svg class="ml-1 w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
                             </path>
@@ -44,7 +45,8 @@
                         <ul class="absolute hidden group-hover:block bg-white shadow-lg rounded-md py-2 mt-2 w-48 z-10">
                             @foreach($categories as $category)
                                 <li>
-                                    <a href="/products/{{ $category->slug }}" class="block px-4 py-2 text-[#ef380d] hover:underline">
+                                    <a href="/products/{{ $category->slug }}"
+                                        class="block px-4 py-2 text-[#ef380d] hover:underline">
                                         {{ $category->name }}
                                     </a>
                                 </li>
@@ -54,15 +56,40 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('web.about') }}" class="hover:underline transition">About</a>
+                    <a href="{{ route('web.about') }}"
+                        class="hover:underline transition">{{ __('common.nav.about') }}</a>
                 </li>
                 <li>
-                    <a href="/contact-us" class="hover:underline transition">Contact</a>
+                    <a href="/contact-us" class="hover:underline transition">{{ __('common.nav.contact') }}</a>
                 </li>
             </ul>
 
             <!-- Icons (right) -->
-            <div class="flex items-center space-x-6">
+            <div class="flex items-center space-x-4">
+                <!-- Language Switcher -->
+                <div class="relative">
+                    <button
+                        class="text-[#ef380d] hover:opacity-80 flex items-center space-x-1 px-2 py-1 rounded-md hover:bg-white/50 transition"
+                        type="button" onclick="document.getElementById('language-dropdown').classList.toggle('hidden')">
+                        <span class="text-sm font-semibold">{{ strtoupper(app()->getLocale()) }}</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <div id="language-dropdown"
+                        class="absolute right-0 mt-2 w-32 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                        <a href="{{ route('language.switch', 'en') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-gray-50 font-semibold' : '' }}">
+                            🇬🇧 English
+                        </a>
+                        <a href="{{ route('language.switch', 'es') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'es' ? 'bg-gray-50 font-semibold' : '' }}">
+                            🇪🇸 Español
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Search Icon -->
                 <button class="text-[#ef380d] hover:opacity-80" id="search-toggle" type="button">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,10 +122,17 @@
                 </a>
 
                 <!-- Mobile Menu Toggle -->
-                <button class="lg:hidden text-[#ef380d]" id="mobile-menu-toggle">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button class="lg:hidden text-[#ef380d]" @click="mobileMenuOpen = !mobileMenuOpen">
+                    <!-- Hamburger Icon -->
+                    <svg x-show="!mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                    </svg>
+                    <!-- Close Icon -->
+                    <svg x-show="mobileMenuOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        style="display: none;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
                         </path>
                     </svg>
                 </button>
@@ -106,9 +140,11 @@
         </div>
 
         <!-- Mobile Nav -->
-        <div class="lg:hidden hidden" id="mobile-nav">
+        <div class="lg:hidden" x-show="mobileMenuOpen" id="mobile-nav" style="display: none;">
             <ul class="space-y-4 py-4 text-center text-[#ef380d] font-bold">
-                <li><a href="{{ route('web.products') }}" class="block hover:underline">Shop</a></li>
+                <li><a href="{{ route('home') }}" class="block hover:underline">{{ __('common.nav.home') }}</a></li>
+                <li><a href="{{ route('web.products') }}" class="block hover:underline">{{ __('common.nav.shop') }}</a>
+                </li>
 
                 <!-- Mobile Categories -->
                 @if(isset($categories) && count($categories) > 0)
@@ -121,8 +157,23 @@
                     @endforeach
                 @endif
 
-                <li><a href="{{ route('web.about') }}" class="block hover:underline">About</a></li>
-                <li><a href="/contact-us" class="block hover:underline">Contact</a></li>
+                <li><a href="{{ route('web.about') }}" class="block hover:underline">{{ __('common.nav.about') }}</a>
+                </li>
+                <li><a href="/contact-us" class="block hover:underline">{{ __('common.nav.contact') }}</a></li>
+
+                <!-- Mobile Language Switcher -->
+                <li class="pt-4 border-t border-white/20">
+                    <div class="flex items-center justify-center space-x-4">
+                    <a href="{{ route('language.switch', ['locale' => 'en', 'redirect' => url()->current()]) }}"
+   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'en' ? 'bg-gray-50 font-semibold' : '' }}">
+    🇬🇧 English
+</a>
+<a href="{{ route('language.switch', ['locale' => 'es', 'redirect' => url()->current()]) }}"
+   class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ app()->getLocale() == 'es' ? 'bg-gray-50 font-semibold' : '' }}">
+    🇪🇸 Español
+</a>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

@@ -229,8 +229,8 @@
         <div class="mb-12">
             <div class="flex flex-col md:flex-row items-center justify-items-start">
                 <h1 class="text-4xl md:text-5xl lg:text-6xl min-w-[26%] text-left">
-                    <span class="block font-light text-primary">Our</span>
-                    <span class="block font-bold text-primary">Products</span>
+                    <span class="block font-light text-primary">{{ __('common.products.title') }}</span>
+                    <span class="block font-bold text-primary">{{ __('common.products.title_bold') }}</span>
                 </h1>
                 <div class="w-full h-1 bg-primary-light mt-4 md:mt-0"></div>
             </div>
@@ -238,7 +238,7 @@
 
         <div class="mb-10 max-w-3xl">
             <p class="text-stone-700 text-lg">
-            Discover our exclusive range of premium hair care essentials, crafted to keep your routine simple, healthy, and effortlessly beautiful.
+            {{ __('common.products.subtitle') }}
             </p>
         </div>
         <!-- View All Products Button -->
@@ -246,7 +246,7 @@
             <div class="flex justify-end mb-12">
                 <a href="{{ route('web.products') }}"
                     class="group inline-flex items-center justify-center px-8 py-4 rounded-2xl border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all duration-300 hover:shadow-xl hover:scale-105">
-                    <span class="font-semibold">View All Products</span>
+                    <span class="font-semibold">{{ __('common.products.view_all') }}</span>
                     <svg xmlns="http://www.w3.org/2000/svg"
                         class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20"
                         fill="currentColor">
@@ -303,7 +303,7 @@
                                         data-product-price="{{ $product->getPrice() }}"
                                         data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
                                         data-size-id="0"
-                                        title="Add to Cart">
+                                        title="{{ __('common.button.add_to_cart') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
@@ -373,13 +373,13 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
-                                        Cart
+                                        {{ __('common.button.add_to_cart') }}
                                     </button>
 
                                     <!-- Buy Now -->
                                     <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => 0]) }}"
                                         class="flex-1 bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 py-2 px-3 rounded-lg text-sm font-medium transition-colors text-center">
-                                        Buy
+                                        {{ __('common.button.checkout') }}
                                     </a>
                                 </div>
                             </div>
@@ -393,9 +393,9 @@
                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-600 mb-3">No Products Available</h3>
+                    <h3 class="text-2xl font-bold text-gray-600 mb-3">{{ __('common.products.no_products') }}</h3>
                     <p class="text-gray-500 text-lg max-w-md mx-auto">
-                        We're currently refreshing our collection with amazing new products. Stay tuned for updates!
+                        {{ __('common.products.no_products_message') }}
                     </p>
                 </div>
             @endforelse

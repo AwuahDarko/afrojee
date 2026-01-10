@@ -3,14 +3,14 @@
         <div class="mb-16">
             <div class="flex flex-col md:flex-row items-center justify-items-start">
                 <h1 class="text-5xl min-w-[26%] font-bold text-gray-700  text-left">
-                    <span class="block">Reach Out</span>
-                    <span class="text--gray-700 font-medium text-5xl w-full">To Us</span>
+                    <span class="block">{{ __('common.reachout.title') }}</span>
+                    <span class="text--gray-700 font-medium text-5xl w-full">{{ __('common.reachout.title_bold') }}</span>
                 </h1>
                 <div class="w-full h-1 bg-gray-300 mt-4 md:mt-0"></div>
             </div>
         </div>
         <p class="text-lg text-gray-700 mb-12 text-left">
-            Have a question or need help? Reach out to us—we're here to assist you!
+            {{ __('common.reachout.subtitle') }}
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -24,8 +24,8 @@
                             fill="#ef380d" />
                     </svg>
                 </div>
-                <h3 class="text-2xl font-semibold text-gray-800 mb-4">Email Us</h3>
-                <p class="text-gray-700 mb-2">Reach out to us via the email address below:</p>
+                <h3 class="text-2xl font-semibold text-gray-800 mb-4">{{ __('common.reachout.email.title') }}</h3>
+                <p class="text-gray-700 mb-2">{{ __('common.reachout.email.description') }}</p>
                 <p class="font-semibold text-gray-800">info@afrojee.store</p>
             </div>
 
@@ -45,8 +45,8 @@
                         </svg>
 
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">On WhatsApp</h3>
-                    <p class="text-gray-700 mb-2">Send us a direct message on WhatsApp:</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">{{ __('common.reachout.whatsapp.title') }}</h3>
+                    <p class="text-gray-700 mb-2">{{ __('common.reachout.whatsapp.description') }}</p>
                     <p class="font-semibold text-gray-800">+34 602 18 15 65</p>
                 </div>
             </a>
@@ -63,8 +63,8 @@
                                 fill="#ef380d" />
                         </svg>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">On Instagram</h3>
-                    <p class="text-gray-700 mb-2">Reach out to us via the IG handle;</p>
+                    <h3 class="text-2xl font-semibold text-gray-800 mb-4">{{ __('common.reachout.instagram.title') }}</h3>
+                    <p class="text-gray-700 mb-2">{{ __('common.reachout.instagram.description') }}</p>
                     <p class="font-semibold text-gray-800">@afro_jeee</p>
                 </div>
             </a>

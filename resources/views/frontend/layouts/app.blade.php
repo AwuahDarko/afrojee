@@ -66,7 +66,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- <link rel="stylesheet" href="{{ asset('css/theme.css') }}"> -->
     <!-- <link rel="stylesheet" href="{{ asset('css/slick.css') }}"> -->
 
@@ -129,7 +129,7 @@
     <div id="cart-sidebar"
         class="fixed right-0 top-0 w-80 bg-white h-full shadow-lg z-[100] transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto md:w-96">
         <div class="p-4 border-b flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-gray-800">Your Cart</h2>
+            <h2 class="text-2xl font-bold text-gray-800">{{ __('common.cart.title') }}</h2>
             <button id="close-cart-sidebar" class="text-gray-600 hover:text-gray-900 focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -141,21 +141,21 @@
         <div id="cart-items-list" class="p-4 space-y-4">
             {{-- Cart items will be rendered here by JavaScript --}}
         </div>
-        <p class="text-gray-500 text-center" id="empty-cart-message">Your cart is empty.</p>
+        <p class="text-gray-500 text-center" id="empty-cart-message">{{ __('common.cart.empty') }}</p>
         <div id="cart-summary" class="p-4 border-t sticky bottom-0 bg-white shadow-inner">
             <div class="flex justify-between items-center mb-2">
-                <span class="text-lg font-semibold">Total:</span>
+                <span class="text-lg font-semibold">{{ __('common.cart.total') }}:</span>
                 <span id="cart-total" class="text-lg font-bold text-pink-800">$0.00</span>
             </div>
             {{-- New: View Cart Button --}}
             <a href="{{ route('web.cart') }}"
                 class="block w-full bg-gray-200 text-gray-800 text-center py-3 rounded-md hover:bg-gray-300 transition duration-200 mb-2">
-                View Full Cart
+                {{ __('common.button.view_full_cart') }}
             </a>
             {{-- Updated: Proceed to Checkout button now triggers JS --}}
             <button id="proceed-to-checkout-btn"
                 class="block w-full bg-[#ef380d] text-white text-center py-3 rounded-md hover:bg-[#f06243ff] transition duration-200">
-                Proceed to Checkout
+                {{ __('common.button.proceed_to_checkout') }}
             </button>
 
         </div>
@@ -189,6 +189,7 @@
     <script src="{{ asset('js/index.js') }}"></script>
     <!-- <script src="{{ asset('js/plugins/slick.js') }}"></script> -->
     <!-- <script src="{{ asset('js/plugins/theme.js') }}"></script> -->
+    <script src="{{ asset('js/nav.js') }}"></script>
     <script src="{{ asset('js/cart.js') }}"></script>
     <script src="{{ asset('js/tooltip.js') }}"></script>
     <!-- Add before closing </body> tag -->

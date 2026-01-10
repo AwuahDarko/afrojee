@@ -15,18 +15,18 @@
                 <div class="max-w-2xl space-y-6">
                     <div
                         class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
-                        Beauty creams, oils, balms & more
+                        {{ __('common.hero.label_beauty') }}
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-right delay-200">
-                        Together, <span class="font-bold">we celebrate<br class="hidden sm:block">natural beauty</span> in every curl<br
+                        {{ __('common.hero.heading_1_line1') }} <span class="font-bold">{{ __('common.hero.heading_1_line2') }}<br class="hidden sm:block">{{ __('common.hero.heading_1_line3') }}</span> {{ __('common.hero.heading_1_line4') }}<br
                             class="hidden sm:block">
-                        <span class="font-bold">Beauty that unites us all</span>
+                        <span class="font-bold">{{ __('common.hero.heading_1_line5') }}</span>
                     </h1>
                     <div class="hidden hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            View Products
+                            {{ __('common.hero.button.view_products') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -36,7 +36,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn more
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -67,11 +67,11 @@
                             </div>
                         </div>
                     </div>
-                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"My skin has never felt this radiant"
+                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('common.hero.testimonial.quote_1') }}
                     </p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -94,20 +94,20 @@
             <div class="absolute inset-0 bg-black/30 z-10"></div>
             <div class="relative z-20 container mx-auto h-full px-4 sm:px-6 md:px-8 flex flex-col justify-center">
                 <div class="max-w-2xl space-y-6">
-                    <div
+                        <div
                         class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
-                        Natural ingredients for glowing skin
+                        {{ __('common.hero.label_natural') }}
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-up delay-200">
-                        Discover <span class="font-bold">nature’s power<br class="hidden sm:block">for your healthy,</span> radiant<br
+                        {{ __('common.hero.heading_2_line1') }} <span class="font-bold">{{ __('common.hero.heading_2_line2') }}<br class="hidden sm:block">{{ __('common.hero.heading_2_line3') }}</span> {{ __('common.hero.heading_2_line4') }}<br
                             class="hidden sm:block">
-                        <span class="font-bold"> hair</span>
+                        <span class="font-bold">{{ __('common.hero.heading_2_line5') }}</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Shop Now
+                            {{ __('common.hero.button.shop_now') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -117,7 +117,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn More
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -147,11 +147,11 @@
                             </div>
                         </div>
                     </div>
-                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"Transformed my skincare routine!"
+                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('common.hero.testimonial.quote_2') }}
                     </p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -175,18 +175,18 @@
                 <div class="max-w-2xl space-y-6">
                     <div
                         class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up-fast delay-100">
-                        Hydrate & nourish with aloe vera
+                        {{ __('common.hero.label_hydrate') }}
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-left delay-200">
-                        Embrace <span class="font-bold">deep nourishment <br class="hidden sm:block">for your </span> vibrant curls<br
+                        {{ __('common.hero.heading_3_line1') }} <span class="font-bold">{{ __('common.hero.heading_3_line2') }} <br class="hidden sm:block">{{ __('common.hero.heading_3_line3') }} </span> {{ __('common.hero.heading_3_line4') }}<br
                             class="hidden sm:block">
-                        <span class="font-bold hidden">vibrant curls</span>
+                        <span class="font-bold hidden">{{ __('common.hero.heading_3_line4') }}</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Explore Now
+                            {{ __('common.hero.button.explore_now') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -196,7 +196,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn More
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -226,11 +226,10 @@
                             </div>
                         </div>
                     </div>
-                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"My skin feels so refreshed and
-                        soft!"</p>
+                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('common.hero.testimonial.quote_3') }}</p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -254,18 +253,18 @@
                 <div class="max-w-2xl space-y-6">
                     <div
                         class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-left delay-100">
-                        Soothing chamomile for calm skin
+                        {{ __('common.hero.label_soothing') }}
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-up-fast delay-200">
-                        Experience <span class="font-bold">joy and confidence <br class="hidden sm:block">pure care inside.</span> Every delivery, <br
+                        {{ __('common.hero.heading_4_line1') }} <span class="font-bold">{{ __('common.hero.heading_4_line2') }} <br class="hidden sm:block">{{ __('common.hero.heading_4_line3') }}</span> {{ __('common.hero.heading_4_line4') }} <br
                             class="hidden sm:block">
-                        <span class="font-bold"> hair routine.</span>
+                        <span class="font-bold">{{ __('common.hero.heading_4_line5') }}</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Discover Now
+                            {{ __('common.hero.button.discover_now') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -275,7 +274,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn More
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -305,11 +304,10 @@
                             </div>
                         </div>
                     </div>
-                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"The best addition to my beauty
-                        routine!"</p>
+                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('common.hero.testimonial.quote_4') }}</p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -334,18 +332,18 @@
                 <div class="max-w-2xl space-y-6">
                     <div
                         class="hero-label hidden  px-4 sm:px-6 py-2 rounded-full bg-gray-500/70 text-white text-xs sm:text-sm animate-slide-up delay-100">
-                        Essential oils for ultimate relaxation
+                        {{ __('common.hero.label_oils') }}
                     </div>
                     <h1
                         class="hero-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-white leading-tight animate-slide-right delay-200">
-                        From our hands to your hair, <span class="font-bold">pure care inside. <br class="hidden sm:block">Every delivery, </span>a promise of<br
+                        {{ __('common.hero.heading_5_line1') }} <span class="font-bold">{{ __('common.hero.heading_5_line2') }} <br class="hidden sm:block">{{ __('common.hero.heading_5_line3') }} </span>{{ __('common.hero.heading_5_line4') }}<br
                             class="hidden sm:block">
-                        <span class="font-bold"> beauty.</span>
+                        <span class="font-bold">{{ __('common.hero.heading_5_line5') }}</span>
                     </h1>
                     <div class="hero-cta hidden flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-up-fast delay-300">
                         <a href="/products"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full bg-burgundy text-white hover:bg-burgundy/90 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Shop Oils
+                            {{ __('common.hero.button.shop_oils') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -355,7 +353,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn More
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -385,10 +383,10 @@
                             </div>
                         </div>
                     </div>
-                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"These oils changed my life!"</p>
+                    <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">{{ __('common.hero.testimonial.quote_5') }}</p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"
@@ -433,7 +431,7 @@
                         </a>
                         <a href="#who-section"
                             class="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full border-2 border-white text-white hover:bg-white/10 transition-colors text-sm sm:text-base w-full sm:w-auto">
-                            Learn More
+                            {{ __('common.hero.button.learn_more') }}
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 ml-2"
                                 viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -466,7 +464,7 @@
                     <p class="italic text-white mb-3 sm:mb-4 text-sm sm:text-base">"Natural beauty at its finest!"</p>
                     <a href="#"
                         class="inline-flex items-center text-white font-medium hover:underline text-sm sm:text-base">
-                        All reviews
+                        {{ __('common.hero.testimonial.all_reviews') }}
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-4 sm:w-4 ml-1" viewBox="0 0 20 20"
                             fill="currentColor">
                             <path fill-rule="evenodd"

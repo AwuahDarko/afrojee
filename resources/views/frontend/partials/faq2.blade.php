@@ -57,8 +57,8 @@
     <div class="mb-12">
       <div class="flex flex-col md:flex-row items-center justify-items-start">
         <h1 class="text-4xl md:text-5xl lg:text-6xl min-w-[26%] text-left">
-          <span class="block font-light text-primary">Got</span>
-          <span class="block font-bold text-primary">Questions?</span>
+          <span class="block font-light text-primary">{{ __('common.faq.title') }}</span>
+          <span class="block font-bold text-primary">{{ __('common.faq.title_bold') }}</span>
         </h1>
         <div class="w-full h-1 bg-primary-light mt-4 md:mt-0"></div>
       </div>
@@ -66,8 +66,7 @@
 
     <div class="mb-10 max-w-3xl">
       <p class="text-stone-700 text-lg">
-        Check out our FAQ section where we've answered some of the most common queries to help you get the most out of
-        our products
+        {{ __('common.faq.subtitle') }}
       </p>
     </div>
 
@@ -77,7 +76,7 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-md">
         <button class="faq-button w-full flex justify-between items-center px-6 py-4 text-left focus:outline-none"
           aria-expanded="true">
-          <span class="font-bold">Do you ship internationally?</span>
+          <span class="font-bold">{{ __('common.faq.question_1') }}</span>
           <div class="relative ml-2">
             <span class="plus-icon bg-[#ef380d]/10 rounded-full w-8 h-8 flex items-center justify-center">
               <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -97,8 +96,7 @@
         </button>
         <div class="faq-content active px-6 pb-4">
           <p class="text-gray-700">
-            Certainly! We ship internationally. The estimated delivery time will be displayed at checkout and depends on
-            your delivery destination and selected shipping method. For further assistance, contact us at <a
+            {{ __('common.faq.answer_1') }} <a
               href="mailto:info@afrojee.store" class="text-[#ef380d] hover:underline">info@afrojee.store</a>.
           </p>
         </div>
@@ -109,7 +107,7 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-md">
         <button class="faq-button w-full flex justify-between items-center px-6 py-4 text-left focus:outline-none"
           aria-expanded="false">
-          <span class="font-bold">When will my order be processed?</span>
+          <span class="font-bold">{{ __('common.faq.question_2') }}</span>
           <div class="relative ml-2">
             <span class="plus-icon bg-[#ef380d]/10 rounded-full w-8 h-8 flex items-center justify-center">
               <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -129,8 +127,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            All orders are shipped within 2 working days (excluding weekends and bank holidays). Once your order has
-            been shipped, you'll receive a confirmation email with tracking information.
+            {{ __('common.faq.answer_2') }}
           </p>
         </div>
       </div>
@@ -140,7 +137,7 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-md">
         <button class="faq-button w-full flex justify-between items-center px-6 py-4 text-left focus:outline-none"
           aria-expanded="false">
-          <span class="font-bold">What payment options do you accept?</span>
+          <span class="font-bold">{{ __('common.faq.question_3') }}</span>
           <div class="relative ml-2">
             <span class="plus-icon bg-[#ef380d]/10 rounded-full w-8 h-8 flex items-center justify-center">
               <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -160,9 +157,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            We offer several secure payment options: all major credit and debit cards (Visa, MasterCard, American
-            Express, Maestro), PayPal, and Apple Pay. All payments are processed through trusted, encrypted gateways to
-            ensure your data remains secure.
+            {{ __('common.faq.answer_3') }}
           </p>
         </div>
       </div>
@@ -172,7 +167,7 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-md">
         <button class="faq-button w-full flex justify-between items-center px-6 py-4 text-left focus:outline-none"
           aria-expanded="false">
-          <span class="font-bold">Are your products suitable for all hair types?</span>
+          <span class="font-bold">{{ __('common.faq.question_4') }}</span>
           <div class="relative ml-2">
             <span class="plus-icon bg-[#ef380d]/10 rounded-full w-8 h-8 flex items-center justify-center">
               <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -192,9 +187,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            Yes! Afro Jee products are specially formulated for afro-textured hair but work wonderfully on all hair
-            types. Our natural ingredients are gentle yet effective, making them suitable for various curl patterns and
-            textures.
+            {{ __('common.faq.answer_4') }}
           </p>
         </div>
       </div>
@@ -204,7 +197,7 @@
         class="border border-gray-200 rounded-lg overflow-hidden bg-white transition-all duration-300 hover:shadow-md">
         <button class="faq-button w-full flex justify-between items-center px-6 py-4 text-left focus:outline-none"
           aria-expanded="false">
-          <span class="font-bold">How should I store my Afro Jee products?</span>
+          <span class="font-bold">{{ __('common.faq.question_5') }}</span>
           <div class="relative ml-2">
             <span class="plus-icon bg-[#ef380d]/10 rounded-full w-8 h-8 flex items-center justify-center">
               <svg class="w-5 h-5 text-[#ef380d]" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -224,9 +217,7 @@
         </button>
         <div class="faq-content px-6 pb-4 hidden">
           <p class="text-gray-700">
-            Store your Afro Jee products in a cool, dry place away from direct sunlight. Some products with natural
-            ingredients may benefit from refrigeration during hot weather. Always check product labels for specific
-            storage instructions.
+            {{ __('common.faq.answer_5') }}
           </p>
         </div>
       </div>
@@ -235,7 +226,7 @@
     <div class="flex justify-end mt-10">
       <a href="/faq"
         class="bg-[#ef380d] text-white px-6 py-3 rounded-full flex items-center hover:bg-[#d6320c] transition-colors duration-300">
-        View More
+        {{ __('common.faq.view_more') }}
         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>

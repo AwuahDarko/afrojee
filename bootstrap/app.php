@@ -28,8 +28,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->web(prepend: [
-            \App\Http\Middleware\SetLocale::class,
             LogWebsiteVisit::class,
+        ]);
+        
+        // SetLocale must run AFTER session middleware loads, so append it
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
         ]);
 
     })

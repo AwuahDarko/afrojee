@@ -21,16 +21,26 @@ use App\Http\Controllers\Web\TermsController;
 use App\Http\Controllers\Web\PrivacyController;
 use App\Mail\TestMail;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Http\Request;
 
 
 
 // Language switcher route
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'es'])) {
-        session(['locale' => $locale]);
+        // Save to session and set locale immediately
+        session()->put('locale', $locale);
+        app()->setLocale($locale);
     }
-    return redirect()->back();
+    
+    // Get the previous URL, but avoid redirecting to the language switch route itself
+    $previousUrl = url()->previous();
+    if (str_contains($previousUrl, '/lang/')) {
+        $previousUrl = route('home');
+    }
+    
+    // Redirect back, ensuring session is saved
+    return redirect()->to($previousUrl ?: route('home'));
 })->name('language.switch');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
