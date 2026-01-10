@@ -690,7 +690,12 @@ class CheckoutController extends Controller
      */
     public function storeAddress(Request $request)
     {
-        $validatedData = $request->validate([
+        // Get country to check if Spain (for conditional validation)
+        $countryId = $request->country;
+        $country = \App\Models\Country::find($countryId);
+        $isSpain = $country && strtolower(trim($country->name)) === 'spain';
+
+        $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'mobile_number' => 'required|string|max:20',
@@ -701,8 +706,12 @@ class CheckoutController extends Controller
             'postcode' => 'required|string|max:20',
             'from_where' => 'required',
             'product_id' => 'nullable',
-            'email' => 'required|email'
-        ]);
+            'email' => 'required|email',
+            'city' => $isSpain ? 'required|string|max:255' : 'nullable|string|max:255',
+            'province' => $isSpain ? 'required|string|max:255' : 'nullable|string|max:255',
+        ];
+
+        $validatedData = $request->validate($rules);
 
         // Check if an address ID already exists in the session (meaning they're editing)
         $guestAddressId = Session::get('guest_billing_address_id');
@@ -717,7 +726,8 @@ class CheckoutController extends Controller
                     'country_id' => $request->country,
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,
-                    'city' => NULL,
+                    'city' => $request->city,
+                    'province' => $request->province,
                     'shipping_zone_id' => $request->region,
                     'county' => NULL,
                     'postcode' => $request->postcode,
@@ -733,7 +743,8 @@ class CheckoutController extends Controller
                     'country_id' => $request->country,
                     'address_line_1' => $request->address_line_1,
                     'address_line_2' => $request->address_line_2,
-                    'city' => NULL,
+                    'city' => $request->city,
+                    'province' => $request->province,
                     'shipping_zone_id' => $request->region,
                     'county' => NULL,
                     'postcode' => $request->postcode,

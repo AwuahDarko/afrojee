@@ -99,14 +99,37 @@
 
                             <div>
                                 <div>
-                                    <label for="city"
-                                        class="block text-gray-700 text-sm font-medium mb-1">City/Region</label>
+                                    <label for="region"
+                                        class="block text-gray-700 text-sm font-medium mb-1">Region/Shipping Zone</label>
                                     <select name="region" id="region" autocomplete="off" required
                                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
 
                                     </select>
                                 </div>
+                            </div>
 
+                            <!-- City and Province fields (required for Spain) -->
+                            <div id="city-province-fields-single" class="hidden">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="province" class="block text-gray-700 text-sm font-medium mb-1">
+                                            Province <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" id="province" name="province"
+                                            placeholder="e.g., Barcelona, Madrid"
+                                            value="{{ old('province', $userAddress->province ?? '') }}"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
+                                    </div>
+                                    <div>
+                                        <label for="city" class="block text-gray-700 text-sm font-medium mb-1">
+                                            City/Town <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" id="city" name="city"
+                                            placeholder="e.g., Barcelona, Madrid"
+                                            value="{{ old('city', $userAddress->city ?? '') }}"
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-800">
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
@@ -491,7 +514,36 @@
                 getNewPrice(qty, id, selectedShippingZoneId || val, sizeId)  // UPDATED: Pass sizeId
             })
 
+            // Function to check if country is Spain and show/hide city/province fields
+            function toggleCityProvinceFieldsSingle(countryId) {
+                const cityProvinceFields = document.getElementById('city-province-fields-single');
+                const provinceInput = document.getElementById('province');
+                const cityInput = document.getElementById('city');
+                
+                if (!cityProvinceFields || !provinceInput || !cityInput) return;
+                
+                // Get country name to check if it's Spain
+                const countrySelect = document.getElementById('country');
+                if (!countrySelect) return;
+                
+                const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+                const countryName = selectedOption ? selectedOption.text.trim() : '';
+                const isSpain = countryName.toLowerCase() === 'spain';
+                
+                if (isSpain) {
+                    cityProvinceFields.classList.remove('hidden');
+                    provinceInput.setAttribute('required', 'required');
+                    cityInput.setAttribute('required', 'required');
+                } else {
+                    cityProvinceFields.classList.add('hidden');
+                    provinceInput.removeAttribute('required');
+                    cityInput.removeAttribute('required');
+                }
+            }
+
             country?.addEventListener('change', (evt) => {
+                // Check if Spain and toggle city/province fields
+                toggleCityProvinceFieldsSingle(country.value);
                 const val = country.value
                 if (val != '0') {
                     const url = "{{ route('web.checkoutDetails.info.region') }}"
@@ -512,8 +564,15 @@
                     hideShippingMethods();
                     if (orderZone) orderZone.value = '';
                     selectedShippingZoneId = 0;
+                    // Hide city/province fields when no country selected
+                    toggleCityProvinceFieldsSingle(0);
                 }
             })
+
+            // Check on page load if Spain is already selected
+            if (country && country.value != '0') {
+                toggleCityProvinceFieldsSingle(country.value);
+            }
 
             document.getElementById('decrease-btn').addEventListener('click', (evt) => {
                 let qty = parseInt(quantity.value)

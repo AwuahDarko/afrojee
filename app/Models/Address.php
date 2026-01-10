@@ -22,6 +22,7 @@ class Address extends Model
         'address_line_1',
         'address_line_2',
         'city',
+        'province',
         'shipping_zone_id',
         'county',
         'postcode',
