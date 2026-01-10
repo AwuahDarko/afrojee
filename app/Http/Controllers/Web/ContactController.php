@@ -30,6 +30,6 @@ class ContactController extends Controller
         // Optional: Send email notification to admin
         Mail::to('admin@afrojee.store')->send(new ContactFormMail($validated));
 
-        return back()->with('contact_success', 'Thank you for your message! We\'ll get back to you within 24 hours.');
+        return back()->with('contact_success', __('common.contact.form.success'));
     }
 }

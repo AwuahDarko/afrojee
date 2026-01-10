@@ -102,9 +102,9 @@
         <div class="max-w-7xl mx-auto">
             <!-- Breadcrumb -->
             <div class="mb-6 text-sm text-gray-600">
-                <a href="{{ route('home') }}" class="hover:text-gray-900">Home</a>
+                <a href="{{ route('home') }}" class="hover:text-gray-900">{{ __('common.product.breadcrumb.home') }}</a>
                 <span class="mx-2">/</span>
-                <a href="{{ route('web.products') }}" class="hover:text-gray-900">Products</a>
+                <a href="{{ route('web.products') }}" class="hover:text-gray-900">{{ __('common.product.breadcrumb.products') }}</a>
                 <span class="mx-2">/</span>
                 <span class="text-gray-900">{{ $product->name }}</span>
             </div>
@@ -141,7 +141,7 @@
                     <!-- Sale Badge -->
                     @if($product->getPrice() != $product->getOriginalPrice())
                         <span class="inline-block px-3 py-1 bg-red-500 text-white text-sm font-semibold rounded-full">
-                            Discount Sale
+                            {{ __('common.product.discount_sale') }}
                         </span>
                     @endif
 
@@ -176,7 +176,7 @@
                                 @endfor
                             </div>
                             <span class="text-gray-600 font-medium">{{ number_format($product->average_rating, 1) }}
-                                ({{ $product->reviews_count }} reviews)</span>
+                                ({{ $product->reviews_count }} {{ __('common.product.reviews_count') }})</span>
                         </div>
                     @endif
 
@@ -184,7 +184,7 @@
                     @if($product->sizes->isNotEmpty())
                         <div>
                             <div class="flex items-center gap-2 mb-3">
-                                <span class="font-semibold text-gray-900">Size:</span>
+                                <span class="font-semibold text-gray-900">{{ __('common.product.size') }}</span>
                                 <span class="text-gray-600"
                                     id="selected-size-display">{{ $product->sizes->first()->size }}</span>
                             </div>
@@ -209,7 +209,7 @@
 
                     <!-- Quantity & Actions -->
                     <div class="space-y-4">
-                        <span class="font-semibold text-gray-900">Quantity</span>
+                        <span class="font-semibold text-gray-900">{{ __('common.product.quantity') }}</span>
 
                         <div class="flex gap-4">
                             <!-- Quantity Selector -->
@@ -237,7 +237,7 @@
                                 data-product-price="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->price : $product->price }}"
                                 data-product-image="{{ $initialImage }}"
                                 data-size-id="{{ $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0 }}">
-                                Add to cart
+                                {{ __('common.product.add_to_cart') }}
                             </button>
                         </div>
 
@@ -245,7 +245,7 @@
                         <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => $product->sizes->isNotEmpty() ? $product->sizes->first()->id : 0]) }}"
                             id="buy-now-link"
                             class="block w-full bg-white border-2 border-gray-900 text-gray-900 py-4 rounded-lg font-semibold text-center hover:bg-gray-50 transition">
-                            Buy it now
+                            {{ __('common.product.buy_now') }}
                         </a>
                     </div>
 
@@ -351,15 +351,15 @@
                     <button type="button" onclick="showTab('description')"
                         class="tab-btn font-semibold text-gray-900 border-b-2 border-gray-900 pb-3 -mb-px"
                         data-tab="description">
-                        Description
+                        {{ __('common.product.description') }}
                     </button>
                     <button type="button" onclick="showTab('ingredients')"
                         class="tab-btn font-semibold text-gray-500 hover:text-gray-900 pb-3" data-tab="ingredients">
-                        Ingredients
+                        {{ __('common.product.ingredients') }}
                     </button>
                     <button type="button" onclick="showTab('reviews')"
                         class="tab-btn font-semibold text-gray-500 hover:text-gray-900 pb-3" data-tab="reviews">
-                        Reviews ({{ $product->reviews_count }})
+                        {{ __('common.product.reviews') }} ({{ $product->reviews_count }})
                     </button>
                 </div>
 
@@ -376,31 +376,31 @@
                 <div
                     class="mb-6 flex flex-col sm:flex-row bg-white/80 justify-between p-4 sm:p-6 rounded-xl items-start sm:items-center gap-4 sm:gap-0 border border-gray-200">
                     <p class="text-gray-700 mb-2 sm:mb-0 font-bold text-sm sm:text-base">
-                        Got thoughts on this product?
+                        {{ __('common.product.got_thoughts') }}
                     </p>
                     <button id="show-review-form-btn"
                         class="bg-[#ef380d] hover:bg-[#d6320c] text-white px-4 py-2 sm:px-6 sm:py-2 rounded-full font-medium flex items-center gap-2 text-sm sm:text-base transition-all duration-200 hover:shadow-lg">
-                        Leave A Review
+                        {{ __('common.product.leave_review') }}
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </button>
                 </div>
                 <div class="pt-6">
-                    <h2 class="text-xl font-bold mb-8 text-gray-900">Reviews ({{ $product->review_count }})</h2>
+                    <h2 class="text-xl font-bold mb-8 text-gray-900">{{ __('common.product.reviews') }} ({{ $product->review_count }})</h2>
 
                     @if($product->review_count > 0)
 
                         {{-- 🆕 SORTING DROPDOWN --}}
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                             <div class="flex items-center space-x-2">
-                                <label class="text-sm font-medium text-gray-700">Sort by:</label>
+                                <label class="text-sm font-medium text-gray-700">{{ __('common.product.sort_by') }}</label>
                                 <select id="sortReviews"
                                     class="border border-gray-300 rounded-full px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-[#ef380d] focus:border-[#ef380d] transition-all duration-200">
-                                    <option value="newest">Newest First</option>
-                                    <option value="oldest">Oldest First</option>
-                                    <option value="highest">Highest Rating</option>
-                                    <option value="lowest">Lowest Rating</option>
+                                    <option value="newest">{{ __('common.product.sort_newest') }}</option>
+                                    <option value="oldest">{{ __('common.product.sort_oldest') }}</option>
+                                    <option value="highest">{{ __('common.product.sort_highest') }}</option>
+                                    <option value="lowest">{{ __('common.product.sort_lowest') }}</option>
                                     <option value="helpful">Most Helpful</option>
                                 </select>
                             </div>
@@ -420,7 +420,7 @@
                                     </div>
                                 </div>
                                 <div class="text-right">
-                                    <p class="text-2xl font-bold text-gray-900">{{ $product->review_count }} Reviews</p>
+                                    <p class="text-2xl font-bold text-gray-900">{{ $product->review_count }} {{ __('common.product.reviews') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -454,8 +454,8 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M11.05 18.25l-.46.46a.75.75 0 01-1.06 0l-1.08-1.08a.75.75 0 010-1.06l4.5-4.5a.75.75 0 011.06 0l1.08 1.08a.75.75 0 010 1.06l-4.5 4.5zM12 11.25a.75.75 0 10-1.5 0 .75.75 0 001.5 0zM12 21a9 9 0 100-18 9 9 0 000 18z" />
                             </svg>
-                            <h3 class="mt-2 text-lg font-semibold text-gray-900">No Reviews Yet</h3>
-                            <p class="mt-1 text-sm text-gray-500">Be the first to share your thoughts on this product.</p>
+                            <h3 class="mt-2 text-lg font-semibold text-gray-900">{{ __('common.product.no_reviews') }}</h3>
+                            <p class="mt-1 text-sm text-gray-500">{{ __('common.product.be_first_review') }}</p>
                             <div class="mt-6">
                                 <button id="show-review-form-empty-btn"
                                     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-[#ef380d] hover:bg-[#d6320c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ef380d] transition-all duration-200">
@@ -583,7 +583,7 @@
             {{-- Related products --}}
     @if($relatedProducts && $relatedProducts->count())
         <div class="mt-12">
-            <h3 class="text-2xl font-bold mb-6">Related Products</h3>
+            <h3 class="text-2xl font-bold mb-6">{{ __('common.product.related_products') }}</h3>
             <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach($relatedProducts as $product)
                     <div class="gsp-search-recommend-collection-item group">

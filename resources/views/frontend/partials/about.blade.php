@@ -31,9 +31,9 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <!-- Left Side - Text -->
                 <div class="order-2 lg:order-1">
-                    <p class="text-sm tracking-[0.2em] text-gray-500 uppercase mb-4">Introducing</p>
+                    <p class="text-sm tracking-[0.2em] text-gray-500 uppercase mb-4">{{ __('common.about.introducing') }}</p>
                     <h1 class="text-5xl md:text-6xl lg:text-7xl font-light mb-8">
-                        About Afro Jee
+                        {{ __('common.about.title') }}
                     </h1>
                     <div class="space-y-6 text-gray-600 text-lg leading-relaxed">
                         <p>
@@ -56,8 +56,8 @@
                     <img src="{{ asset('images/founder-jennifer.jpeg') }}" alt="Jennifer Pokuaa Effah - Founder of Afro Jee" 
                          class="rounded-2xl shadow-2xl border-4 border-[#ef380d]/20 w-full h-auto">
                     <div class="absolute -bottom-4 -right-4 bg-[#ef380d] text-white px-4 py-2 rounded-lg">
-                        <p class="text-sm font-semibold">Jennifer Pokuaa Effah</p>
-                        <p class="text-xs">Founder & CEO</p>
+                        <p class="text-sm font-semibold">{{ __('common.about.founder_name') }}</p>
+                        <p class="text-xs">{{ __('common.about.founder_title') }}</p>
                     </div>
                 </div>
             </div>
@@ -78,8 +78,8 @@
             </div>
 
             <h2 class="text-4xl md:text-5xl font-light mb-6 text-gray-900">
-                We strive to live with compassion,<br>
-                <span class="font-normal">kindness and empathy</span>
+                {{ __('common.about.values.title') }}<br>
+                <span class="font-normal">{{ __('common.about.values.title_bold') }}</span>
             </h2>
 
             <p class="text-gray-500 max-w-3xl mx-auto leading-relaxed text-lg">
@@ -103,8 +103,8 @@
                 <!-- Right Side - Text -->
                 <div>
                     <h2 class="text-4xl md:text-5xl font-light mb-6 text-gray-900">
-                        Give your hair a healthy<br>
-                        <span class="font-normal">glow everyone</span>
+                        {{ __('common.about.mission.title_line1') }}<br>
+                        <span class="font-normal">{{ __('common.about.mission.title_line2') }}</span>
                     </h2>
                     <div class="space-y-6 text-gray-600 text-lg leading-relaxed">
                         <p>
@@ -130,7 +130,7 @@
                 <!-- Left Side - Text -->
                 <div>
                     <h2 class="text-4xl md:text-5xl font-light mb-6 text-gray-900">
-                        Our mission
+                        {{ __('common.about.vision.title') }}
                     </h2>
                     <div class="space-y-6 text-gray-600 text-lg leading-relaxed">
                         <p>
@@ -167,7 +167,7 @@
                 </svg>
             </div>
 
-            <h2 class="text-3xl md:text-4xl font-light mb-6 text-gray-900">About The Founder</h2>
+            <h2 class="text-3xl md:text-4xl font-light mb-6 text-gray-900">{{ __('common.about.founder_section.title') }}</h2>
 
             <div class="max-w-4xl mx-auto space-y-6 text-gray-600 text-lg leading-relaxed">
                 <p>
@@ -196,9 +196,9 @@
     <section id="our-coverage" class="bg-[#F8F7F4] py-20 px-6 md:px-20">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
-                <p class="text-sm tracking-[0.2em] text-gray-500 uppercase mb-4">Global Reach</p>
+                <p class="text-sm tracking-[0.2em] text-gray-500 uppercase mb-4">{{ __('common.about.coverage.title') }}</p>
                 <h2 class="text-4xl md:text-5xl font-light mb-6 text-gray-900">
-                    Our Coverage
+                    {{ __('common.about.coverage.title_bold') }}
                 </h2>
                 <p class="text-gray-600 text-lg max-w-3xl mx-auto leading-relaxed">
                     Afro Jee currently operates across several countries in Europe (Germany, Portugal, Italy, Austria, Switzerland, Luxembourg…) and the United States
@@ -311,7 +311,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-medium text-gray-900 mb-2">Multiple Continents</h3>
+                                <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('common.about.coverage.stats_multiple') }}</h3>
                                 <p class="text-gray-600">Active operations across Europe, and the United States with
                                     growing presence worldwide.</p>
                             </div>
@@ -328,7 +328,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-medium text-gray-900 mb-2">Rapid Expansion</h3>
+                                <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('common.about.coverage.stats_rapid') }}</h3>
                                 <p class="text-gray-600">Continuously expanding to more regions to bring natural self-care
                                     essentials to communities globally.</p>
                             </div>
@@ -345,7 +345,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-xl font-medium text-gray-900 mb-2">Trusted Quality</h3>
+                                <h3 class="text-xl font-medium text-gray-900 mb-2">{{ __('common.about.coverage.stats_trusted') }}</h3>
                                 <p class="text-gray-600">Handmade products with consistent quality standards across all
                                     markets we serve.</p>
                             </div>
@@ -360,7 +360,7 @@
     <section class="bg-white py-20 px-6 md:px-20">
         <div class="max-w-4xl mx-auto text-center">
             <h2 class="text-4xl md:text-5xl font-light mb-8 text-gray-900">
-                Join us on our journey
+                {{ __('common.about.cta.title') }}
             </h2>
             <p class="text-gray-600 text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
                 Join us on our journey to celebrate natural beauty, one product at a time. At Afro Jee, it's not just about
@@ -368,7 +368,7 @@
             </p>
             <a href="{{ route('web.products') }}"
                 class="inline-flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-10 py-4 rounded-full font-medium transition-all duration-300 hover:scale-105 shadow-sm">
-                Explore Our Products
+                {{ __('common.about.cta.button') }}
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>

@@ -8,10 +8,10 @@
 <section class="bg-white py-20 px-6 md:px-20">
     <div class="max-w-6xl mx-auto text-center">
         <h1 class="text-5xl md:text-6xl font-light mb-6 text-gray-900">
-            Keep In Touch with Us
+            {{ __('common.contact.hero.title') }}
         </h1>
         <p class="text-gray-500 text-lg max-w-3xl mx-auto leading-relaxed">
-            We're talking about clean beauty gift sets, of course – and we've got a bouquet of beauties for yourself or someone you love.
+            {{ __('common.contact.hero.subtitle') }}
         </p>
     </div>
 </section>
@@ -23,7 +23,7 @@
             
             <!-- Left Column - Contact Form -->
             <div>
-                <h2 class="text-4xl font-light mb-8 text-gray-900">Send A Message</h2>
+                <h2 class="text-4xl font-light mb-8 text-gray-900">{{ __('common.contact.form.title') }}</h2>
                 
                 @if(session('contact_success'))
                     <div class="bg-green-50 border border-green-200 text-green-800 px-6 py-4 rounded-lg mb-6">
@@ -33,7 +33,7 @@
 
                 @if($errors->any())
                     <div class="bg-red-50 border border-red-200 text-red-800 px-6 py-4 rounded-lg mb-6">
-                        <p class="font-medium mb-2">Please fix the following errors:</p>
+                        <p class="font-medium mb-2">{{ __('common.contact.form.errors') }}</p>
                         <ul class="list-disc list-inside space-y-1">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -50,7 +50,7 @@
                         <div>
                             <input type="text" 
                                    name="name" 
-                                   placeholder="Name" 
+                                   placeholder="{{ __('common.contact.form.name') }}" 
                                    value="{{ old('name') }}"
                                    required
                                    class="w-full px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition">
@@ -58,7 +58,7 @@
                         <div>
                             <input type="email" 
                                    name="email" 
-                                   placeholder="Email" 
+                                   placeholder="{{ __('common.contact.form.email') }}" 
                                    value="{{ old('email') }}"
                                    required
                                    class="w-full px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition">
@@ -69,7 +69,7 @@
                     <div>
                         <input type="tel" 
                                name="phone" 
-                               placeholder="Phone (Optional)" 
+                               placeholder="{{ __('common.contact.form.phone') }}" 
                                value="{{ old('phone') }}"
                                class="w-full px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition">
                     </div>
@@ -78,7 +78,7 @@
                     <div>
                         <input type="text" 
                                name="subject" 
-                               placeholder="Subject" 
+                               placeholder="{{ __('common.contact.form.subject') }}" 
                                value="{{ old('subject') }}"
                                required
                                class="w-full px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition">
@@ -88,7 +88,7 @@
                     <div>
                         <textarea name="message" 
                                   rows="6" 
-                                  placeholder="Message" 
+                                  placeholder="{{ __('common.contact.form.message') }}" 
                                   required
                                   class="w-full px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition resize-none">{{ old('message') }}</textarea>
                     </div>
@@ -97,7 +97,7 @@
                     <div>
                         <button type="submit" 
                                 class="bg-gray-900 hover:bg-gray-800 text-white px-12 py-4 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-sm">
-                            Submit
+                            {{ __('common.contact.form.submit') }}
                         </button>
                     </div>
                 </form>
@@ -128,22 +128,22 @@
 
                 <!-- Contact -->
                 <div>
-                    <h3 class="text-2xl font-light mb-6 text-gray-900">Contact</h3>
+                    <h3 class="text-2xl font-light mb-6 text-gray-900">{{ __('common.contact.info.contact') }}</h3>
                     <div class="space-y-3 text-gray-600 text-lg">
                         <p>
-                            <span class="text-gray-500">Mobile:</span> 
+                            <span class="text-gray-500">{{ __('common.contact.info.mobile') }}</span> 
                             <a href="tel:+34602181565" class="text-gray-900 hover:text-[#ef380d] transition">
                                 +34 602 181 565
                             </a>
                         </p>
                         <p>
-                            <span class="text-gray-500">WhatsApp:</span> 
+                            <span class="text-gray-500">{{ __('common.contact.info.whatsapp') }}</span> 
                             <a href="https://wa.me/34602181565" target="_blank" class="text-gray-900 hover:text-[#ef380d] transition">
                                 +34 602 181 565
                             </a>
                         </p>
                         <p>
-                            <span class="text-gray-500">E-mail:</span> 
+                            <span class="text-gray-500">{{ __('common.contact.info.email') }}</span> 
                             <a href="mailto:info@afrojee.store" class="text-gray-900 hover:text-[#ef380d] transition">
                                 info@afrojee.store
                             </a>
@@ -153,7 +153,7 @@
 
                 <!-- Social Media -->
                 <div>
-                    <h3 class="text-2xl font-light mb-6 text-gray-900">Follow Us</h3>
+                    <h3 class="text-2xl font-light mb-6 text-gray-900">{{ __('common.contact.info.follow') }}</h3>
                     <div class="flex gap-4">
                         <a href="https://www.instagram.com/afro_jeee/" 
                            target="_blank"
@@ -204,22 +204,22 @@
 <section class="bg-[#F8F7F4] py-20 px-6 md:px-20">
     <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-4xl md:text-5xl font-light mb-6 text-gray-900">
-            Stay Updated
+            {{ __('common.contact.newsletter.title') }}
         </h2>
         <p class="text-gray-500 text-lg mb-8 max-w-2xl mx-auto">
-            Subscribe to our newsletter for exclusive offers, hair care tips, and product updates.
+            {{ __('common.contact.newsletter.subtitle') }}
         </p>
         
         <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
             @csrf
             <input type="email" 
                    name="newsletter_email" 
-                   placeholder="Enter your email" 
+                   placeholder="{{ __('common.contact.newsletter.placeholder') }}" 
                    required
                    class="flex-1 px-6 py-4 bg-white border-0 rounded-lg text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-900 transition">
             <button type="submit" 
                     class="bg-gray-900 hover:bg-gray-800 text-white px-8 py-4 rounded-lg font-medium transition-all duration-300 hover:scale-105 shadow-sm whitespace-nowrap">
-                Subscribe
+                {{ __('common.contact.newsletter.subscribe') }}
             </button>
         </form>
     </div>
