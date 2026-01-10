@@ -611,13 +611,13 @@
         <div class="mb-12">
             <div class="flex items-center mb-6">
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-light text-primary">
-                    View <br><span class="font-bold text-primary">Our Products</span>
+                    {{ __('common.productlist.view') }} <br><span class="font-bold text-primary">{{ __('common.productlist.our_products') }}</span>
                 </h2>
                 <div class="bg-gradient-to-r from-primary to-primary-dark h-1 w-full min-w-32 mt-4 ml-8 rounded-full">
                 </div>
             </div>
             <p class="text-gray-600 text-lg md:text-xl max-w-4xl leading-relaxed">
-                Explore our collection and find the perfect products to elevate your beauty routine
+                {{ __('common.productlist.description') }}
             </p>
         </div>
 
@@ -628,7 +628,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input name="q" type="text" placeholder="Search for products..." class="search-input"
+                <input name="q" type="text" placeholder="{{ __('common.productlist.search_placeholder') }}" class="search-input"
                     value="{{ $_GET['q'] ?? '' }}" />
                 <button type="submit" class="search-btn">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -646,10 +646,16 @@
                 {{ __('common.productlist.all_products') }}
             </a>
             @foreach ($categories as $category)
-                <a href="{{ route('web.products.filterByCategory', ['slug' => $category->slug]) }}"
-                    class="filter-btn {{ request()->routeIs('web.products.filterByCategory') && request()->route('slug') == $category->slug ? 'active' : '' }}">
-                    {{ $category->name }}
-                </a>
+            @php
+                $map = config('category_map');
+                $key = $map[$category->name] ?? null;
+            @endphp
+
+            <a href="{{ route('web.products.filterByCategory', ['slug' => $category->slug]) }}"
+                class="filter-btn {{ request()->routeIs('web.products.filterByCategory') && request()->route('slug') == $category->slug ? 'active' : '' }}">
+                {{ $key ? __('common.categories.' . $key) : $category->name }}
+            </a>
+
             @endforeach
         </div>
 
@@ -699,7 +705,7 @@
                                         data-product-price="{{ $product->getPrice() }}"
                                         data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
                                         data-size-id="0"
-                                        title="Add to Cart">
+                                        title="{{ __('common.productlist.add_to_cart') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
@@ -708,7 +714,7 @@
                                     <!-- Quick View Button -->
                                     <a href="{{ route('web.products.details', $product->slug) }}"
                                         class="bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-                                        title="Quick View">
+                                        title="{{ __('common.productlist.quick_view') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -718,7 +724,7 @@
                                     <!-- Wishlist Button -->
                                     <button type="button"
                                         class="bg-white hidden hover:bg-red-500 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-                                        title="Add to Wishlist">
+                                        title="{{ __('common.productlist.add_to_wishlist') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                                         </svg>
@@ -769,13 +775,13 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
-                                        Cart
+                                        {{ __('common.productlist.cart') }}
                                     </button>
 
                                     <!-- Buy Now -->
                                     <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => 0]) }}"
                                         class="flex-1 bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 py-2 px-3 rounded-lg text-sm font-medium transition-colors text-center">
-                                        Buy
+                                        {{ __('common.productlist.buy') }}
                                     </a>
                                 </div>
                             </div>
@@ -796,7 +802,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                             </svg>
-                            Back to All Products
+                            {{ __('common.productlist.back_to_all') }}
                         </a>
                     </div>
                 @endforelse
@@ -813,7 +819,7 @@
                             d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                             clip-rule="evenodd" />
                     </svg>
-                    Previous
+                    {{ __('common.productlist.previous') }}
                 </a>
 
                 @php
@@ -843,7 +849,7 @@
 
                 <a href="{{ $products->nextPageUrl() }}"
                     class="pagination-btn {{ $products->currentPage() == $products->lastPage() ? 'disabled' : '' }}">
-                    Next
+                    {{ __('common.productlist.next') }}
                     <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
                             d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"

@@ -14,7 +14,7 @@
         </button>
 
         <!-- Success Message -->
-        <h2 class="text-green-600 text-lg font-semibold mb-4">Purchase Successful!</h2>
+        <h2 class="text-green-600 text-lg font-semibold mb-4">{{ __('common.order_success.title') }}</h2>
 
         <!-- Checkmark Icon -->
         <div class="mx-auto w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mb-6 shadow-lg">
@@ -25,17 +25,17 @@
         </div>
 
         <!-- Thank You Message -->
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Thank You!</h1>
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ __('common.order_success.thank_you') }}</h1>
         <p class="text-gray-600 mb-6">
-            Your package should be delivered within <span class="font-semibold">2-3 business days</span>.
+            {{ __('common.order_success.delivery_message') }} <span class="font-semibold">{{ __('common.order_success.delivery_days') }}</span>.
             <br>
-            We appreciate your patronage.
+            {{ __('common.order_success.appreciation') }}
         </p>
 
         <!-- Done Button -->
         <button
             class="w-full bg-purple-700 hover:bg-purple-800 text-white font-medium py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75">
-            Done
+            {{ __('common.order_success.done') }}
         </button>
     </section>
 @endsection

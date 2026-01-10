@@ -10,7 +10,7 @@
                     type="text"
                     name="q"
                     id="search-input"
-                    placeholder="Search for products..."
+                    placeholder="{{ __('common.search.placeholder') }}"
                     class="w-full p-3 pr-10 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-500 focus:border-rose-500 text-stone-700"
                     autocomplete="off"
                 >

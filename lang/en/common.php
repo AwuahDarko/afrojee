@@ -201,6 +201,33 @@ return [
     'product.related_products' => 'Related Products',
     'product.got_thoughts' => 'Got thoughts on this product?',
     'product.leave_review' => 'Leave A Review',
+    'product.add_to_wishlist' => 'Add To Wishlist',
+    'product.share' => 'Share',
+    'product.share_this_product' => 'Share this product',
+    'product.share_facebook' => 'Share on Facebook',
+    'product.share_twitter' => 'Share on Twitter',
+    'product.share_whatsapp' => 'Share on WhatsApp',
+    'product.copy_link' => 'Copy link',
+    'product.estimated_delivery' => 'Estimated Delivery:',
+    'product.quality_guaranteed' => 'Quality Guaranteed:',
+    'product.quality_description' => 'Premium products, carefully selected',
+    'product.safe_checkout' => 'Guarantee safe & secure checkout',
+    'product.sort_helpful' => 'Most Helpful',
+    'product.previous' => 'Previous',
+    'product.next' => 'Next',
+    'product.write_review' => 'Write Your Review',
+    'product.your_rating' => 'Your Rating',
+    'product.select_rating' => 'Please select a rating',
+    'product.name' => 'Name',
+    'product.enter_name' => 'Please enter your name',
+    'product.email_optional' => 'Email (Optional)',
+    'product.review_title' => 'Review Title',
+    'product.enter_review_title' => 'Please enter a review title',
+    'product.your_review' => 'Your Review',
+    'product.write_review_text' => 'Please write your review',
+    'product.upload_image' => 'Upload Image (Optional)',
+    'product.submit_review' => 'Submit Review',
+    'product.cancel' => 'Cancel',
     
     // Cart Page
     'cart.shopping_cart' => 'Your Shopping Cart',
@@ -340,5 +367,45 @@ return [
     'privacy.title_bold' => 'Policy',
     'privacy.subtitle' => 'Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.',
     'privacy.last_updated' => 'Last updated:',
+    
+    // Order Success Page
+    'order_success.title' => 'Purchase Successful!',
+    'order_success.thank_you' => 'Thank You!',
+    'order_success.delivery_message' => 'Your package should be delivered within',
+    'order_success.delivery_days' => '2-3 business days',
+    'order_success.appreciation' => 'We appreciate your patronage.',
+    'order_success.done' => 'Done',
+    
+    // Newsletter Section
+    'newsletter.subscribe_to' => 'Subscribe To',
+    'newsletter.our_newsletter' => 'Our Newsletter?',
+    'newsletter.description' => 'Stay in the loop with the latest from Afro Jee! Sign up for our newsletter to receive exclusive updates, special offers, and beauty tips straight to your inbox. Join our community and be the first to know what\'s new!',
+    'newsletter.email_placeholder' => 'Enter your email address',
+    'newsletter.subscribe' => 'Subscribe',
+    
+    // Search Modal
+    'search.placeholder' => 'Search for products...',
+    
+    // Product List Page Additional
+    'productlist.view' => 'View',
+    'productlist.our_products' => 'Our Products',
+    'productlist.description' => 'Explore our collection and find the perfect products to elevate your beauty routine',
+    'productlist.search_placeholder' => 'Search for products...',
+    'productlist.add_to_cart' => 'Add to Cart',
+    'productlist.quick_view' => 'Quick View',
+    'productlist.add_to_wishlist' => 'Add to Wishlist',
+    'productlist.cart' => 'Cart',
+    'productlist.buy' => 'Buy',
+    'productlist.back_to_all' => 'Back to All Products',
+    'productlist.previous' => 'Previous',
+    'productlist.next' => 'Next',
+
+    'categories' => [//
+        'skin_care_products' => 'Skin Care Products',
+        'haircare_sets' => 'Haircare Sets',
+        'herbal_care' => 'Herbal Care',
+        'moisturizers_conditioners' => 'Moisturizers & Conditioners',
+        'oils_treatments' => 'Oils & Treatments',
+    ],
 ];
 

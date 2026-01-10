@@ -5,8 +5,8 @@
     <div class="relative z-10 container max-w-1xl mx-auto text-left text-white">
         <div class="flex items-center mb-2">
             <div>
-                <h1 class="text-5xl font-light">Subscribe To</h1>
-                <h2 class="text-5xl font-bold mt-2 mb-6">Our Newsletter?</h2>
+                <h1 class="text-5xl font-light">{{ __('common.newsletter.subscribe_to') }}</h1>
+                <h2 class="text-5xl font-bold mt-2 mb-6">{{ __('common.newsletter.our_newsletter') }}</h2>
             </div>
             <div class="bg-taupe h-1 backdrop-blur-sm  w-5/6 min-w-lg mt-4 mb-8"></div>
         </div>
@@ -20,18 +20,16 @@
         </div> -->
 
         <p class="text-lg font-bold leading-relaxed mb-10">
-            Stay in the loop with the latest from Afro Jee! Sign up for our newsletter to receive
-            exclusive updates, special offers, and beauty tips straight to your inbox. Join our community and be the
-            first to know what's new!
+            {{ __('common.newsletter.description') }}
         </p>
 
         <form class="flex flex-col  justify-start gap-4 max-w-xl mr-auto">
-            <input type="email" placeholder="Enter your email address"
+            <input type="email" placeholder="{{ __('common.newsletter.email_placeholder') }}"
                 class="w-full sm:w-2/3 px-5 py-3 bg-white rounded-md text-gray-500 block focus:outline-none shadow-md border border-gray-300"
                 required /><br />
             <button type="submit"
                 class="px-6 py-3 rounded-full w-40 bg-purple-800 hover:bg-purple-900 text-white font-semibold flex items-center gap-2">
-                Subscribe
+                {{ __('common.newsletter.subscribe') }}
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7" />
                 </svg>

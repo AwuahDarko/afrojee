@@ -256,7 +256,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
         </svg>
-        <span class="font-medium">Add To Wishlist</span>
+        <span class="font-medium">{{ __('common.product.add_to_wishlist') }}</span>
     </button>
     
     <div class="share-dropdown relative">
@@ -265,36 +265,36 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
             </svg>
-            <span class="font-medium">Share</span>
+            <span class="font-medium">{{ __('common.product.share') }}</span>
         </button>
         
         <div class="share-menu hidden absolute top-full left-0 mt-2 bg-white rounded-xl shadow-lg p-5 min-w-[280px] z-50">
-            <div class="font-semibold text-sm text-gray-900 mb-3">Share this product</div>
+            <div class="font-semibold text-sm text-gray-900 mb-3">{{ __('common.product.share_this_product') }}</div>
             <div class="flex gap-3">
                 <a href="#" onclick="shareProduct('facebook', '{{ route('web.products.details', $product->slug) }}', '{{ addslashes($product->name) }}'); return false;" 
                    class="flex-1 flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-[#1877f2] hover:text-white transition-all duration-200 hover:-translate-y-0.5" 
-                   title="Share on Facebook">
+                   title="{{ __('common.product.share_facebook') }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
                 </a>
                 <a href="#" onclick="shareProduct('twitter', '{{ route('web.products.details', $product->slug) }}', '{{ addslashes($product->name) }}'); return false;" 
                    class="flex-1 flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-[#1da1f2] hover:text-white transition-all duration-200 hover:-translate-y-0.5" 
-                   title="Share on Twitter">
+                   title="{{ __('common.product.share_twitter') }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
                     </svg>
                 </a>
                 <a href="#" onclick="shareProduct('whatsapp', '{{ route('web.products.details', $product->slug) }}', '{{ addslashes($product->name) }}'); return false;" 
                    class="flex-1 flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-[#25d366] hover:text-white transition-all duration-200 hover:-translate-y-0.5" 
-                   title="Share on WhatsApp">
+                   title="{{ __('common.product.share_whatsapp') }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                     </svg>
                 </a>
                 <button type="button" onclick="copyProductLink('{{ route('web.products.details', $product->slug) }}')" 
                         class="flex-1 flex items-center justify-center p-3 bg-gray-100 rounded-lg hover:bg-indigo-500 hover:text-white transition-all duration-200 hover:-translate-y-0.5" 
-                        title="Copy link">
+                        title="{{ __('common.product.copy_link') }}">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
                     </svg>
@@ -312,7 +312,7 @@
                                     d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
                             </svg>
                             <div>
-                                <p class="font-semibold text-gray-900">Estimated Delivery:</p>
+                                <p class="font-semibold text-gray-900">{{ __('common.product.estimated_delivery') }}</p>
                                 <p class="text-gray-600">{{ now()->addDays(7)->format('F d') }} -
                                     {{ now()->addDays(14)->format('F d') }}</p>
                             </div>
@@ -323,8 +323,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <div>
-                                    <p class="font-semibold text-gray-900">Quality Guaranteed:</p>
-                                    <p class="text-gray-600">Premium products, carefully selected</p>
+                                    <p class="font-semibold text-gray-900">{{ __('common.product.quality_guaranteed') }}</p>
+                                    <p class="text-gray-600">{{ __('common.product.quality_description') }}</p>
                                 </div>
                             </div>
                         @endif
@@ -340,7 +340,7 @@
                             <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal"
                                 class="h-6">
                         </div>
-                        <p class="text-sm text-gray-600">Guarantee safe & secure checkout</p>
+                        <p class="text-sm text-gray-600">{{ __('common.product.safe_checkout') }}</p>
                     </div>
                 </div>
             </div>
@@ -401,7 +401,7 @@
                                     <option value="oldest">{{ __('common.product.sort_oldest') }}</option>
                                     <option value="highest">{{ __('common.product.sort_highest') }}</option>
                                     <option value="lowest">{{ __('common.product.sort_lowest') }}</option>
-                                    <option value="helpful">Most Helpful</option>
+                                    <option value="helpful">{{ __('common.product.sort_helpful') }}</option>
                                 </select>
                             </div>
                         </div>
@@ -436,12 +436,12 @@
                                 <svg width="8" height="13" viewBox="0 0 8 13" fill="none">
                                     <path d="m7.41 11.572-4.58-4.59 4.58-4.59L6 .982l-6 6 6 6z" fill="#ef380d"></path>
                                 </svg>
-                                <span class="ml-2 sm:ml-3">Previous</span>
+                                <span class="ml-2 sm:ml-3">{{ __('common.product.previous') }}</span>
                             </button>
                             <div id="pagination-numbers" class="flex space-x-2 text-gray-600"></div>
                             <button id="nextPage"
                                 class="pagination-button text-[#ef380d] font-bold px-3 py-1 rounded-full border border-transparent hover:border-[#ef380d] hover:bg-[#ef380d]/5 transition duration-300 flex items-center space-x-1 text-sm sm:text-base">
-                                <span class="mr-2 sm:mr-3">Next</span>
+                                <span class="mr-2 sm:mr-3">{{ __('common.product.next') }}</span>
                                 <svg width="9" height="13" viewBox="0 0 9 13" fill="none">
                                     <path d="m.824 2.392 4.58 4.59-4.58 4.59 1.41 1.41 6-6-6-6z" fill="#ef380d"></path>
                                 </svg>
@@ -459,7 +459,7 @@
                             <div class="mt-6">
                                 <button id="show-review-form-empty-btn"
                                     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-[#ef380d] hover:bg-[#d6320c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ef380d] transition-all duration-200">
-                                    Leave a Review
+                                    {{ __('common.product.leave_review') }}
                                 </button>
                             </div>
                         </div>
@@ -469,7 +469,7 @@
                     <div class="mt-10 hidden" id="review-form-container">
                         <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
                             <div class="flex justify-between items-center mb-6">
-                                <h2 class="text-2xl font-bold text-gray-900">Write Your Review</h2>
+                                <h2 class="text-2xl font-bold text-gray-900">{{ __('common.product.write_review') }}</h2>
                                 <button id="close-review-form"
                                     class="text-gray-400 hover:text-gray-600 transition-colors duration-200">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -492,7 +492,7 @@
 
                                 <!-- Rating Field -->
                                 <div>
-                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Your Rating <span
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.your_rating') }} <span
                                             class="text-red-500">*</span></label>
                                     <div class="flex items-center text-3xl space-x-1 text-gray-300 review-stars"
                                         id="rating-stars">
@@ -503,7 +503,7 @@
                                                 class="cursor-pointer transition-colors duration-200 hover:text-yellow-500">★</label>
                                         @endfor
                                     </div>
-                                    <div id="rating-error" class="text-red-500 text-sm mt-1 hidden">Please select a rating
+                                    <div id="rating-error" class="text-red-500 text-sm mt-1 hidden">{{ __('common.product.select_rating') }}
                                     </div>
                                     @error('rating')
                                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -513,18 +513,17 @@
                                 <!-- Name & Email -->
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Name <span
+                                        <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.name') }} <span
                                                 class="text-red-500">*</span></label>
                                         <input type="text" id="name" name="name"
                                             value="{{ old('name', auth()->user()->name ?? '') }}" required
                                             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-[#ef380d] focus:ring-2 focus:ring-[#ef380d]/20 transition duration-200">
-                                        <div id="name-error" class="text-red-500 text-sm mt-1 hidden">Please enter your name
+                                        <div id="name-error" class="text-red-500 text-sm mt-1 hidden">{{ __('common.product.enter_name') }}
                                         </div>
                                         @error('name')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                                     </div>
                                     <div>
-                                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email
-                                            (Optional)</label>
+                                        <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.email_optional') }}</label>
                                         <input type="email" id="email" name="email"
                                             value="{{ old('email', auth()->user()->email ?? '') }}"
                                             class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-[#ef380d] focus:ring-2 focus:ring-[#ef380d]/20 transition duration-200">
@@ -534,30 +533,28 @@
 
                                 <!-- Review Title -->
                                 <div>
-                                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">Review Title
+                                    <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.review_title') }}
                                         <span class="text-red-500">*</span></label>
                                     <input type="text" id="title" name="title" value="{{ old('title') }}" required
                                         class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-[#ef380d] focus:ring-2 focus:ring-[#ef380d]/20 transition duration-200">
-                                    <div id="title-error" class="text-red-500 text-sm mt-1 hidden">Please enter a review
-                                        title</div>
+                                    <div id="title-error" class="text-red-500 text-sm mt-1 hidden">{{ __('common.product.enter_review_title') }}</div>
                                     @error('title')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                                 </div>
 
                                 <!-- Review Content -->
                                 <div>
-                                    <label for="review" class="block text-sm font-semibold text-gray-700 mb-2">Your Review
+                                    <label for="review" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.your_review') }}
                                         <span class="text-red-500">*</span></label>
                                     <textarea id="review" name="review" rows="4" required
                                         class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:border-[#ef380d] focus:ring-2 focus:ring-[#ef380d]/20 transition duration-200">{{ old('review') }}</textarea>
-                                    <div id="review-error" class="text-red-500 text-sm mt-1 hidden">Please write your review
+                                    <div id="review-error" class="text-red-500 text-sm mt-1 hidden">{{ __('common.product.write_review_text') }}
                                     </div>
                                     @error('review')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
                                 </div>
 
                                 <!-- Image Upload -->
                                 <div>
-                                    <label for="image_file" class="block text-sm font-semibold text-gray-700 mb-2">Upload
-                                        Image (Optional)</label>
+                                    <label for="image_file" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('common.product.upload_image') }}</label>
                                     <input type="file" id="image_file" name="image_file"
                                         class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ef380d]/10 file:text-[#ef380d] hover:file:bg-[#ef380d]/20">
                                     @error('image_file')<p class="text-red-500 text-sm mt-1">{{ $message }}</p>@enderror
@@ -567,11 +564,11 @@
                                 <div class="flex gap-3">
                                     <button type="submit" id="submit-review-btn"
                                         class="bg-[#ef380d] hover:bg-[#d6320c] text-white font-semibold py-3 px-8 rounded-xl transition-colors duration-300 shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed">
-                                        Submit Review
+                                        {{ __('common.product.submit_review') }}
                                     </button>
                                     <button type="button" id="cancel-review-form"
                                         class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-3 px-6 rounded-xl transition-colors duration-300">
-                                        Cancel
+                                        {{ __('common.product.cancel') }}
                                     </button>
                                 </div>
                             </form>
@@ -618,7 +615,7 @@
                                         data-product-price="{{ $product->price }}"
                                         data-product-image="{{ $product->getPrimaryImage()?->image_path ? $product->getPrimaryImage()?->image_path : $product->image ?? asset('images/default-product.png') }}"
                                         data-size-id="0"
-                                        title="Add to Cart">
+                                        title="{{ __('common.productlist.add_to_cart') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
@@ -627,7 +624,7 @@
                                     <!-- Quick View Button -->
                                     <a href="{{ route('web.products.details', $product->slug) }}"
                                         class="bg-white hover:bg-gray-900 text-gray-900 hover:text-white p-3 rounded-full shadow-lg transition-all duration-300 hover:scale-110"
-                                        title="Quick View">
+                                        title="{{ __('common.productlist.quick_view') }}">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -688,13 +685,13 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
                                         </svg>
-                                        Cart
+                                        {{ __('common.productlist.cart') }}
                                     </button>
 
                                     <!-- Buy Now -->
                                     <a href="{{ route('web.checkoutDetails.single', ['product_id' => $product->id, 'quantity' => 1, 'size_id' => 0]) }}"
                                         class="flex-1 bg-white border-2 border-gray-900 text-gray-900 hover:bg-gray-50 py-2 px-3 rounded-lg text-sm font-medium transition-colors text-center">
-                                        Buy
+                                        {{ __('common.productlist.buy') }}
                                     </a>
                                 </div>
                             </div>

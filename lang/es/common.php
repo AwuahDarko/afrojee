@@ -202,6 +202,33 @@ return [
     'product.related_products' => 'Productos Relacionados',
     'product.got_thoughts' => '¿Tienes opiniones sobre este producto?',
     'product.leave_review' => 'Dejar Una Reseña',
+    'product.add_to_wishlist' => 'Añadir a Lista de Deseos',
+    'product.share' => 'Compartir',
+    'product.share_this_product' => 'Compartir este producto',
+    'product.share_facebook' => 'Compartir en Facebook',
+    'product.share_twitter' => 'Compartir en Twitter',
+    'product.share_whatsapp' => 'Compartir en WhatsApp',
+    'product.copy_link' => 'Copiar enlace',
+    'product.estimated_delivery' => 'Entrega Estimada:',
+    'product.quality_guaranteed' => 'Calidad Garantizada:',
+    'product.quality_description' => 'Productos premium, cuidadosamente seleccionados',
+    'product.safe_checkout' => 'Garantía de pago seguro',
+    'product.sort_helpful' => 'Más Útil',
+    'product.previous' => 'Anterior',
+    'product.next' => 'Siguiente',
+    'product.write_review' => 'Escribe Tu Reseña',
+    'product.your_rating' => 'Tu Calificación',
+    'product.select_rating' => 'Por favor selecciona una calificación',
+    'product.name' => 'Nombre',
+    'product.enter_name' => 'Por favor ingresa tu nombre',
+    'product.email_optional' => 'Correo Electrónico (Opcional)',
+    'product.review_title' => 'Título de la Reseña',
+    'product.enter_review_title' => 'Por favor ingresa un título para la reseña',
+    'product.your_review' => 'Tu Reseña',
+    'product.write_review_text' => 'Por favor escribe tu reseña',
+    'product.upload_image' => 'Subir Imagen (Opcional)',
+    'product.submit_review' => 'Enviar Reseña',
+    'product.cancel' => 'Cancelar',
     
     // Cart Page
     'cart.shopping_cart' => 'Tu Carrito de Compras',
@@ -341,5 +368,51 @@ return [
     'privacy.title_bold' => 'Privacidad',
     'privacy.subtitle' => 'Tu privacidad es importante para nosotros. Esta política explica cómo recopilamos, usamos y protegemos tu información personal.',
     'privacy.last_updated' => 'Última actualización:',
+    
+    // Order Success Page
+    'order_success.title' => '¡Compra Exitosa!',
+    'order_success.thank_you' => '¡Gracias!',
+    'order_success.delivery_message' => 'Tu paquete debería ser entregado en',
+    'order_success.delivery_days' => '2-3 días hábiles',
+    'order_success.appreciation' => 'Apreciamos tu patrocinio.',
+    'order_success.done' => 'Hecho',
+    
+    // Newsletter Section
+    'newsletter.subscribe_to' => 'Suscríbete a',
+    'newsletter.our_newsletter' => 'Nuestro Boletín?',
+    'newsletter.description' => '¡Mantente al día con lo último de Afro Jee! Regístrate en nuestro boletín para recibir actualizaciones exclusivas, ofertas especiales y consejos de belleza directamente en tu bandeja de entrada. ¡Únete a nuestra comunidad y sé el primero en saber qué hay de nuevo!',
+    'newsletter.email_placeholder' => 'Ingresa tu dirección de correo electrónico',
+    'newsletter.subscribe' => 'Suscribirse',
+    
+    // Search Modal
+    'search.placeholder' => 'Buscar productos...',
+    
+    // Product List Page Additional
+    'productlist.view' => 'Ver',
+    'productlist.our_products' => 'Nuestros Productos',
+    'productlist.description' => 'Explora nuestra colección y encuentra los productos perfectos para elevar tu rutina de belleza',
+    'productlist.search_placeholder' => 'Buscar productos...',
+    'productlist.add_to_cart' => 'Añadir al Carrito',
+    'productlist.quick_view' => 'Vista Rápida',
+    'productlist.add_to_wishlist' => 'Añadir a Lista de Deseos',
+    'productlist.cart' => 'Carrito',
+    'productlist.buy' => 'Comprar',
+    'productlist.back_to_all' => 'Volver a Todos los Productos',
+    'productlist.previous' => 'Anterior',
+    'productlist.next' => 'Siguiente',
+
+
+    'Haircare Sets' => 'Sets para el Cuidado del Cabello',
+    'Herbal Care' => 'Cuidado Herbal',
+    'Moisturizers & Conditioners' => 'Hidratantes y Acondicionadores',
+    'Oils & Treatments' => 'Aceites y Tratamientos',
+
+    'categories' => [//
+        'skin_care_products' => 'Productos de Cuidado de la Piel',
+        'haircare_sets' => 'Sets para el Cuidado del Cabello',
+        'herbal_care' => 'Cuidado Herbal',
+        'moisturizers_conditioners' => 'Hidratantes y Acondicionadores',
+        'oils_treatments' => 'Aceites y Tratamientos',
+    ],
 ];
 
