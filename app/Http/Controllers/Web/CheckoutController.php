@@ -43,6 +43,53 @@ class CheckoutController extends Controller
     }
 
     /**
+     * Check if customer is making their first order (by email)
+     * 
+     * @param string $email
+     * @return bool
+     */
+    private function isFirstTimeCustomer(?string $email): bool
+    {
+        if (empty($email)) {
+            return false;
+        }
+    
+        $email = strtolower(trim($email));
+    
+        $hasPaidOrder = Order::whereHas('billingAddress', function ($query) use ($email) {
+                $query->whereRaw('LOWER(email) = ?', [$email]);
+            })
+            ->where('payment_status', 'paid')
+            ->exists();
+    
+        Log::info('First order check', [
+            'email' => $email,
+            'has_paid_order' => $hasPaidOrder,
+        ]);
+    
+        return !$hasPaidOrder;
+    }
+    
+
+    /**
+     * Calculate first order discount (10%)
+     * 
+     * @param float $subtotal
+     * @return array ['discount_amount' => float, 'discounted_subtotal' => float]
+     */
+    private function calculateFirstOrderDiscount($subtotal)
+    {
+        $discountPercentage = 10; // 10% discount
+        $discountAmount = ($subtotal * $discountPercentage) / 100;
+        $discountedSubtotal = $subtotal - $discountAmount;
+
+        return [
+            'discount_amount' => round($discountAmount, 2),
+            'discounted_subtotal' => round($discountedSubtotal, 2)
+        ];
+    }
+
+    /**
      * Calculate shipping cost using tiered pricing model.
      * Sums up costs for each weight tier the order spans across.
      * 
@@ -394,13 +441,36 @@ class CheckoutController extends Controller
         $total_price = $price * $quantity;
         // Use highest rate if weight exceeds max, or 0 if no rate found
         $total_shipping = $rates ? $rates->rate : 0;
-        $grand_total = $total_shipping + $total_price;
+
+        // Check if customer is first-time (need email from request)
+        $customerEmail = $request->input('email');
+        if (!$customerEmail) {
+            // Try to get from session address
+            $guestAddressId = Session::get('guest_billing_address_id');
+            if ($guestAddressId) {
+                $address = Address::find($guestAddressId);
+                $customerEmail = $address ? $address->email : null;
+            }
+        }
+
+        // Calculate discount if first-time customer
+        $isFirstOrder = $this->isFirstTimeCustomer($customerEmail);
+        $discountAmount = 0;
+        $discountedSubtotal = $total_price;
+        if ($isFirstOrder) {
+            $discountData = $this->calculateFirstOrderDiscount($total_price);
+            $discountAmount = $discountData['discount_amount'];
+            $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Calculate grand total with discount
+        $grand_total = $total_shipping + $discountedSubtotal;
 
         // Get the shipping zone to get carrier name
         $zone = ShippingZone::find($zone_id);
         $carrier_name = $zone ? $zone->zone_name : '';
 
-        return view('frontend.partials.checkoutSummary', compact('total_price', 'total_shipping', 'grand_total', 'carrier_name'));
+        return view('frontend.partials.checkoutSummary', compact('total_price', 'discountAmount', 'isFirstOrder', 'discountedSubtotal', 'total_shipping', 'grand_total', 'carrier_name', 'customerEmail'));
     }
 
     public function getPrice(Request $request)
@@ -448,9 +518,37 @@ class CheckoutController extends Controller
             $total_shipping = $shippingCalculation['rate'];
         }
 
+        // Check if customer is first-time (need email from request or session)
+        $customerEmail = $request->input('email');
+        if (!$customerEmail) {
+            // Try to get from session address
+            $guestAddressId = Session::get('guest_billing_address_id');
+            if ($guestAddressId) {
+                $address = Address::find($guestAddressId);
+                $customerEmail = $address ? $address->email : null;
+            }
+        }
+
+        // Calculate discount if first-time customer
+        $isFirstOrder = $this->isFirstTimeCustomer($customerEmail);
+        $discountAmount = 0;
+        $discountedSubtotal = $total_amount;
+        if ($isFirstOrder) {
+            $discountData = $this->calculateFirstOrderDiscount($total_amount);
+            $discountAmount = $discountData['discount_amount'];
+            $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Calculate grand total with discount
+        $grand_total = $total_shipping + $discountedSubtotal;
+
         return json_encode([
+            'subtotal' => number_format($total_amount, 2),
+            'discount_amount' => number_format($discountAmount, 2),
+            'discounted_subtotal' => number_format($discountedSubtotal, 2),
+            'is_first_order' => $isFirstOrder,
             'total_shipping' => app_currency() . ' ' . number_format($total_shipping, 2),
-            'grand_total' => app_currency() . ' ' . number_format($total_shipping + $total_amount, 2),
+            'grand_total' => app_currency() . ' ' . number_format($grand_total, 2),
             'total_weight' => $total_weight,
             'breakdown' => $shippingCalculation['breakdown'] ?? []
         ]);

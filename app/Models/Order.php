@@ -18,6 +18,8 @@ class Order extends Model
         'billing_address_id',
         'shipping_address_id',
         'subtotal',
+        'discount_amount',
+        'is_first_order',
         'delivery_fee',
         'total_amount',
         'total_weight',

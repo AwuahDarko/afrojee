@@ -228,6 +228,14 @@
                         <p class="text-gray-700">Product sub-total</p>
                         <p class="font-bold text-gray-900" id="total-lbl">  {{ number_format(0, 2) }} {{app_currency()}} </p>
                     </div>
+                    <!-- First Order Discount -->
+                    <div id="discount-row" class="flex justify-between items-center mb-3 hidden">
+                        <div class="flex items-center gap-2">
+                            <p class="text-gray-700">First Order Discount (10%)</p>
+                            <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">SAVED</span>
+                        </div>
+                        <p class="font-bold text-green-600" id="discount-lbl">-{{ number_format(0, 2) }} {{app_currency()}}</p>
+                    </div>
                     <div class="flex justify-between items-center mb-6">
                         <p class="text-gray-700">Delivery</p>
                         @if ($userAddress)
@@ -461,6 +469,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    // Update discount when email changes
+    const emailInput = document.getElementById('email');
+    emailInput?.addEventListener('blur', () => {
+        if (global_zone_id && cartData && cartData.length > 0) {
+            getNewPrice(global_zone_id);
+        }
+    });
+
     // -------------------- PRICE RECALCULATION --------------------
     function getNewPrice(zone_id) {
         if (!zone_id && !global_zone_id) {
@@ -475,12 +491,33 @@ document.addEventListener('DOMContentLoaded', function () {
         const cart = JSON.stringify(cartData);
         if (!cart || cart === '[]') return;
 
-        fetch(`${regionPriceUrl}?cart=${encodeURIComponent(cart)}&zone_id=${z}`)
+        // Get customer email for discount check
+        const emailInput = document.getElementById('email');
+        const customerEmail = emailInput ? emailInput.value : null;
+        
+        fetch(`${regionPriceUrl}?cart=${encodeURIComponent(cart)}&zone_id=${z}${customerEmail ? '&email=' + encodeURIComponent(customerEmail) : ''}`)
             .then(res => res.json())
             .then(data => {
                 if (summary) summary.textContent = data.total_shipping;
                 if (grand) grand.textContent = data.grand_total;
                 if (orderZone) orderZone.value = z;
+                
+                // Handle discount display
+                const discountRow = document.getElementById('discount-row');
+                const discountLbl = document.getElementById('discount-lbl');
+                
+                if (data.is_first_order && parseFloat(data.discount_amount) > 0) {
+                    if (discountRow) {
+                        discountRow.classList.remove('hidden');
+                    }
+                    if (discountLbl) {
+                        discountLbl.textContent = `-${appCurrency} ${data.discount_amount}`;
+                    }
+                } else {
+                    if (discountRow) {
+                        discountRow.classList.add('hidden');
+                    }
+                }
             })
             .catch(error => {
                 console.error('Error fetching shipping price:', error);

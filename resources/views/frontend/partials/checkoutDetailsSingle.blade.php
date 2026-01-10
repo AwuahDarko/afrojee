@@ -273,12 +273,21 @@
                     <!-- Subtotal -->
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
                         <span class="text-gray-600 text-sm sm:text-base font-medium">Subtotal</span>
-                        <span class="font-bold text-gray-900 text-base sm:text-lg">
+                        <span class="font-bold text-gray-900 text-base sm:text-lg" id="subtotal-display">
                              @php
                                  $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
                              @endphp
                              {{ number_format($unitPrice * $quantity, 2) }} {{app_currency()}}
                         </span>
+                    </div>
+                    
+                    <!-- First Order Discount (will be shown/hidden by JS) -->
+                    <div id="discount-row-single" class="flex justify-between items-center py-3 border-b border-gray-200 hidden">
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-600 text-sm sm:text-base font-medium">First Order Discount (10%)</span>
+                            <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">SAVED</span>
+                        </div>
+                        <span class="font-bold text-green-600 text-base sm:text-lg" id="discount-display-single">-0.00 {{app_currency()}}</span>
                     </div>
                     
                     <!-- Delivery -->
@@ -299,7 +308,7 @@
                     <!-- Total -->
                     <div class="flex justify-between items-center pt-4 pb-2">
                         <span class="text-xl sm:text-2xl font-bold text-gray-900">Total</span>
-                        <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent">
+                        <span class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-pink-700 bg-clip-text text-transparent" id="total-display-single">
                              @php
                                  $unitPrice = $selectedSize ? $product->getPriceForSize($selectedSize->id) : $product->getPrice();
                              @endphp

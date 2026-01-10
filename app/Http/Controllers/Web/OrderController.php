@@ -58,6 +58,44 @@ class OrderController extends Controller
     }
 
     /**
+     * Check if customer is making their first order (by email)
+     * 
+     * @param string $email
+     * @return bool
+     */
+    private function isFirstTimeCustomer($email)
+    {
+        if (!$email) {
+            return false;
+        }
+
+        // Check if there are any paid orders with this email
+        $existingOrders = Order::whereHas('billingAddress', function ($query) use ($email) {
+            $query->where('email', $email);
+        })->where('payment_status', 'paid')->exists();
+
+        return !$existingOrders;
+    }
+
+    /**
+     * Calculate first order discount (10%)
+     * 
+     * @param float $subtotal
+     * @return array ['discount_amount' => float, 'discounted_subtotal' => float]
+     */
+    private function calculateFirstOrderDiscount($subtotal)
+    {
+        $discountPercentage = 10; // 10% discount
+        $discountAmount = ($subtotal * $discountPercentage) / 100;
+        $discountedSubtotal = $subtotal - $discountAmount;
+
+        return [
+            'discount_amount' => round($discountAmount, 2),
+            'discounted_subtotal' => round($discountedSubtotal, 2)
+        ];
+    }
+
+    /**
      * Send order notification email to admin
      * 
      * @param Order $order
@@ -333,6 +371,20 @@ class OrderController extends Controller
 
         $subtotal = $price * $quantity;
 
+        // Get customer email to check if first-time customer
+        $address = Address::find($guestAddressId);
+        $customerEmail = $address ? $address->email : null;
+        $isFirstOrder = $this->isFirstTimeCustomer($customerEmail);
+
+        // Apply first order discount (10%)
+        $discountAmount = 0;
+        $discountedSubtotal = $subtotal;
+        if ($isFirstOrder) {
+            $discountData = $this->calculateFirstOrderDiscount($subtotal);
+            $discountAmount = $discountData['discount_amount'];
+            $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
         // Safely handle null/zero weights
         $productWeight = ($product->weight && $product->weight > 0) ? $product->weight : 0;
         $weight = $productWeight * $quantity;  // Weight product-level
@@ -355,7 +407,8 @@ class OrderController extends Controller
 
         $delivery_fee = $rates->rate;
 
-        $grand_total = $delivery_fee + $subtotal;
+        // Calculate grand total with discount applied
+        $grand_total = $delivery_fee + $discountedSubtotal;
 
         $orderNo = "AFR" . rand(111111111, 999999999);
 
@@ -365,6 +418,8 @@ class OrderController extends Controller
                 'billing_address_id' => $guestAddressId ?? 0,
                 'order_number' => $orderNo,
                 'subtotal' => $subtotal,
+                'discount_amount' => $discountAmount,
+                'is_first_order' => $isFirstOrder,
                 'delivery_fee' => $delivery_fee,
                 'total_weight' => $weight,
                 'total_amount' => $grand_total,
@@ -496,7 +551,23 @@ class OrderController extends Controller
         }
 
         $delivery_fee = $rates->rate;
-        $grand_total = $delivery_fee + $total_amount;
+
+        // Get customer email to check if first-time customer
+        $address = Address::find($guestAddressId);
+        $customerEmail = $address ? $address->email : null;
+        $isFirstOrder = $this->isFirstTimeCustomer($customerEmail);
+
+        // Apply first order discount (10%)
+        $discountAmount = 0;
+        $discountedSubtotal = $total_amount;
+        if ($isFirstOrder) {
+            $discountData = $this->calculateFirstOrderDiscount($total_amount);
+            $discountAmount = $discountData['discount_amount'];
+            $discountedSubtotal = $discountData['discounted_subtotal'];
+        }
+
+        // Calculate grand total with discount applied
+        $grand_total = $delivery_fee + $discountedSubtotal;
 
         $orderNo = "AFR" . rand(111111111, 999999999);
 
@@ -506,6 +577,8 @@ class OrderController extends Controller
                 'billing_address_id' => $guestAddressId ?? 0,
                 'order_number' => $orderNo,
                 'subtotal' => $total_amount,
+                'discount_amount' => $discountAmount,
+                'is_first_order' => $isFirstOrder,
                 'delivery_fee' => $delivery_fee,
                 'total_weight' => $total_weight,
                 'total_amount' => $grand_total,
