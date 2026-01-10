@@ -46,15 +46,15 @@
         <div class="success">
 
             <img src="{{ asset('img/remove.png') }}" alt="failed" width="100px" height="100px">
-            <div class="card-header">Payment Failed</div>
+            <div class="card-header">{{ __('common.payment.failed.title') }}</div>
             <div class="card-body">
                 {{-- <h4>Thank you for your patronage!</h4> --}}
-                <p>Your payment failed.</p>
+                <p>{{ __('common.payment.failed.message') }}</p>
                 @if (isset($session))
-                    <p><strong>Amount:</strong>  {{ number_format($session->amount_total / 100, 2) }} {{app_currency()}}</p>
-                    <p><strong>Payment Status:</strong> {{ ucfirst($session->payment_status) }}</p>
+                    <p><strong>{{ __('common.payment.success.amount') }}</strong>  {{ number_format($session->amount_total / 100, 2) }} {{app_currency()}}</p>
+                    <p><strong>{{ __('common.payment.success.status') }}</strong> {{ ucfirst($session->payment_status) }}</p>
                 @endif
-                <a href="{{ route('home') }}" class="mbtn btn-primary">Continue</a>
+                <a href="{{ route('home') }}" class="mbtn btn-primary">{{ __('common.payment.failed.continue') }}</a>
             </div>
 
 

@@ -46,15 +46,15 @@
         <div class="success">
 
             <img src="{{ asset('img/checked.png') }}" alt="checked" width="100px" height="100px">
-            <div class="card-header">Payment Successful</div>
+            <div class="card-header">{{ __('common.payment.success.title') }}</div>
             <div class="card-body">
-                <h4>Thank you for your patronage!</h4>
-                <p>Your payment has been processed successfully.</p>
+                <h4>{{ __('common.payment.success.thank_you') }}</h4>
+                <p>{{ __('common.payment.success.message') }}</p>
                 @if (isset($session))
-                    <p><strong>Amount:</strong>  {{ number_format($session->amount_total / 100, 2) }} {{app_currency()}}</p>
-                    <p><strong>Payment Status:</strong> {{ ucfirst($session->payment_status) }}</p>
+                    <p><strong>{{ __('common.payment.success.amount') }}</strong>  {{ number_format($session->amount_total / 100, 2) }} {{app_currency()}}</p>
+                    <p><strong>{{ __('common.payment.success.status') }}</strong> {{ ucfirst($session->payment_status) }}</p>
                 @endif
-                <a href="{{ route('home') }}" class="mbtn btn-primary">Continue</a>
+                <a href="{{ route('home') }}" class="mbtn btn-primary">{{ __('common.payment.success.continue') }}</a>
             </div>
 
 

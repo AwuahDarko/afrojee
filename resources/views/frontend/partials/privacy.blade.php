@@ -7,14 +7,14 @@
     <div class="max-w-4xl mx-auto">
         <div class="text-center mb-12">
             <h2 class="text-4xl md:text-5xl lg:text-6xl font-light text-gray-800 mb-4">
-                Privacy <span class="font-bold text-[#ef380d]">Policy</span>
+                {{ __('common.privacy.title') }} <span class="font-bold text-[#ef380d]">{{ __('common.privacy.title_bold') }}</span>
             </h2>
             <div class="w-24 h-1 bg-[#ef380d] mx-auto mb-6 rounded-full"></div>
             <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-                Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.
+                {{ __('common.privacy.subtitle') }}
             </p>
             <p class="text-gray-500 text-sm mt-4">
-                Last updated: {{ date('F d, Y') }}
+                {{ __('common.privacy.last_updated') }} {{ date('F d, Y') }}
             </p>
         </div>
 

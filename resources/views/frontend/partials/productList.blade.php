@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 
 @section('title')
-    Afrojee - Browse our products
+    Afrojee - {{ __('common.productlist.title') }}
 @endsection
 
 @section('content')
@@ -643,7 +643,7 @@
         <div class="filter-container">
             <a href="{{ route('web.products') }}"
                 class="filter-btn {{ request()->routeIs('web.products') ? 'active' : '' }}">
-                All Products
+                {{ __('common.productlist.all_products') }}
             </a>
             @foreach ($categories as $category)
                 <a href="{{ route('web.products.filterByCategory', ['slug' => $category->slug]) }}"
@@ -787,10 +787,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                         </svg>
-                        <h2 class="empty-state-title">No Products Found</h2>
+                        <h2 class="empty-state-title">{{ __('common.productlist.no_products_found') }}</h2>
                         <p class="empty-state-text">
-                            We couldn't find any products matching your filters or category.
-                            Try adjusting your filters or check back later for new arrivals.
+                            {{ __('common.productlist.no_products_message') }}
                         </p>
                         <a href="{{ route('web.products') }}" class="btn btn-primary">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -8,18 +8,18 @@
             <div class="px-6 sm:px-10 py-10">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-8 border-b border-[#e0c3b6]/50">
                     <div>
-                        <h1 class="text-3xl sm:text-4xl font-semibold text-[#2E2E2E]">Order Summary</h1>
+                        <h1 class="text-3xl sm:text-4xl font-semibold text-[#2E2E2E]">{{ __('common.order.title') }}</h1>
                         <p class="text-sm sm:text-base text-gray-600 mt-2">
-                            Order number <span class="font-semibold text-[#9d3f5b]">{{ $order->order_number }}</span>
-                            placed on {{ $order->created_at?->format('F j, Y g:i A') ?? 'N/A' }}
+                            {{ __('common.order.number') }} <span class="font-semibold text-[#9d3f5b]">{{ $order->order_number }}</span>
+                            {{ __('common.order.placed_on') }} {{ $order->created_at?->format('F j, Y g:i A') ?? 'N/A' }}
                         </p>
                     </div>
                     <div class="flex flex-wrap items-center gap-3">
                         <span class="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-[#f8f6f1] text-[#9d3f5b] border border-[#e0c3b6]">
-                            Status: {{ ucfirst($order->status ?? 'pending') }}
+                            {{ __('common.order.status') }} {{ ucfirst($order->status ?? 'pending') }}
                         </span>
                         <span class="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-[#ef380d]/10 text-[#ef380d] border border-[#ef380d]/40">
-                            Payment: {{ ucfirst($order->payment_status ?? 'pending') }}
+                            {{ __('common.order.payment') }} {{ ucfirst($order->payment_status ?? 'pending') }}
                         </span>
                     </div>
                 </div>
@@ -27,9 +27,9 @@
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
                     <div class="lg:col-span-2 space-y-6">
                         <div class="border border-[#e0c3b6]/50 rounded-2xl p-6 bg-white">
-                            <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">Items</h2>
+                            <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">{{ __('common.order.items') }}</h2>
                             @if ($order->orderProducts->isEmpty())
-                                <p class="text-gray-600">No items found for this order.</p>
+                                <p class="text-gray-600">{{ __('common.order.no_items') }}</p>
                             @else
                                 <div class="space-y-4">
                                     @foreach ($order->orderProducts as $item)
@@ -39,20 +39,20 @@
                                                     {{ $item->product->name ?? 'Product #' . $item->product_id }}
                                                 </p>
                                                 <p class="text-sm text-gray-600">
-                                                    Quantity: {{ $item->quantity }}
+                                                    {{ __('common.order.quantity') }} {{ $item->quantity }}
                                                     @if ($item->size)
                                                         <span class="mx-2">•</span>
-                                                        Size: {{ $item->size->name }}
+                                                        {{ __('common.order.size') }} {{ $item->size->name }}
                                                     @endif
                                                 </p>
                                             </div>
                                             <div class="text-right">
-                                                <p class="text-sm text-gray-500">Unit price</p>
+                                                <p class="text-sm text-gray-500">{{ __('common.order.unit_price') }}</p>
                                                 <p class="text-base font-semibold text-[#9d3f5b]">
                                                     {{ app_currency() }} {{ number_format($item->unit_price ?? 0, 2) }}
                                                 </p>
                                                 <p class="text-xs text-gray-500 mt-1">
-                                                    Line total: {{ app_currency() }} {{ number_format($item->total_price ?? 0, 2) }}
+                                                    {{ __('common.order.line_total') }} {{ app_currency() }} {{ number_format($item->total_price ?? 0, 2) }}
                                                 </p>
                                             </div>
                                         </div>
@@ -63,7 +63,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="border border-[#e0c3b6]/50 rounded-2xl p-6 bg-white">
-                                <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">Billing Information</h2>
+                                <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">{{ __('common.order.billing_info') }}</h2>
                                 @if ($billingAddress)
                                     <ul class="space-y-1 text-sm text-gray-600">
                                         <li class="font-medium text-[#2E2E2E]">
@@ -92,7 +92,7 @@
                             </div>
 
                             <div class="border border-[#e0c3b6]/50 rounded-2xl p-6 bg-white">
-                                <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">Shipping Information</h2>
+                                <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">{{ __('common.order.shipping_info') }}</h2>
                                 @if ($shippingAddress)
                                     <ul class="space-y-1 text-sm text-gray-600">
                                         <li class="font-medium text-[#2E2E2E]">
@@ -123,22 +123,22 @@
                     </div>
 
                     <div class="border border-[#e0c3b6]/50 rounded-2xl p-6 bg-white h-fit">
-                        <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">Order Totals</h2>
+                        <h2 class="text-xl font-semibold text-[#2E2E2E] mb-4">{{ __('common.order.order_summary') }}</h2>
                         <dl class="space-y-3 text-sm text-gray-700">
                             <div class="flex justify-between">
-                                <dt>Subtotal</dt>
+                                <dt>{{ __('common.order.subtotal') }}</dt>
                                 <dd class="font-medium text-[#2E2E2E]">
                                     {{ app_currency() }} {{ number_format($order->subtotal ?? 0, 2) }}
                                 </dd>
                             </div>
                             <div class="flex justify-between">
-                                <dt>Delivery fee</dt>
+                                <dt>{{ __('common.order.shipping') }}</dt>
                                 <dd class="font-medium text-[#2E2E2E]">
                                     {{ app_currency() }} {{ number_format($order->delivery_fee ?? 0, 2) }}
                                 </dd>
                             </div>
                             <div class="flex justify-between pt-3 border-t border-dashed border-[#e0c3b6]/60">
-                                <dt class="text-base font-semibold text-[#2E2E2E]">Total</dt>
+                                <dt class="text-base font-semibold text-[#2E2E2E]">{{ __('common.order.total') }}</dt>
                                 <dd class="text-base font-semibold text-[#9d3f5b]">
                                     {{ app_currency() }} {{ number_format($order->total_amount ?? 0, 2) }}
                                 </dd>
@@ -147,7 +147,7 @@
                         <div class="mt-8">
                             <a href="{{ route('home') }}"
                                class="inline-flex items-center justify-center px-5 py-3 w-full text-center text-sm font-semibold text-white bg-[#ef380d] hover:bg-[#f06243ff] rounded-full transition-colors duration-200">
-                                Continue Shopping
+                                {{ __('common.button.continue_shopping') }}
                             </a>
                         </div>
                     </div>

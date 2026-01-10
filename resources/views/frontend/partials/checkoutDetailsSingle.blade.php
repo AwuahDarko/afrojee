@@ -308,7 +308,7 @@
                     
                     <!-- Delivery -->
                     <div class="flex justify-between items-center py-3 border-b border-gray-200">
-                        <span class="text-gray-600 text-sm sm:text-base font-medium">Delivery Fee</span>
+                        <span class="text-gray-600 text-sm sm:text-base font-medium">{{ __('common.order.shipping') }}</span>
                         @if ($userAddress)
                             <div class="flex items-center gap-2">
                                 <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-full">FREE</span>

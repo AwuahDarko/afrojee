@@ -250,5 +250,96 @@ return [
     'contact.newsletter.subtitle' => 'Suscríbete a nuestro boletín para ofertas exclusivas, consejos de cuidado del cabello y actualizaciones de productos.',
     'contact.newsletter.placeholder' => 'Ingresa tu correo electrónico',
     'contact.newsletter.subscribe' => 'Suscribirse',
+    
+    // Product Listing Page
+    'productlist.title' => 'Explora nuestros productos',
+    'productlist.all_products' => 'Todos los Productos',
+    'productlist.no_products_found' => 'No Se Encontraron Productos',
+    'productlist.no_products_message' => 'No pudimos encontrar productos que coincidan con tus filtros o categoría. Intenta ajustar tus filtros o vuelve más tarde para ver nuevas llegadas.',
+    'productlist.clear_filters' => 'Limpiar Filtros',
+    
+    // Reviews Pages
+    'reviews.title' => 'Lee',
+    'reviews.title_bold' => 'Nuestras Reseñas',
+    'reviews.subtitle' => '¡No solo confíes en nuestra palabra—mira lo que nuestros clientes dicen sobre su experiencia!',
+    'reviews.search_placeholder' => 'Ingresa el producto para buscar',
+    'reviews.select_product' => 'Seleccionar Producto',
+    'reviews.leave_review' => 'Dejar una Reseña',
+    'reviews.no_reviews' => 'No hay reseñas disponibles que coincidan con tus criterios.',
+    'reviews.reviews' => 'Reseñas',
+    
+    // Review Form
+    'review_form.title' => 'Dejar una Reseña',
+    'review_form.name' => 'Tu Nombre',
+    'review_form.email' => 'Tu Correo Electrónico (Opcional)',
+    'review_form.product' => 'Producto (Opcional)',
+    'review_form.select_product' => 'Selecciona un producto (opcional)',
+    'review_form.rating' => 'Calificación',
+    'review_form.review_title' => 'Título de la Reseña',
+    'review_form.your_review' => 'Tu Reseña',
+    'review_form.upload_image' => 'Subir una Imagen (Opcional)',
+    'review_form.submit' => 'Enviar Reseña',
+    'review_form.cancel' => 'Cancelar',
+    'review_form.success' => '¡Éxito!',
+    'review_form.whoops' => '¡Ups!',
+    'message.problems_with_input' => 'Hubo algunos problemas con tu entrada.',
+    
+    // Order Pages
+    'order.title' => 'Resumen del Pedido',
+    'order.number' => 'Número de pedido',
+    'order.placed_on' => 'realizado el',
+    'order.status' => 'Estado:',
+    'order.payment' => 'Pago:',
+    'order.items' => 'Artículos',
+    'order.no_items' => 'No se encontraron artículos para este pedido.',
+    'order.quantity' => 'Cantidad:',
+    'order.size' => 'Talla:',
+    'order.unit_price' => 'Precio unitario',
+    'order.line_total' => 'Total de línea:',
+    'order.billing_info' => 'Información de Facturación',
+    'order.shipping_info' => 'Información de Envío',
+    'order.order_summary' => 'Resumen del Pedido',
+    'order.subtotal' => 'Subtotal',
+    'order.shipping' => 'Envío',
+    'order.discount' => 'Descuento',
+    'order.total' => 'Total',
+    
+    // Payment Pages
+    'payment.success.title' => 'Pago Exitoso',
+    'payment.success.thank_you' => '¡Gracias por tu patrocinio!',
+    'payment.success.message' => 'Tu pago se ha procesado exitosamente.',
+    'payment.success.amount' => 'Cantidad:',
+    'payment.success.status' => 'Estado del Pago:',
+    'payment.success.continue' => 'Continuar',
+    'payment.failed.title' => 'Pago Fallido',
+    'payment.failed.message' => 'Tu pago falló.',
+    'payment.failed.continue' => 'Continuar',
+    
+    // Sign In Page
+    'signin.title' => 'Tu Viaje de Belleza Comienza Aquí —',
+    'signin.subtitle' => '¡Regístrate ahora!',
+    'signin.or' => 'O',
+    'signin.email' => 'Ingresa tu dirección de correo electrónico',
+    'signin.username' => 'Ingresa tu nombre de usuario (Opcional)',
+    'signin.submit' => 'Registrarse',
+    'signin.terms' => 'Al continuar, aceptas nuestros',
+    'signin.terms_link' => 'Términos y Condiciones',
+    'signin.privacy_link' => 'Política de Privacidad',
+    'and' => 'y',
+    
+    // FAQ Full Page
+    'faq_full.title' => '¿Tienes',
+    'faq_full.title_bold' => 'Preguntas?',
+    'faq_full.subtitle' => 'Hemos compilado respuestas a las preguntas más comunes sobre nuestros productos, envíos y más para ayudarte a aprovechar al máximo tu experiencia con Afro Jee.',
+    
+    // Terms & Privacy
+    'terms.title' => 'Términos y',
+    'terms.title_bold' => 'Condiciones',
+    'terms.subtitle' => 'Por favor, lee estos términos y condiciones cuidadosamente antes de usar nuestro sitio web y realizar una compra.',
+    'terms.last_updated' => 'Última actualización:',
+    'privacy.title' => 'Política de',
+    'privacy.title_bold' => 'Privacidad',
+    'privacy.subtitle' => 'Tu privacidad es importante para nosotros. Esta política explica cómo recopilamos, usamos y protegemos tu información personal.',
+    'privacy.last_updated' => 'Última actualización:',
 ];
 

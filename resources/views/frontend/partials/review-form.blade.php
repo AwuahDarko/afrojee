@@ -26,19 +26,19 @@
         }
     </style>
     <section class="container mx-auto max-w-2xl bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="text-4xl font-bold text-taupe mb-6">Leave a Review</h2>
+        <h2 class="text-4xl font-bold text-taupe mb-6">{{ __('common.review_form.title') }}</h2>
 
         @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Success!</strong>
+                <strong class="font-bold">{{ __('common.review_form.success') }}</strong>
                 <span class="block sm:inline">{{ session('success') }}</span>
             </div>
         @endif
 
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                <strong class="font-bold">Whoops!</strong>
-                <span class="block sm:inline">There were some problems with your input.</span>
+                <strong class="font-bold">{{ __('common.review_form.whoops') }}</strong>
+                <span class="block sm:inline">{{ __('common.message.problems_with_input') }}</span>
                 <ul class="mt-2 list-disc list-inside">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -51,7 +51,7 @@
             @csrf
 
             <div class="mb-4">
-                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Your Name <span
+                <label for="name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.name') }} <span
                         class="text-red-500">*</span></label>
                 <input type="text" id="name" name="name"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -59,17 +59,17 @@
             </div>
 
             <div class="mb-4">
-                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Your Email (Optional)</label>
+                <label for="email" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.email') }}</label>
                 <input type="email" id="email" name="email"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     value="{{ old('email') }}">
             </div>
 
             <div class="mb-4">
-                <label for="product_name" class="block text-gray-700 text-sm font-bold mb-2">Product (Optional)</label>
+                <label for="product_name" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.product') }}</label>
                 <select id="product_name" name="product_name"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                    <option value="">Select a product (optional)</option>
+                    <option value="">{{ __('common.review_form.select_product') }}</option>
                     @foreach($availableProducts as $product)
                         <option value="{{ $product }}" {{ old('product_name') == $product ? 'selected' : '' }}>{{ $product }}
                         </option>
@@ -78,7 +78,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="rating" class="block text-gray-700 text-sm font-bold mb-2">Rating <span
+                <label for="rating" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.rating') }} <span
                         class="text-red-500">*</span></label>
                 <div class="star-rating-input flex" id="star-rating-container">
                     @for ($i = 1; $i <= 5; $i++)
@@ -89,7 +89,7 @@
             </div>
 
             <div class="mb-4">
-                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Review Title <span
+                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.review_title') }} <span
                         class="text-red-500">*</span></label>
                 <input type="text" id="title" name="title"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -97,7 +97,7 @@
             </div>
 
             <div class="mb-6">
-                <label for="review" class="block text-gray-700 text-sm font-bold mb-2">Your Review <span
+                <label for="review" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.your_review') }} <span
                         class="text-red-500">*</span></label>
                 <textarea id="review" name="review" rows="5"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -105,7 +105,7 @@
             </div>
 
             <div class="mb-6 hidden">
-                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">Upload an Image (Optional)</label>
+                <label for="image" class="block text-gray-700 text-sm font-bold mb-2">{{ __('common.review_form.upload_image') }}</label>
                 <input type="file" id="image" name="image" accept="image/*"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
             </div>
@@ -113,11 +113,11 @@
             <div class="flex items-center justify-between">
                 <button type="submit"
                     class="bg-mauve hover:bg-opacity-90 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-colors duration-300">
-                    Submit Review
+                    {{ __('common.review_form.submit') }}
                 </button>
                 <a href="{{ route('reviews') }}"
                     class="inline-block align-baseline font-bold text-sm text-taupe hover:text-gray-800">
-                    Cancel
+                    {{ __('common.review_form.cancel') }}
                 </a>
             </div>
         </form>

@@ -30,18 +30,18 @@
             <div class="mb-12">
                 <div class="flex items-center mmax-products mb-2">
                     <h2 class="text-4xl md:text-5xl lg:text-6xl font-light text-taupe mb-2">
-                        Read <br><span class="font-bold">Our Reviews</span>
+                        {{ __('common.reviews.title') }} <br><span class="font-bold">{{ __('common.reviews.title_bold') }}</span>
                     </h2>
                     <div class="bg-taupe h-1 backdrop-blur-sm w-full min-w-lg mt-4 mb-8"></div>
                 </div>
                 <p class="text-taupe text-lg md:text-xl max-w-4xl">
-                    Don't just take our word for it—see what our customers are saying about their experience!
+                    {{ __('common.reviews.subtitle') }}
                 </p>
             </div>
 
             <form action="{{ route('reviews') }}" method="GET" class="flex flex-col md:flex-row items-center justify-between mb-8 space-y-4 md:space-y-0 md:space-x-4">
                 <div class="relative w-full md:w-auto flex-grow">
-                    <input type="text" name="search" placeholder="Enter product to search" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-taupe" aria-label="Search reviews" value="{{ request('search') }}">
+                    <input type="text" name="search" placeholder="{{ __('common.reviews.search_placeholder') }}" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-taupe" aria-label="Search reviews" value="{{ request('search') }}">
                     <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </div>
                 <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full md:w-auto">
@@ -50,7 +50,7 @@
                     </button>
                     <div class="relative inline-block text-left w-full md:w-auto">
                         <select name="product_name" onchange="this.form.submit()" class="block appearance-none w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                            <option value="">Select Product</option>
+                            <option value="">{{ __('common.reviews.select_product') }}</option>
                             @foreach($productNames as $productName)
                                 <option value="{{ $productName }}" {{ request('product_name') == $productName ? 'selected' : '' }}>
                                     {{ $productName }}
@@ -62,7 +62,7 @@
                         </div>
                     </div>
                     <a href="{{ route('reviews.create') }}" class="bg-mauve text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-colors duration-300 flex items-center justify-center flex-shrink-0">
-                        Leave a Review
+                        {{ __('common.reviews.leave_review') }}
                         <svg class="ml-2 w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
@@ -71,10 +71,10 @@
             </form>
 
             <div class="reviews">
-                <h3 class="text-3xl font-bold text-taupe mb-6">Reviews</h3>
+                <h3 class="text-3xl font-bold text-taupe mb-6">{{ __('common.reviews.reviews') }}</h3>
 
                 @if($reviews->isEmpty())
-                    <p class="text-gray-600">No reviews available matching your criteria.</p>
+                    <p class="text-gray-600">{{ __('common.reviews.no_reviews') }}</p>
                 @else
                     @foreach($reviews as $review)
                         <div class="review-item bg-white p-6 rounded-lg shadow-md mb-6">

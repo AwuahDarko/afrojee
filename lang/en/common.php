@@ -249,5 +249,96 @@ return [
     'contact.newsletter.subtitle' => 'Subscribe to our newsletter for exclusive offers, hair care tips, and product updates.',
     'contact.newsletter.placeholder' => 'Enter your email',
     'contact.newsletter.subscribe' => 'Subscribe',
+    
+    // Product Listing Page
+    'productlist.title' => 'Browse our products',
+    'productlist.all_products' => 'All Products',
+    'productlist.no_products_found' => 'No Products Found',
+    'productlist.no_products_message' => 'We couldn\'t find any products matching your filters or category. Try adjusting your filters or check back later for new arrivals.',
+    'productlist.clear_filters' => 'Clear Filters',
+    
+    // Reviews Pages
+    'reviews.title' => 'Read',
+    'reviews.title_bold' => 'Our Reviews',
+    'reviews.subtitle' => 'Don\'t just take our word for it—see what our customers are saying about their experience!',
+    'reviews.search_placeholder' => 'Enter product to search',
+    'reviews.select_product' => 'Select Product',
+    'reviews.leave_review' => 'Leave a Review',
+    'reviews.no_reviews' => 'No reviews available matching your criteria.',
+    'reviews.reviews' => 'Reviews',
+    
+    // Review Form
+    'review_form.title' => 'Leave a Review',
+    'review_form.name' => 'Your Name',
+    'review_form.email' => 'Your Email (Optional)',
+    'review_form.product' => 'Product (Optional)',
+    'review_form.select_product' => 'Select a product (optional)',
+    'review_form.rating' => 'Rating',
+    'review_form.review_title' => 'Review Title',
+    'review_form.your_review' => 'Your Review',
+    'review_form.upload_image' => 'Upload an Image (Optional)',
+    'review_form.submit' => 'Submit Review',
+    'review_form.cancel' => 'Cancel',
+    'review_form.success' => 'Success!',
+    'review_form.whoops' => 'Whoops!',
+    'message.problems_with_input' => 'There were some problems with your input.',
+    
+    // Order Pages
+    'order.title' => 'Order Summary',
+    'order.number' => 'Order number',
+    'order.placed_on' => 'placed on',
+    'order.status' => 'Status:',
+    'order.payment' => 'Payment:',
+    'order.items' => 'Items',
+    'order.no_items' => 'No items found for this order.',
+    'order.quantity' => 'Quantity:',
+    'order.size' => 'Size:',
+    'order.unit_price' => 'Unit price',
+    'order.line_total' => 'Line total:',
+    'order.billing_info' => 'Billing Information',
+    'order.shipping_info' => 'Shipping Information',
+    'order.order_summary' => 'Order Summary',
+    'order.subtotal' => 'Subtotal',
+    'order.shipping' => 'Shipping',
+    'order.discount' => 'Discount',
+    'order.total' => 'Total',
+    
+    // Payment Pages
+    'payment.success.title' => 'Payment Successful',
+    'payment.success.thank_you' => 'Thank you for your patronage!',
+    'payment.success.message' => 'Your payment has been processed successfully.',
+    'payment.success.amount' => 'Amount:',
+    'payment.success.status' => 'Payment Status:',
+    'payment.success.continue' => 'Continue',
+    'payment.failed.title' => 'Payment Failed',
+    'payment.failed.message' => 'Your payment failed.',
+    'payment.failed.continue' => 'Continue',
+    
+    // Sign In Page
+    'signin.title' => 'Your Beauty Journey Starts Here —',
+    'signin.subtitle' => 'Sign up now!',
+    'signin.or' => 'Or',
+    'signin.email' => 'Enter your email address',
+    'signin.username' => 'Enter your username (Optional)',
+    'signin.submit' => 'Sign Up',
+    'signin.terms' => 'By continuing you agree to our',
+    'signin.terms_link' => 'Terms & Conditions',
+    'signin.privacy_link' => 'Privacy Policy',
+    'and' => 'and',
+    
+    // FAQ Full Page
+    'faq_full.title' => 'Got',
+    'faq_full.title_bold' => 'Questions?',
+    'faq_full.subtitle' => 'We\'ve compiled answers to the most common questions about our products, shipping, and more to help you get the most out of your Afro Jee experience.',
+    
+    // Terms & Privacy
+    'terms.title' => 'Terms &',
+    'terms.title_bold' => 'Conditions',
+    'terms.subtitle' => 'Please read these terms and conditions carefully before using our website and making a purchase.',
+    'terms.last_updated' => 'Last updated:',
+    'privacy.title' => 'Privacy',
+    'privacy.title_bold' => 'Policy',
+    'privacy.subtitle' => 'Your privacy is important to us. This policy explains how we collect, use, and protect your personal information.',
+    'privacy.last_updated' => 'Last updated:',
 ];
 

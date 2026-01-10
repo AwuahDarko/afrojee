@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function () {
             cartItemsContainer.innerHTML = `
                 <div class="text-gray-600 text-center py-6">
                     Your cart is empty.<br>
-                    <a href="/" class="text-pink-700 hover:underline font-medium">Continue shopping</a>
+                    <a href="/" class="text-pink-700 hover:underline font-medium">{{ __('common.button.continue_shopping') }}</a>
                 </div>`;
             subtotalElement.textContent = `${appCurrency} 0.00`;
             totalLbl.textContent = `${appCurrency} 0.00`;

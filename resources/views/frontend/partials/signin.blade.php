@@ -5,8 +5,8 @@
         <div class="w-1/2 bg-cover bg-center relative" style="background-image: url('/images/signup-bg.jpg')">
             <div class="absolute inset-0 bg-black opacity-20"></div>
             <div class="absolute left-10 bottom-1/4 text-white z-10">
-                <h1 class="text-4xl font-bold mb-4">Your Beauty Journey Starts Here —</h1>
-                <p class="text-2xl font-semibold">Sign up now!</p>
+                <h1 class="text-4xl font-bold mb-4">{{ __('common.signin.title') }}</h1>
+                <p class="text-2xl font-semibold">{{ __('common.signin.subtitle') }}</p>
             </div>
         </div>
 
@@ -24,24 +24,23 @@
                     </a> -->
                 </div>
 
-                <div class="my-4 text-center text-sm text-gray-500">Or</div>
+                <div class="my-4 text-center text-sm text-gray-500">{{ __('common.signin.or') }}</div>
 
                 <!-- action="{{ route('register') }}" -->
                 <form method="POST" class="space-y-3">
                     @csrf
-                    <input type="email" name="email" placeholder="Enter your email address"
+                    <input type="email" name="email" placeholder="{{ __('common.signin.email') }}"
                         class="w-full border p-2 rounded focus:outline-none focus:ring" required />
-                    <input type="text" name="username" placeholder="Enter your username (Optional)"
+                    <input type="text" name="username" placeholder="{{ __('common.signin.username') }}"
                         class="w-full border p-2 rounded focus:outline-none focus:ring" />
 
-                    <button type="submit" class="w-full bg-pink-200 text-white py-2 rounded hover:bg-pink-300">Sign
-                        Up</button>
+                    <button type="submit" class="w-full bg-pink-200 text-white py-2 rounded hover:bg-pink-300">{{ __('common.signin.submit') }}</button>
                 </form>
 
                 <p class="text-xs text-gray-500 mt-3 text-center">
-                    By continuing you agree to our
-                    <a href="#" class="underline">Terms & Conditions</a> and
-                    <a href="#" class="underline">Privacy Policy</a>
+                    {{ __('common.signin.terms') }}
+                    <a href="#" class="underline">{{ __('common.signin.terms_link') }}</a> {{ __('common.and') }}
+                    <a href="#" class="underline">{{ __('common.signin.privacy_link') }}</a>
                 </p>
             </div>
         </div>
