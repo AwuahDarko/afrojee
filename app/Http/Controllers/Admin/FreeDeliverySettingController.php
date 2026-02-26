@@ -16,7 +16,11 @@ class FreeDeliverySettingController extends Controller
     {
         $settings = FreeDeliverySetting::get();
         $countries = Country::where('status', 1)->orderBy('name')->get();
-        return view('backend.free-delivery-settings', compact('settings', 'countries'));
+        $eligibleNames = collect($countries)
+            ->whereIn('id', $settings->country_ids ?? [])
+            ->pluck('name')
+            ->join(', ');
+        return view('backend.free-delivery-settings', compact('settings', 'countries', 'eligibleNames'));
     }
 
     /**

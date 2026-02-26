@@ -86,7 +86,7 @@
           <ul class="mb-0 small text-muted">
             <li>Free delivery is <strong>{{ $settings->enabled ? 'on' : 'off' }}</strong>.</li>
             <li>Minimum order: <strong>{{ app_currency() }} {{ number_format($settings->min_order_amount, 2) }}</strong> (after discounts).</li>
-            <li>Eligible countries: <strong>@php $eligibleNames = collect($countries)->whereIn('id', $settings->country_ids ?? [])->pluck('name')->join(', '); @endphp{{ $eligibleNames ?: 'None selected' }}</strong>.</li>
+            <li>Eligible countries: <strong>{{ $eligibleNames ?: 'None selected' }}</strong>.</li>
           </ul>
         </div>
       </div>
