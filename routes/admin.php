@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\SignInController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\EmailController;
+use App\Http\Controllers\Admin\FreeDeliverySettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -46,6 +47,9 @@ Route::prefix('admin')->group(function () {
         Route::get('/orders/feature/{id}', [OrdersController::class, 'featureOrder'])->name('admin.orders.feature');
         Route::post('orders/update', [OrdersController::class, 'updateOrder'])->name('admin.orders.update');
         Route::delete('orders/{id}', [OrdersController::class, 'removeOrder'])->name('admin.orders.destroy');
+
+        Route::get('/free-delivery', [FreeDeliverySettingController::class, 'index'])->name('admin.free-delivery.index');
+        Route::post('/free-delivery', [FreeDeliverySettingController::class, 'update'])->name('admin.free-delivery.update');
 
         Route::get('/shipment', [ShipmentController::class, 'index'])->name('admin.shipment');
         Route::get('/shipment/create', [ShipmentController::class, 'create'])->name('admin.shipment.create');

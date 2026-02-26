@@ -60,10 +60,18 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link {{ request()->routeIs('admin.shipment') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+        <a class="nav-link {{ request()->routeIs('admin.shipment*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
           href="{{ route('admin.shipment') }}">
           <i class="material-symbols-rounded opacity-5">table_view</i>
           <span class="nav-link-text ms-1">Add Shipment</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link {{ request()->routeIs('admin.free-delivery*') ? 'active bg-gradient-dark text-white' : 'text-dark' }}"
+          href="{{ route('admin.free-delivery.index') }}">
+          <i class="material-symbols-rounded opacity-5">local_shipping</i>
+          <span class="nav-link-text ms-1">Free Delivery</span>
         </a>
       </li>
 

@@ -12,6 +12,7 @@ use App\Models\ShippingRate;
 use App\Models\ShippingZone;
 use Illuminate\Http\Request;
 use App\Models\Address; // Import the Address model
+use App\Models\FreeDeliverySetting;
 use App\Models\Order;   // Import the Order model (for future use, if not already used)
 use Illuminate\Support\Facades\Session; // Import Session facade
 use Illuminate\Support\Facades\Log;
@@ -90,25 +91,16 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Check if order qualifies for free shipping (Spain orders over €70)
-     * 
+     * Check if order qualifies for free shipping (uses admin-configured rules).
+     *
      * @param Address|null $address
      * @param float $discountedSubtotal
      * @return bool
      */
     private function qualifiesForFreeShipping($address, $discountedSubtotal)
     {
-        if (!$address || !$address->country) {
-            return false;
-        }
-
-        // Check if country is Spain (mainland, not islands)
-        $isSpain = strtolower(trim($address->country->name)) === 'spain';
-        
-        // Check if subtotal (after discount) is >= €70
-        $meetsMinimum = $discountedSubtotal >= 70.00;
-
-        return $isSpain && $meetsMinimum;
+        $countryId = $address && $address->country ? $address->country_id : null;
+        return FreeDeliverySetting::orderQualifies($countryId, (float) $discountedSubtotal);
     }
 
     /**
