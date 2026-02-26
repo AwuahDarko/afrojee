@@ -434,6 +434,11 @@ return [
     'productlist.previous' => 'Previous',
     'productlist.next' => 'Next',
 
+    'Haircare Sets' => 'Haircare Sets',
+    'Herbal Care' => 'Herbal Care',
+    'Moisturizers & Conditioners' => 'Moisturizers & Conditioners',
+    'Oils & Treatments' => 'Oils & Treatments',
+
     'categories' => [//
         'skin_care_products' => 'Skin Care Products',
         'haircare_sets' => 'Haircare Sets',
