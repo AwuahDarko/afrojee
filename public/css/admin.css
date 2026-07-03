@@ -21,12 +21,111 @@
     height: 300px;
 }
 
-.wrapper {
+/* Promo product multiselect */
+.promo-multiselect.wrapper {
+    width: 100%;
+    margin: 0;
+    position: relative;
+}
+.promo-multiselect .select-box {
+    background: #fff;
+    border: 1px solid #d2d6da;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    min-height: 42px;
+    align-items: center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.promo-multiselect .select-box:hover,
+.promo-multiselect .select-box:focus {
+    border-color: #344767;
+    outline: none;
+}
+.promo-multiselect .select-box .placeholder {
+    color: #8392ab;
+    font-size: 0.875rem;
+}
+.promo-multiselect .tag {
+    background: #34476714;
+    border: 1px solid #34476740;
+    color: #344767;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+    font-size: 0.8125rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+.promo-multiselect .tag .remove {
+    cursor: pointer;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.7;
+}
+.promo-multiselect .tag .remove:hover {
+    opacity: 1;
+}
+.promo-multiselect .menu {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    background: #fff;
+    border: 1px solid #d2d6da;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-height: 220px;
+    overflow-y: auto;
+    padding: 0.35rem;
+    display: none;
+    z-index: 50;
+}
+.promo-multiselect .menu.show {
+    display: block;
+}
+.promo-multiselect .menu .search {
+    width: 100%;
+    padding: 0.45rem 0.65rem;
+    border: none;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 0.35rem 0.35rem 0 0;
+    outline: none;
+    font-size: 0.875rem;
+}
+.promo-multiselect .menu ul {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+}
+.promo-multiselect .menu li {
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+.promo-multiselect .menu li:hover {
+    background: #f8f9fa;
+}
+.promo-multiselect .menu li.selected {
+    background: #34476714;
+    color: #344767;
+    font-weight: 600;
+}
+.promo-multiselect .menu li.hidden {
+    display: none;
+}
+
+/* Legacy wrapper (new-promo) — keep until migrated */
+.wrapper:not(.promo-multiselect) {
     width: 100%;
     margin: 40px auto;
     position: relative;
 }
-.select-box {
+.wrapper:not(.promo-multiselect) .select-box {
     background: #fff;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -38,12 +137,10 @@
     min-height: 38px;
     align-items: center;
 }
-.select-box .placeholder {
+.wrapper:not(.promo-multiselect) .select-box .placeholder {
     color: #888;
 }
-
-/* tags that show chosen items */
-.tag {
+.wrapper:not(.promo-multiselect) .tag {
     background: #007bff1a;
     border: 1px solid #007bff;
     padding: 2px 6px;
@@ -53,13 +150,11 @@
     align-items: center;
     gap: 4px;
 }
-.tag .remove {
+.wrapper:not(.promo-multiselect) .tag .remove {
     cursor: pointer;
     font-weight: bold;
 }
-
-/* drop‑down panel */
-.menu {
+.wrapper:not(.promo-multiselect) .menu {
     position: absolute;
     left: 0;
     right: 0;
@@ -73,29 +168,65 @@
     display: none;
     z-index: 50;
 }
-.menu.show {
+.wrapper:not(.promo-multiselect) .menu.show {
     display: block;
 }
-.menu .search {
+.wrapper:not(.promo-multiselect) .menu .search {
     width: 100%;
     padding: 6px 8px;
     border: none;
     border-bottom: 1px solid #eee;
     outline: none;
 }
-.menu ul {
+.wrapper:not(.promo-multiselect) .menu ul {
     list-style: none;
     margin: 4px 0;
     padding: 0;
 }
-.menu li {
+.wrapper:not(.promo-multiselect) .menu li {
     padding: 6px 8px;
     border-radius: 4px;
     cursor: pointer;
 }
-.menu li:hover {
+.wrapper:not(.promo-multiselect) .menu li:hover {
     background: #f2f2f2;
 }
-.menu li.hidden {
+.wrapper:not(.promo-multiselect) .menu li.hidden {
     display: none;
+}
+
+/* Promo form inputs — visible bordered fields */
+.promo-form .form-control,
+.promo-form select.form-control {
+    border: 1px solid #b0b8c4 !important;
+    background-color: #fff !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 0.5rem;
+    box-shadow: none;
+}
+.promo-form .form-control:hover,
+.promo-form select.form-control:hover {
+    border-color: #8392ab !important;
+}
+.promo-form .form-control:focus,
+.promo-form select.form-control:focus {
+    border-color: #344767 !important;
+    box-shadow: 0 0 0 2px rgba(52, 71, 103, 0.12);
+    outline: none;
+}
+.promo-form .form-control.is-invalid,
+.promo-form select.form-control.is-invalid {
+    border-color: #ea0606 !important;
+}
+
+.promo-guide {
+    border-left: 3px solid #344767;
+    background: #f8f9fa;
+    border-radius: 0 0.5rem 0.5rem 0;
+}
+.promo-guide ol {
+    padding-left: 1.25rem;
+}
+.promo-guide li + li {
+    margin-top: 0.35rem;
 }

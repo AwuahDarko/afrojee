@@ -8,19 +8,14 @@ class FreeDeliverySetting extends Model
 {
     protected $fillable = [
         'enabled',
-        'min_order_amount',
-        'country_ids',
     ];
 
     protected $casts = [
         'enabled' => 'boolean',
-        'min_order_amount' => 'decimal:2',
-        'country_ids' => 'array',
     ];
 
     /**
-     * Get the single free delivery settings row (singleton).
-     * Creates default row if none exists.
+     * Get the single free delivery settings row (singleton) - global on/off only.
      */
     public static function get(): self
     {
@@ -28,28 +23,21 @@ class FreeDeliverySetting extends Model
         if ($row) {
             return $row;
         }
-        $countryIds = [];
-        $spain = \App\Models\Country::whereRaw('LOWER(TRIM(name)) = ?', ['spain'])->first();
-        if ($spain) {
-            $countryIds = [(int) $spain->id];
-        }
-        return static::create([
-            'enabled' => true,
-            'min_order_amount' => 70.00,
-            'country_ids' => $countryIds,
-        ]);
+        return static::create(['enabled' => true]);
     }
 
     /**
-     * Check if free delivery is enabled and order qualifies by amount and country.
+     * Check if free delivery is enabled and order qualifies (has a rule for this country with amount met).
      */
     public static function orderQualifies(?int $countryId, float $discountedSubtotal): bool
     {
-        $s = static::get();
-        $countryIds = $s->country_ids ?? [];
-        $meetsCountry = $countryId !== null && !empty($countryIds)
-            && in_array((int) $countryId, array_map('intval', $countryIds), true);
-        $meetsMinimum = $discountedSubtotal >= (float) $s->min_order_amount;
-        return $s->enabled && $meetsCountry && $meetsMinimum;
+        if (!static::get()->enabled || $countryId === null) {
+            return false;
+        }
+        $rule = FreeDeliveryRule::where('country_id', $countryId)->first();
+        if (!$rule) {
+            return false;
+        }
+        return $discountedSubtotal >= (float) $rule->min_order_amount;
     }
 }

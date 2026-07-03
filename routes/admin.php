@@ -50,6 +50,9 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/free-delivery', [FreeDeliverySettingController::class, 'index'])->name('admin.free-delivery.index');
         Route::post('/free-delivery', [FreeDeliverySettingController::class, 'update'])->name('admin.free-delivery.update');
+        Route::post('/free-delivery/rules', [FreeDeliverySettingController::class, 'storeRule'])->name('admin.free-delivery.rules.store');
+        Route::post('/free-delivery/rules/{rule}', [FreeDeliverySettingController::class, 'updateRule'])->name('admin.free-delivery.rules.update');
+        Route::delete('/free-delivery/rules/{rule}', [FreeDeliverySettingController::class, 'destroyRule'])->name('admin.free-delivery.rules.destroy');
 
         Route::get('/shipment', [ShipmentController::class, 'index'])->name('admin.shipment');
         Route::get('/shipment/create', [ShipmentController::class, 'create'])->name('admin.shipment.create');
